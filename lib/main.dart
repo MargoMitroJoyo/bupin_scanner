@@ -72,10 +72,10 @@ class _MyAppState extends State<MyApp> {
             fontFamily: 'Nunito',
             textTheme:
                 const TextTheme(titleMedium: TextStyle(fontFamily: "Nunito")),
-            scaffoldBackgroundColor: const Color.fromRGBO(70, 89, 166, 1),
+            scaffoldBackgroundColor:Color.fromARGB(255, 223, 247, 218),
             colorScheme: ColorScheme.fromSwatch().copyWith(
-                secondary: const Color.fromRGBO(236, 180, 84, 1),
-                primary: const Color.fromRGBO(70, 89, 166, 1))),
+                secondary: const Color.fromRGBO(254 ,238, 80, 1),
+                primary: const Color.fromRGBO( 0, 140, 64,1))),
         home: const Home());
   }
 }

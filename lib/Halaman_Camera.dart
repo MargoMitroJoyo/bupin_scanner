@@ -3,8 +3,10 @@ import 'dart:io';
 
 import 'package:Bupin/ApiServices.dart';
 import 'package:Bupin/widgets/scann_aniamtion/scanning_effect.dart';
+import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
@@ -70,6 +72,7 @@ class _QRViewExampleState extends State<QRViewExample> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
         children: <Widget>[
           Expanded(
               flex: 3,
@@ -90,61 +93,75 @@ class _QRViewExampleState extends State<QRViewExample> {
                   ),
                 ],
               )),
-          Expanded(
-            flex: 2,
-            child: Stack(
-              children: [
-                Image.asset(
-                  "asset/Halaman_Scan/Doodle Halaman Scan@4x.png",
-                  width: MediaQuery.of(context).size.width,
-                  fit: BoxFit.fitWidth,
-                  repeat: ImageRepeat.repeat,
-                ),
-                Container(
-                  padding: const EdgeInsets.all(8.0),
-                  child: IconButton.filled(
-                      style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.all(Colors.white)),
-                      color: Colors.white,
-                      highlightColor: Colors.grey,
-                      onPressed: () {
-                        Navigator.pop(context, false);
-                      },
-                      icon: Icon(
-                        Icons.arrow_back_rounded,
-                        color: Theme.of(context).primaryColor,
-                      )),
-                ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Expanded(
-                        flex: 6,
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 0),
-                          child: Stack(
-                            alignment: Alignment.bottomLeft,
-                            children: [
-                              const Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Spacer(
-                                    flex: 2,
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.only(left: 16),
-                                    child: Text(
-                                      "Scan",
-                                      style: TextStyle(
-                                          fontSize: 40,
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.w900),
+           Expanded(
+                flex: 2,
+                child:Stack(
+            alignment: Alignment.topCenter,
+            clipBehavior: Clip.none,
+            children: [
+              Expanded(
+                flex: 2,
+                child: Stack(
+                  children: [
+                    Image.asset(
+                      "asset/doodle camera.png",
+                      width: MediaQuery.of(context).size.width,
+                      fit: BoxFit.fitWidth,
+                      repeat: ImageRepeat.repeat,
+                    ), 
+                    Container(
+                      padding: const EdgeInsets.all(8.0),
+                      child: IconButton.filled(
+                          style: ButtonStyle(
+                              backgroundColor:
+                                  MaterialStateProperty.all(Colors.white)),
+                          color: Colors.white,
+                          highlightColor: Colors.grey,
+                          onPressed: () {
+                            Navigator.pop(context, false);
+                          },
+                          icon: Icon(
+                            Icons.arrow_back_rounded,
+                            color: Theme.of(context).primaryColor,
+                          )),
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      right: -55,
+                      child: SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.7,
+                          child: Image.asset(
+                            "asset/Halaman_Scan/Hasan Scan2.png",
+                            scale: 1,
+                          )),
+                    ),
+                     
+                    
+                     Positioned(left: 10,top: 120,
+                      child: Padding(
+                                      padding: EdgeInsets.only(left: 16),
+                                      child: Text(
+                                        "Scan",
+                                        style: TextStyle(
+                                            fontSize: 40,
+                                            color: Color.fromARGB(255, 255, 255, 255),
+                                            fontWeight: FontWeight.w900,shadows: <Shadow>[
+      Shadow(
+        offset: Offset(0.0, 0.0),
+        blurRadius: 15,
+        color: Color.fromARGB(255, 112, 182, 134)
+      ),
+      Shadow(
+        offset: Offset(1,1),
+        blurRadius: 5.0,
+        color: Color.fromARGB(122, 236, 236, 236),
+      ),
+    ] ,),
+                                      ),
                                     ),
-                                  ),
-                                  Padding(
+                    ),
+                                  Positioned(left: 10,top: 160,
+                      child: Padding(
                                     padding: EdgeInsets.only(left: 16),
                                     child: Text(
                                       "Akses Video & Soal",
@@ -152,40 +169,32 @@ class _QRViewExampleState extends State<QRViewExample> {
                                           fontSize: 17,
                                           color:
                                               Color.fromRGBO(236, 180, 84, 1),
-                                          fontWeight: FontWeight.w700),
+                                          fontWeight: FontWeight.w700,shadows: <Shadow>[
+      Shadow(
+        offset: Offset(0.0, 0.0),
+        blurRadius: 15,
+        color: Color.fromARGB(255, 112, 182, 134)
+      ),
+      Shadow(
+        offset: Offset(1,1),
+        blurRadius: 5.0,
+        color: Color.fromARGB(255, 255, 255, 255),
+      ),
+    
+    ] ,),
                                     ),
-                                  ),
-                                  Spacer(
-                                    flex: 4,
-                                  ),
-                                ],
-                              ),
-                              Positioned(
-                                left: -1,
-                                bottom: -1,
-                                child: Image.asset(
-                                  "asset/Halaman_Latihan_PAS&PTS/Bupin.png",
-                                  alignment: Alignment.centerLeft,
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.2,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                          flex: 8,
-                          child: Image.asset(
-                            "asset/Halaman_Scan/Hasan Scan2.png",
-                            scale: 0.7,
-                          )),
-                    ],
-                  ),
+                                  )),
+                  ],
                 ),
-              ],
-            ),
-          ),
+              ),Positioned(
+                        top: 0,
+                        child: Image.asset(
+                          "asset/Halaman_Scan/Logo Bupin@4x.png",
+                          width: MediaQuery.of(context).size.width * 0.25,
+                        )),
+         
+            ],
+          )),
         ],
       ),
     );
@@ -202,7 +211,7 @@ class _QRViewExampleState extends State<QRViewExample> {
       key: qrKey,
       onQRViewCreated: _onQRViewCreated,
       overlay: QrScannerOverlayShape(
-          borderColor: const Color.fromRGBO(70, 89, 166, 1),
+          borderColor: const Color.fromRGBO(0, 140, 64, 1),
           borderRadius: 6,
           borderLength: 30,
           borderWidth: 10,

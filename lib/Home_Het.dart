@@ -49,8 +49,8 @@ class _HalmanHetState extends State<HalmanHet> {
       listHET.clear();
       final dio = Dio();
       int data = list.indexOf(dropdownValue);
-      final response = await dio
-          .get("https://bupin.id/api/het?kelas=${listKelas[data]}");
+      final response =
+          await dio.get("https://bupin.id/api/het?kelas=${listKelas[data]}");
 
       if (response.statusCode == 200) {
         for (Map<String, dynamic> element in response.data) {
@@ -102,11 +102,22 @@ class _HalmanHetState extends State<HalmanHet> {
                   left: 10,
                   bottom: 10,
                   child: Text(
-                    "Katalog\nBuku Sekolah\nElektronik (BSE)",
+                    "Buku Sekolah\nElektronik (BSE)",
                     style: TextStyle(
                         height: 1.22,
-                        color: Colors.white,
-                        fontSize: 24,
+                        color: Colors.white, shadows: <Shadow>[
+      Shadow(
+        offset: Offset(0.0, 0.0),
+        blurRadius: 15,
+        color: Color.fromARGB(255, 52, 160, 87)
+      ),
+      Shadow(
+        offset: Offset(1,1),
+        blurRadius: 5.0,
+        color: Color.fromARGB(123, 37, 37, 37),
+      ),
+    ] ,
+                        fontSize: 23,
                         fontWeight: FontWeight.w900,
                         fontStyle: FontStyle.italic),
                   )),
