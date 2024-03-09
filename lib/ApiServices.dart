@@ -44,7 +44,7 @@ class ApiService {
       final dio = Dio();
       int data = list.indexOf(dropdownValue);
       final response = await dio
-          .get("https://bupin.id/api/het?kelas=${listKelas[data]}");
+          .get("https://paling.kencang.id/api/het?kelas=${listKelas[data]}");
 
       if (response.statusCode == 200) {
         for (Map<String, dynamic> element in response.data) {
