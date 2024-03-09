@@ -24,7 +24,7 @@ class PlayPauseButtonBar extends StatelessWidget {
             padding: const EdgeInsets.only(right: 5, left: 10),
             margin: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-                color: Colors.grey.shade300,
+                color: Colors.grey.shade100,
                 borderRadius: BorderRadius.circular(10)),
             child: Row(
               children: [

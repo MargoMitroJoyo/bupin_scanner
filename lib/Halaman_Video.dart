@@ -101,16 +101,13 @@ class HalamanVideoState extends State<HalamanVideo>
     log("Video");
     // ignore: deprecated_member_use
     return WillPopScope(
-     onWillPop: () {
-       Navigator.pop(context, false);
-       if(  noInternet==false){
-        _controller.stopVideo();
-       }
-       return Future.value(true);
-     
-     },
-
-      
+      onWillPop: () {
+        Navigator.pop(context, false);
+        if (noInternet == false) {
+          _controller.stopVideo();
+        }
+        return Future.value(true);
+      },
       child: FutureBuilder<void>(
           future: fetchApi(),
           builder: (context, snapshot) {
@@ -178,42 +175,55 @@ class HalamanVideoState extends State<HalamanVideo>
                                 builder: (context, constraints) {
                                   return Column(
                                     children: [
-                                      Stack(
-                                          alignment: Alignment.center,
-                                          children: [
-                                            Image.asset(
-                                              "asset/logo.png",
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.5,
-                                            ),
-                                            FadeTransition(
-                                                opacity: _animation,
-                                                child: player)
-                                          ]),
+                                     Stack(
+                                            alignment: Alignment.center,
+                                            children: [
+                                              Image.asset(
+                                                "asset/logo.png",
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.5,
+                                              ),
+                                              FadeTransition(
+                                                  opacity: _animation,
+                                                  child: player)
+                                            ]),
+                                      
                                       aspectRatio == 9 / 16
                                           ? const SizedBox()
-                                          : Stack(
-                                              children: [
-                                                aspectRatio == 9 / 16
-                                                    ? const SizedBox()
-                                                    : Image.asset(
-                                                        "asset/Halaman_Scan/Doodle Halaman Scan@4x.png",
-                                                        width: MediaQuery.of(
-                                                                context)
-                                                            .size
-                                                            .width,
-                                                        color: Theme.of(context)
-                                                            .primaryColor,
+                                          : Expanded(
+                                            child: Stack(alignment: Alignment.topCenter,
+                                                children: [Container(color: Color.fromARGB(255, 223, 247, 218) ,),
+                                                  aspectRatio == 9 / 16
+                                                      ? const SizedBox()
+                                                      : Image.asset(
+                                                          "asset/Halaman_Scan/Cahaya Halaman Scan@4x.png",
+                                                          width: MediaQuery.of(
+                                                                  context)
+                                                              .size
+                                                              .width,
+                                                          fit: BoxFit.fitWidth,
+                                                        ), aspectRatio == 9 / 16
+                                                      ? const SizedBox()
+                                                      : Positioned(top: 0,
+                                                        child: Image.asset(
+                                                            "asset/Halaman_Scan/Doodle Halaman Scan@4x.png",
+                                                            width: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .width,
+                                                            fit: BoxFit.fitWidth,
+                                                          ),
                                                       ),
-                                                const Padding(
-                                                  padding: EdgeInsets.only(
-                                                      right: 0.0),
-                                                  child: PlayPauseButtonBar(),
-                                                ),
-                                              ],
-                                            ),
+                                                  const Padding(
+                                                    padding: EdgeInsets.only(
+                                                        right: 0.0),
+                                                    child: PlayPauseButtonBar(),
+                                                  ),
+                                                ],
+                                              ),
+                                          ),
                                     ],
                                   );
                                 },
