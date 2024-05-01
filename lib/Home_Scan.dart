@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:Bupin/Halaman_Camera.dart';
 import 'package:Bupin/styles/PageTransitionTheme.dart';
+import 'package:Bupin/widgets/event_bsc.dart';
 import 'package:Bupin/widgets/scann_aniamtion/scanning_effect.dart';
 
 import 'package:flutter/material.dart';
@@ -13,7 +14,7 @@ class HalmanScan extends StatefulWidget {
   State<HalmanScan> createState() => _HalmanScanState();
 }
 
-class _HalmanScanState extends State<HalmanScan> {
+class _HalmanScanState extends State<HalmanScan>with AutomaticKeepAliveClientMixin {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -21,7 +22,7 @@ class _HalmanScanState extends State<HalmanScan> {
 
   double width = 0;
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { super.build(context);
     log("scan");
     width = MediaQuery.of(context).size.width;
 
@@ -46,7 +47,10 @@ class _HalmanScanState extends State<HalmanScan> {
           child: Stack(
             clipBehavior: Clip.none,
             children: [
-              Image.asset("asset/Halaman_Scan/Manusia.png", width: width),
+              Image.asset("asset/Halaman_Scan/Manusia.png", width: width),Positioned(
+      top: -30,
+                right: 0,
+            child: Event()),
               Positioned(
                 top: -30,
                 left: 25,
@@ -58,7 +62,7 @@ class _HalmanScanState extends State<HalmanScan> {
                       ));
                     },
                     child: Container(
-                        padding: EdgeInsets.all(5),
+                        padding: EdgeInsets.all(10),
                         decoration: BoxDecoration(
                           color: const Color.fromRGBO(70, 89, 166, 1),
                           borderRadius: const BorderRadius.all(
@@ -76,12 +80,12 @@ class _HalmanScanState extends State<HalmanScan> {
                         child: const Icon(
                           Icons.qr_code_scanner_rounded,
                           color: Colors.white,
-                          size: 40,
+                          size: 42,
                         )),
                   ),
                   SizedBox(
-                    width: width * 0.3,
-                    height: width * 0.3,
+                    width: width * 0.31,
+                    height: width * 0.31,
                     child: const ScanningEffect(
                       enableBorder: false,
                       scanningColor: Color.fromRGBO(236, 180, 84, 1),
@@ -133,4 +137,8 @@ class _HalmanScanState extends State<HalmanScan> {
           FloatingActionButtonLocation.miniCenterFloat,
     );
   }
+  
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }

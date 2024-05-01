@@ -41,7 +41,7 @@ class HalmanHet extends StatefulWidget {
   State<HalmanHet> createState() => _HalmanHetState();
 }
 
-class _HalmanHetState extends State<HalmanHet> {
+class _HalmanHetState extends State<HalmanHet> with AutomaticKeepAliveClientMixin {
   List<Het> listHET = [];
 
   Future<void> fetchApi() async {
@@ -83,6 +83,7 @@ class _HalmanHetState extends State<HalmanHet> {
   String dropdownValue = list.first;
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     log("het");
     return SafeArea(
       child: Column(
@@ -272,4 +273,8 @@ class _HalmanHetState extends State<HalmanHet> {
       ),
     );
   }
+  
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }

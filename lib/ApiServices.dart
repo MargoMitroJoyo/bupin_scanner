@@ -38,13 +38,14 @@ const List<String> listKelas = <String>[
 ];
 
 class ApiService {
+  Map<String, dynamic> eventData = {};
   Future<List<Het>> fetchHet(String dropdownValue) async {
     try {
       List<Het> listHet = [];
       final dio = Dio();
       int data = list.indexOf(dropdownValue);
-      final response = await dio
-          .get("https://bupin.id/api/het?kelas=${listKelas[data]}");
+      final response =
+          await dio.get("https://bupin.id/api/het?kelas=${listKelas[data]}");
 
       if (response.statusCode == 200) {
         for (Map<String, dynamic> element in response.data) {
@@ -58,23 +59,21 @@ class ApiService {
     } catch (e) {
       return [];
     }
-  } Future<String> fetchCs() async {
+  }
+
+  Future<String> fetchCs() async {
     try {
-    
       final dio = Dio();
-     
-      final response = await dio
-          .get("https://bupin.id/api/cs/");
+
+      final response = await dio.get("https://bupin.id/api/cs/");
 
       if (response.statusCode == 200) {
-    return  response.data[0]["num"]
-;
-       
+        return response.data[0]["num"];
       } else {
         return "6282171685885";
       }
     } catch (e) {
-     return "6282171685885";
+      return "6282171685885";
     }
   }
 
@@ -82,6 +81,17 @@ class ApiService {
     try {
       final dio = Dio();
       final response = await dio.get("https://bupin.id/api/banner/");
+
+      return response.data[0];
+    } catch (e) {
+      return {};
+    }
+  }
+
+  static Future<Map<String, dynamic>> checkEvent() async {
+    try {
+      final dio = Dio();
+      final response = await dio.get("https://bupin.id/api/fab/");
 
       return response.data[0];
     } catch (e) {
@@ -103,11 +113,10 @@ class ApiService {
     }
   }
 
-  Future<bool> pushToVideo(
-       String link, BuildContext context) async {
+  Future<bool> pushToVideo(String link, BuildContext context) async {
     return await Navigator.of(context).push(CustomRoute(
-        builder: (context) =>
-            HalamanVideo(link),));
+      builder: (context) => HalamanVideo(link),
+    ));
   }
 
   Future<bool> pushToCbt(
@@ -141,10 +150,9 @@ class ApiService {
         kodeTingkat == 27 ||
         kodeTingkat == 28 ||
         kodeTingkat == 36 ||
-        kodeTingkat == 40 ) {
+        kodeTingkat == 40) {
       jenjang = "cbtsd";
-    } else if (
-        kodeTingkat == 16 ||
+    } else if (kodeTingkat == 16 ||
         kodeTingkat == 17 ||
         kodeTingkat == 22 ||
         kodeTingkat == 24 ||
@@ -152,7 +160,7 @@ class ApiService {
         kodeTingkat == 31 ||
         kodeTingkat == 33 ||
         kodeTingkat == 34 ||
-        kodeTingkat == 37 ) {
+        kodeTingkat == 37) {
       jenjang = "cbtsmp";
     } else {
       jenjang = "cbtsma";
@@ -161,7 +169,7 @@ class ApiService {
     int? ujianId;
 
     List<String> parts = link.split("-");
-  
+
     if (parts.length >= 2) {
       String numberString = parts[1];
 
@@ -182,7 +190,6 @@ class ApiService {
   }
 
   Future<bool> scanQrVideo(String link, BuildContext context) async {
-  
-    return await pushToVideo( link, context);
+    return await pushToVideo(link, context);
   }
 }

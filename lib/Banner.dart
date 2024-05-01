@@ -4,6 +4,7 @@ import 'package:Bupin/ApiServices.dart';
 import 'package:Bupin/WebivewPolos.dart';
 import 'package:Bupin/styles/PageTransitionTheme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'dart:async';
 
 import 'package:url_launcher/url_launcher.dart';
@@ -80,37 +81,42 @@ class _HalamanBannerState extends State<HalamanBanner> {
                                             if ((snapshot.data!["link"]
                                                     as String)
                                                 .isNotEmpty) {
-                                              if (snapshot.data!["external"]==true) {
+                                              if (snapshot.data!["external"] ==
+                                                  true) {
                                                 _launchInBrowser(Uri.parse(
                                                     snapshot.data!["link"]));
                                               } else {
                                                 Navigator.of(context)
                                                     .push(CustomRoute(
                                                   builder: (context) =>
-                                                      HalamanWebview(snapshot
-                                                          .data!["link"]),
+                                                      HalamanWebview(
+                                                          url: snapshot
+                                                              .data!["link"],
+                                                          judul: snapshot
+                                                              .data!["title"]),
                                                 ));
                                               }
                                             }
                                           },
-                                          child: Stack(
-                                            alignment: Alignment.topRight,
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
                                             children: [
-                                              FadeInImage(
-                                                imageErrorBuilder: (context,
-                                                        error, stackTrace) =>
-                                                    Image.asset(
-                                                        "asset/place.png"),
-                                                image: NetworkImage(
-                                                  snapshot.data!["image"],
-                                                ),
-                                                placeholder: const AssetImage(
-                                                  "asset/place.png",
+                                              ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(25),
+                                                child: FadeInImage(
+                                                  image: NetworkImage(
+                                                    snapshot.data!["image"],
+                                                  ),
+                                                  placeholder: AssetImage(
+                                                    "asset/place.png",
+                                                  ),
                                                 ),
                                               ),
                                               Padding(
                                                 padding:
-                                                    const EdgeInsets.all(0.0),
+                                                    const EdgeInsets.all(8.0),
                                                 child: CircleAvatar(
                                                   backgroundColor: snapshot
                                                                   .data![
@@ -140,7 +146,7 @@ class _HalamanBannerState extends State<HalamanBanner> {
                                                                 .transparent,
                                                       )),
                                                 ),
-                                              )
+                                              ),
                                             ],
                                           )),
                                     ),

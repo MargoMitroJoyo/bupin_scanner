@@ -16,7 +16,7 @@ class Home extends StatefulWidget {
   State<Home> createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
+class _HomeState extends State<Home> with SingleTickerProviderStateMixin , AutomaticKeepAliveClientMixin {
   late TabController _controller;
 
   @override
@@ -183,6 +183,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Stack(
       alignment: Alignment.center,
       children: [
@@ -220,4 +221,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       ],
     );
   }
+  
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }
