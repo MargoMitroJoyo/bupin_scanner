@@ -146,46 +146,45 @@ class _HalamanWebviewState extends State<HalamanWebview>
   @override
   Widget build(BuildContext context) {
     log("Soal");
-    // ignore: deprecated_member_use
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          leading: Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: GestureDetector(
-                onTap: () {
-                  _dialogBuilder(context);
-                },
-                child: CircleAvatar(
-                  backgroundColor: Colors.white,
-                  child: Center(
-                    child: Icon(
-                      Icons.arrow_back_rounded,
-                      color: Theme.of(context).primaryColor,
-                      size: 15,
-                      weight: 100,
-                    ),
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        leading: Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: GestureDetector(
+              onTap: () {
+                _dialogBuilder(context);
+              },
+              child: CircleAvatar(
+                backgroundColor: Colors.white,
+                child: Center(
+                  child: Icon(
+                    Icons.arrow_back_rounded,
+                    color: Theme.of(context).primaryColor,
+                    size: 15,
+                    weight: 100,
                   ),
-                )),
-          ),
-          backgroundColor: Theme.of(context).primaryColor,
-          title: Text(
-            widget.judul,
-            style: const TextStyle(
-                color: Colors.white, fontSize: 15, fontWeight: FontWeight.w700),
-          ),
+                ),
+              )),
         ),
-        backgroundColor: Colors.white,
-        body: Column( // Use Column to stack AppBar and Loading Indicator
+        backgroundColor: Theme.of(context).primaryColor,
+        title: Text(
+          widget.judul,
+          style: const TextStyle(
+              color: Colors.white, fontSize: 15, fontWeight: FontWeight.w700),
+        ),
+      ),
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: Column(
           children: [
-            LinearProgressIndicator( // Loading Indicator
+            LinearProgressIndicator(
               backgroundColor: Colors.white,
               valueColor: AlwaysStoppedAnimation<Color>(
                 Theme.of(context).primaryColor,
               ),
-              minHeight: 3, // Adjust height as needed
-              value: _isLoading ? null : 0, // Show loading indicator only when loading
+              minHeight: 3,
+              value: _isLoading ? null : 0,
             ),
             Expanded(
               child: Stack(
@@ -211,3 +210,4 @@ class _HalamanWebviewState extends State<HalamanWebview>
     );
   }
 }
+
