@@ -101,16 +101,13 @@ class HalamanVideoState extends State<HalamanVideo>
     log("Video");
     // ignore: deprecated_member_use
     return WillPopScope(
-     onWillPop: () {
-       Navigator.pop(context, false);
-       if(  noInternet==false){
-        _controller.stopVideo();
-       }
-       return Future.value(true);
-     
-     },
-
-      
+      onWillPop: () {
+        Navigator.pop(context, false);
+        if (noInternet == false) {
+          _controller.stopVideo();
+        }
+        return Future.value(true);
+      },
       child: FutureBuilder<void>(
           future: fetchApi(),
           builder: (context, snapshot) {
@@ -169,7 +166,7 @@ class HalamanVideoState extends State<HalamanVideo>
                                 title: Text(
                                   video!.namaVideo!,
                                   style: const TextStyle(
-                                      color: Colors.white,
+                                      color: Colors.black,
                                       fontSize: 15,
                                       fontWeight: FontWeight.w700),
                                 ),
@@ -194,25 +191,64 @@ class HalamanVideoState extends State<HalamanVideo>
                                           ]),
                                       aspectRatio == 9 / 16
                                           ? const SizedBox()
-                                          : Stack(
-                                              children: [
-                                                aspectRatio == 9 / 16
-                                                    ? const SizedBox()
-                                                    : Image.asset(
-                                                        "asset/Halaman_Scan/Doodle Halaman Scan@4x.png",
-                                                        width: MediaQuery.of(
-                                                                context)
-                                                            .size
-                                                            .width,
-                                                        color: Theme.of(context)
-                                                            .primaryColor,
-                                                      ),
-                                                const Padding(
-                                                  padding: EdgeInsets.only(
-                                                      right: 0.0),
-                                                  child: PlayPauseButtonBar(),
-                                                ),
-                                              ],
+                                          : Expanded(
+                                              child: Stack(
+                                                alignment: Alignment.topCenter,
+                                                children: [
+                                                  Container(
+                                                    color: Colors.white,
+                                                  ),
+                                                  aspectRatio == 9 / 16
+                                                      ? const SizedBox()
+                                                      : Positioned.fill(
+                                                          child: Opacity( opacity: 0.05,
+                                                            child: Image.asset(
+                                                              "asset/Halaman_Scan/Cahaya Halaman Scan@4x.png",
+                                                              repeat: ImageRepeat
+                                                                  .repeatY,
+                                                              color: Theme.of(
+                                                                      context)
+                                                                  .primaryColor,
+                                                              width:
+                                                                  MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .width,
+                                                              fit:
+                                                                  BoxFit.fitWidth,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                  aspectRatio == 9 / 16
+                                                      ? const SizedBox()
+                                                      : Positioned.fill(
+                                                          top: 0,
+                                                          child: Opacity( opacity: 0.05,
+                                                            child: Image.asset(
+                                                              "asset/Halaman_Scan/Cahaya Halaman Scan@4x.png",
+                                                              repeat: ImageRepeat
+                                                                  .repeatY,
+                                                              color: Theme.of(
+                                                                      context)
+                                                                  .primaryColor,
+                                                              width:
+                                                                  MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .width,
+                                                              fit:
+                                                                  BoxFit.fitWidth,
+                                                            ),
+                                                          ),
+                                                        
+                                                        ),
+                                                  const Padding(
+                                                    padding: EdgeInsets.only(
+                                                        right: 0.0),
+                                                    child: PlayPauseButtonBar(),
+                                                  ),
+                                                ],
+                                              ),
                                             ),
                                     ],
                                   );
