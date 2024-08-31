@@ -71,11 +71,12 @@ class _QRViewExampleState extends State<QRViewExample> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).primaryColor,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: <Widget>[
           Expanded(
-              flex: 3,
+              flex: 4,
               child: Stack(
                 alignment: Alignment.center,
                 children: [
@@ -85,7 +86,7 @@ class _QRViewExampleState extends State<QRViewExample> {
                     height: MediaQuery.of(context).size.width / 1.7,
                     child: const ScanningEffect(
                       enableBorder: false,
-                      scanningColor: Color.fromRGBO(236, 180, 84, 1),
+                      scanningColor: Colors.white,
                       delay: Duration(seconds: 1),
                       duration: Duration(seconds: 2),
                       child: SizedBox(),
@@ -95,107 +96,107 @@ class _QRViewExampleState extends State<QRViewExample> {
               )),
           Expanded(
               flex: 2,
-              child: Stack(
-                alignment: Alignment.topCenter,
-                clipBehavior: Clip.none,
-                children: [
-                 
-                        Image.asset(
-                          "asset/doodle camera.png",
+              child:  Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+                colors: [
+                  Color.fromARGB(255, 164, 3, 3),
+                  const Color.fromARGB(255, 255, 255, 255),
+                ],
+                begin: const FractionalOffset(0.0, 0.0),
+                end: const FractionalOffset(0.0, 1.0),
+                stops: [0.4, 1],
+                tileMode: TileMode.clamp),
+          ),
+                child: Stack(
+                  alignment: Alignment.topCenter,
+                  clipBehavior: Clip.none,
+                  children: [
+                    Positioned.fill(
+                      child: Opacity(
+                        opacity: 0.05,
+                        child: Image.asset(
+                          "asset/Halaman_Scan/Cahaya Halaman Scan@4x.png",
                           width: MediaQuery.of(context).size.width,
+                          color: Colors.white,
                           fit: BoxFit.fitWidth,
                           repeat: ImageRepeat.repeat,
                         ),
-                        Positioned(top: 1,left: 1,
-                          child: Container(
-                            padding: const EdgeInsets.all(8.0),
-                            child: IconButton.filled(
-                                style: ButtonStyle(
-                                    backgroundColor:
-                                        MaterialStateProperty.all(Colors.white)),
-                                color: Colors.white,
-                                highlightColor: Colors.grey,
-                                onPressed: () {
-                                  Navigator.pop(context, false);
-                                },
-                                icon: Icon(
-                                  Icons.arrow_back_rounded,
-                                  color: Theme.of(context).primaryColor,
-                                )),
+                      ),
+                    ),
+                    Positioned(
+                      top: 1,
+                      left: 1,
+                      child: Container(
+                        padding: const EdgeInsets.all(8.0),
+                        child: IconButton.filled(
+                            style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all(Colors.white)),
+                            color: Colors.white,
+                            highlightColor: Colors.grey,
+                            onPressed: () {
+                              Navigator.pop(context, false);
+                            },
+                            icon: Icon(
+                              Icons.arrow_back_rounded,
+                              color: Theme.of(context).primaryColor,
+                            )),
+                      ),
+                    ), Positioned(
+                      bottom: 0,
+                      right: 0,
+                      child: SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          child: Opacity(opacity:0.5,
+                            child: Image.asset(
+                              "asset/Halaman_Scan/merdeka.png",color: Theme.of(context).primaryColor,
+                              scale: 1,
+                            ),
+                          )),
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      right: 0,
+                      child: SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.5,
+                          child: Image.asset(
+                            "asset/Halaman_Scan/Hasan Scan2.png",
+                            scale: 1,
+                          )),
+                    ),
+                    Positioned(
+                      left: 10,
+                      top: 90,
+                      child: Padding(
+                        padding: EdgeInsets.only(left: 16),
+                        child: Text(
+                          "Scan",
+                          style: TextStyle(
+                            fontSize: 40,
+                            color: Color.fromARGB(255, 255, 255, 255),
+                            fontWeight: FontWeight.w900,
                           ),
                         ),
-                        Positioned(
-                          bottom: 0,
-                          right: -55,
-                          child: SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.7,
-                              child: Image.asset(
-                                "asset/Halaman_Scan/Hasan Scan2.png",
-                                scale: 1,
-                              )),
-                        ),
-                        Positioned(
-                          left: 10,
-                          top: 120,
-                          child: Padding(
-                            padding: EdgeInsets.only(left: 16),
-                            child: Text(
-                              "Scan",
-                              style: TextStyle(
-                                fontSize: 40,
-                                color: Color.fromARGB(255, 255, 255, 255),
-                                fontWeight: FontWeight.w900,
-                                shadows: <Shadow>[
-                                  Shadow(
-                                      offset: Offset(0.0, 0.0),
-                                      blurRadius: 15,
-                                      color:
-                                          Color.fromARGB(255, 112, 182, 134)),
-                                  Shadow(
-                                    offset: Offset(1, 1),
-                                    blurRadius: 5.0,
-                                    color: Color.fromARGB(122, 236, 236, 236),
-                                  ),
-                                ],
-                              ),
+                      ),
+                    ),
+                    Positioned(
+                        left: 10,
+                        top: 130,
+                        child: Padding(
+                          padding: EdgeInsets.only(left: 16),
+                          child: Text(
+                            "Akses Video & Soal",
+                            style: TextStyle(
+                              fontSize: 17,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w700,
                             ),
                           ),
-                        ),
-                        Positioned(
-                            left: 10,
-                            top: 160,
-                            child: Padding(
-                              padding: EdgeInsets.only(left: 16),
-                              child: Text(
-                                "Akses Video & Soal",
-                                style: TextStyle(
-                                  fontSize: 17,
-                                  color: Color.fromRGBO(236, 180, 84, 1),
-                                  fontWeight: FontWeight.w700,
-                                  shadows: <Shadow>[
-                                    Shadow(
-                                        offset: Offset(0.0, 0.0),
-                                        blurRadius: 15,
-                                        color:
-                                            Color.fromARGB(255, 112, 182, 134)),
-                                    Shadow(
-                                      offset: Offset(1, 1),
-                                      blurRadius: 5.0,
-                                      color: Color.fromARGB(255, 255, 255, 255),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            )),
-                     
-                  
-                  Positioned(
-                      top: 0,
-                      child: Image.asset(
-                        "asset/Halaman_Scan/Logo Bupin@4x.png",
-                        width: MediaQuery.of(context).size.width * 0.25,
-                      )),
-                ],
+                        )),
+                    
+                  ],
+                ),
               )),
         ],
       ),
@@ -213,7 +214,7 @@ class _QRViewExampleState extends State<QRViewExample> {
       key: qrKey,
       onQRViewCreated: _onQRViewCreated,
       overlay: QrScannerOverlayShape(
-          borderColor: const Color.fromRGBO(0, 140, 64, 1),
+          borderColor: Color.fromARGB(255, 164, 3, 3),
           borderRadius: 6,
           borderLength: 30,
           borderWidth: 10,

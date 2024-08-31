@@ -41,7 +41,7 @@ class HalmanHet extends StatefulWidget {
   State<HalmanHet> createState() => _HalmanHetState();
 }
 
-class _HalmanHetState extends State<HalmanHet> {
+class _HalmanHetState extends State<HalmanHet> with AutomaticKeepAliveClientMixin{
   List<Het> listHET = [];
 
   Future<void> fetchApi() async {
@@ -50,7 +50,7 @@ class _HalmanHetState extends State<HalmanHet> {
       final dio = Dio();
       int data = list.indexOf(dropdownValue);
       final response =
-          await dio.get("https://paling.kencang.id/api/het?kelas=${listKelas[data]}");
+          await dio.get("https://bupin.id/api/het?kelas=${listKelas[data]}");
 
       if (response.statusCode == 200) {
         for (Map<String, dynamic> element in response.data) {
@@ -83,204 +83,217 @@ class _HalmanHetState extends State<HalmanHet> {
   String dropdownValue = list.first;
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     log("het");
-    return SafeArea(
-      child: Column(
-        children: [
-          Stack(
-            alignment: Alignment.center,
-            children: [
-              Image.asset("asset/Halaman_HET/Doodle HET-8.png"),
-              Positioned(
-                  right: 20,
-                  bottom: 10,
+    return Column(
+      children: [
+        
+        Stack(
+          alignment: Alignment.center,
+          children: [Positioned.fill(
+            child: Container(
+          color: Theme.of(context).primaryColor,
+        )),
+            Transform.flip(
+                flipX: false,
+                child: Opacity(
+                  opacity: 0.1,
                   child: Image.asset(
-                    "asset/Halaman_HET/Bukut Het-9.png",
-                    width: MediaQuery.of(context).size.width * 0.3,
-                  )),
-              const Positioned(
-                  left: 10,
-                  bottom: 10,
-                  child: Text(
-                    "Buku Sekolah\nElektronik (BSE)",
-                    style: TextStyle(
-                        height: 1.22,
-                        color: Colors.white, shadows: <Shadow>[
-      Shadow(
-        offset: Offset(0.0, 0.0),
-        blurRadius: 15,
-        color: Color.fromARGB(255, 52, 160, 87)
-      ),
-      Shadow(
-        offset: Offset(1,1),
-        blurRadius: 5.0,
-        color: Color.fromARGB(123, 37, 37, 37),
-      ),
-    ] ,
-                        fontSize: 23,
+                    "asset/Halaman_Scan/Cahaya Halaman Scan@4x.png",
+                    color: Colors.white,
+                  ),
+                )),
+            Positioned(
+                right: 20,
+                bottom: 10,
+                child: Image.asset(
+                  "asset/Halaman_HET/Bukut Het-9.png",
+                  width: MediaQuery.of(context).size.width * 0.28,
+                )),
+            const Positioned(
+                left: 10,
+                bottom: 10,
+                child: Text(
+                  "Buku Sekolah\nElektronik (BSE)",
+                  style: TextStyle(
+                      height: 1.22,
+                      color: Colors.white,
+                      shadows: <Shadow>[
+                        Shadow(
+                            offset: Offset(0.0, 0.0),
+                            blurRadius: 15,
+                            color: Colors.white),
+                        Shadow(
+                          offset: Offset(1, 1),
+                          blurRadius: 5.0,
+                          color: Color.fromARGB(123, 37, 37, 37),
+                        ),
+                      ],
+                      fontSize: 20,
+                      fontWeight: FontWeight.w900,
+                      fontStyle: FontStyle.italic),
+                )),
+            Positioned(
+                left: 10,
+                top: 30,
+                child: CircleAvatar(
+                    backgroundColor: Colors.white,
+                    child: Padding(
+                      padding: const EdgeInsets.all(3.0),
+                      child: Image.asset(
+                        "asset/Halaman_HET/kemendikbud.png",
+                        width: MediaQuery.of(context).size.width * 0.19,
+                      ),
+                    ))),
+          ],
+        ),
+        Container(
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(10), topRight: Radius.circular(10)),
+          ),
+          child: Padding(
+            padding:
+                const EdgeInsets.only(right: 7, left: 7, top: 7, bottom: 7),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Image.asset(
+                  "asset/Halaman_HET/Logo Kurmer.png",
+                  width: MediaQuery.of(context).size.width * 0.21,
+                ),
+                Container(
+                  height: MediaQuery.of(context).size.width * 0.19 * 9 / 16,
+                  padding: const EdgeInsets.only(left: 10, right: 10),
+                  decoration: BoxDecoration(
+                      color: Colors.grey.shade200,
+                      borderRadius: BorderRadius.circular(10)),
+                  child: DropdownButton<String>(
+                    padding: EdgeInsets.zero,
+                    value: dropdownValue,
+                    dropdownColor: Colors.white,
+                    iconEnabledColor: const Color.fromARGB(255, 66, 66, 66),
+                    icon: const Padding(
+                      padding: EdgeInsets.only(left: 10),
+                      child: Icon(
+                        Icons.arrow_downward_rounded,
+                        size: 16,
+                        weight: 10,
+                      ),
+                    ),
+                    elevation: 16,
+                    style: const TextStyle(
+                        fontFamily: "Nunito",
                         fontWeight: FontWeight.w900,
-                        fontStyle: FontStyle.italic),
-                  )),
-              Positioned(
-                  left: 5,
-                  top: 5,
-                  child: CircleAvatar(
-                      backgroundColor: Colors.white,
-                      child: Padding(
-                        padding: const EdgeInsets.all(3.0),
-                        child: Image.asset(
-                          "asset/Halaman_HET/kemendikbud.png",
-                          width: MediaQuery.of(context).size.width * 0.19,
-                        ),
-                      ))),
-            ],
-          ),
-          Container(
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(10), topRight: Radius.circular(10)),
-            ),
-            child: Padding(
-              padding:
-                  const EdgeInsets.only(right: 7, left: 7, top: 7, bottom: 7),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Image.asset(
-                    "asset/Halaman_HET/Logo Kurmer.png",
-                    width: MediaQuery.of(context).size.width * 0.21,
-                  ),
-                  Container(
-                    height: MediaQuery.of(context).size.width * 0.19 * 9 / 16,
-                    padding: const EdgeInsets.only(left: 10, right: 10),
-                    decoration: BoxDecoration(
-                        color: Colors.grey.shade200,
-                        borderRadius: BorderRadius.circular(10)),
-                    child: DropdownButton<String>(
-                      padding: EdgeInsets.zero,
-                      value: dropdownValue,
-                      dropdownColor: Colors.white,
-                      iconEnabledColor: const Color.fromARGB(255, 66, 66, 66),
-                      icon: const Padding(
-                        padding: EdgeInsets.only(left: 10),
-                        child: Icon(
-                          Icons.arrow_downward_rounded,
-                          size: 16,
-                          weight: 10,
-                        ),
-                      ),
-                      elevation: 16,
-                      style: const TextStyle(
-                          fontFamily: "Nunito",
-                          fontWeight: FontWeight.w900,
-                          color: Color.fromARGB(255, 66, 66, 66)),
-                      underline: Container(
-                        height: 0,
-                        color: Colors.transparent,
-                      ),
-                      onChanged: (String? value) {
-                        // This is called when the user selects an item.
+                        color: Color.fromARGB(255, 66, 66, 66)),
+                    underline: Container(
+                      height: 0,
+                      color: Colors.transparent,
+                    ),
+                    onChanged: (String? value) {
+                      // This is called when the user selects an item.
 
-                        dropdownValue = value!;
-                        setState(() {});
-                        fetchApi();
-                      },
-                      items: list.map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                    ),
+                      dropdownValue = value!;
+                      setState(() {});
+                      fetchApi();
+                    },
+                    items: list.map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
-          listHET.isEmpty
-              ? Expanded(
-                  child: Container(
-                    color: Colors.white,
-                    child: Center(
-                      child: CircularProgressIndicator(
-                        color: Theme.of(context).primaryColor,
-                        backgroundColor: const Color.fromRGBO(236, 180, 84, 1),
-                      ),
+        ),
+        listHET.isEmpty
+            ? Expanded(
+                child: Container(
+                  color: Colors.white,
+                  child: Center(
+                    child: CircularProgressIndicator(
+                      color: Theme.of(context).primaryColor,
                     ),
                   ),
-                )
-              : Expanded(
-                  flex: 10,
-                  child: Container(
-                    color: Colors.white,
-                    child: GridView.builder(
-                      padding: const EdgeInsets.only(top: 20),
-                      itemCount: listHET.length,
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                              mainAxisSpacing: 0,
-                              crossAxisCount: 2,
-                              childAspectRatio: 0.8),
-                      itemBuilder: (context, index) => Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: InkWell(
-                            splashColor: Theme.of(context).primaryColor,
-                            hoverColor: Theme.of(context).primaryColor,
-                            highlightColor: Theme.of(context).primaryColor,
-                            focusColor: Theme.of(context).primaryColor,
-                            onTap: () {
-                              _launchInBrowser(Uri.parse(listHET[index].pdf));
-                            },
-                            child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Container(
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.3,
-                                    margin: const EdgeInsets.only(bottom: 8),
-                                    child: Container(
-                                      child: ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(5),
-                                          child: FadeInImage(
-                                            imageErrorBuilder:
-                                                (context, error, stackTrace) {
-                                              return Image.asset(
-                                                "asset/place.png",
-                                              );
-                                            },
-                                            image: NetworkImage(
-                                              listHET[index].imgUrl,
-                                            ),
-                                            placeholder: const AssetImage(
+                ),
+              )
+            : Expanded(
+                flex: 10,
+                child: Container(
+                  color: Colors.white,
+                  child: GridView.builder(
+                    padding: const EdgeInsets.only(top: 10),
+                    itemCount: listHET.length,
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                            mainAxisSpacing: 0,
+                            crossAxisCount: 2,
+                            childAspectRatio: 0.8),
+                    itemBuilder: (context, index) => Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: InkWell(
+                          splashColor: Theme.of(context).primaryColor,
+                          hoverColor: Theme.of(context).primaryColor,
+                          highlightColor: Theme.of(context).primaryColor,
+                          focusColor: Theme.of(context).primaryColor,
+                          onTap: () {
+                            _launchInBrowser(Uri.parse(listHET[index].pdf));
+                          },
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Container(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.3,
+                                  margin: const EdgeInsets.only(bottom: 8),
+                                  child: Container(
+                                    child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(5),
+                                        child: FadeInImage(
+                                          imageErrorBuilder:
+                                              (context, error, stackTrace) {
+                                            return Image.asset(
                                               "asset/place.png",
-                                            ),
-                                          )),
+                                            );
+                                          },
+                                          image: NetworkImage(
+                                            listHET[index].imgUrl,
+                                          ),
+                                          placeholder: const AssetImage(
+                                            "asset/place.png",
+                                          ),
+                                        )),
+                                  ),
+                                ),
+                                Center(
+                                    child: Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 10.0, right: 10),
+                                  child: Text(
+                                    listHET[index].namaBuku,
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.w700,
+                                      color: Color.fromARGB(255, 66, 66, 66),
+                                      fontSize: 10,
+                                      overflow: TextOverflow.fade,
                                     ),
                                   ),
-                                  Center(
-                                      child: Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 10.0, right: 10),
-                                    child: Text(
-                                      listHET[index].namaBuku,
-                                      textAlign: TextAlign.center,
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.w700,
-                                        color: Color.fromARGB(255, 66, 66, 66),
-                                        fontSize: 10,
-                                        overflow: TextOverflow.fade,
-                                      ),
-                                    ),
-                                  )),
-                                ])),
-                      ),
+                                )),
+                              ])),
                     ),
                   ),
-                )
-        ],
-      ),
+                ),
+              )
+      ],
     );
   }
+  
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }
