@@ -71,8 +71,7 @@ class _HalamanBannerState extends State<HalamanBanner> {
                                       Colors.black.withOpacity(0.7),
                                   body: Center(
                                     child: Container(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.8,
+                                      width: MediaQuery.of(context).size.width * 0.8,
                                       decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(25)),
