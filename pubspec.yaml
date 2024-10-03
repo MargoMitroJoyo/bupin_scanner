@@ -44,6 +44,11 @@ dependencies:
   webview_flutter: ^4.4.4
   dio: ^5.4.0
   onesignal_flutter: ^5.0.4
+  pdf: ^3.11.1
+  printing: ^5.13.3
+  html: ^0.15.4
+  flutter_animate: ^4.5.0
+  flutter_widget_from_html: ^0.15.2
  
 
 dev_dependencies:
@@ -75,6 +80,7 @@ flutter:
     - asset/Halaman_HET/
     - asset/Halaman_Latihan_PAS&PTS/
     - asset/Halaman_Scan/
+    - asset/Icon/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 

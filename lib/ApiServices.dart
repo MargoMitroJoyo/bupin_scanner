@@ -3,7 +3,9 @@ import 'dart:developer';
 import 'package:Bupin/Halaman_Soal.dart';
 import 'package:Bupin/Halaman_Video.dart';
 import 'package:Bupin/models/Het.dart';
+import 'package:Bupin/models/Mapel.dart';
 import 'package:Bupin/models/Video.dart';
+import 'package:Bupin/models/soal.dart';
 import 'package:Bupin/styles/PageTransitionTheme.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -38,7 +40,34 @@ const List<String> listKelas = <String>[
 ];
 
 class ApiService {
+  static List<Mapel>? listMapel;
+
   Map<String, dynamic> eventData = {};
+  Future<void> getMapel() async {
+    final dio = Dio();
+    final response = await dio.get(
+        "https://bupin.id/api/apigurupintar/api-materipusat.php?kode_sekolah=PUSAT-12345&id_kelas=72");
+
+    if (response.data == null) {
+      return;
+    } else {
+      List<Mapel> tempListMapel = [];
+
+      for (Map<String, dynamic> element in response.data) {
+        if (!tempListMapel
+            .map((e) => e.mapel)
+            .toList()
+            .contains(element["mapel"])) {
+          log(element["mapel"] + " Mapel");
+          tempListMapel.add(Mapel.fromMap(element));
+        }
+      }
+      listMapel = tempListMapel;
+      ;
+      return;
+    }
+  }
+
   Future<List<Het>> fetchHet(String dropdownValue) async {
     try {
       List<Het> listHet = [];
@@ -113,6 +142,27 @@ class ApiService {
     }
   }
 
+  static Future<List<WidgetQuestion>> getUjian(String link) async {
+
+    final dio = Dio();
+    String newLink=link.replaceRange(0, 22, "https://buku.bupin.id/api/ujn.php");
+    log(newLink);
+    final response = await dio.get(newLink);
+    
+    log(response.statusCode.toString());
+    final response2 = await dio.get(
+        "https://be-cbt-sd.bupin.id/api/mapel/${response.data["idUjian"]}?type=id_ujian");
+            log(response2.data.toString());
+
+    var myData = (response2.data["data"]["soal"] as List<dynamic>)
+        .map(
+          (e) => WidgetQuestion.fromMap(e),
+        )
+        .toList();
+log(myData.length.toString());
+    return myData;
+  }
+
   Future<bool> pushToVideo(String link, BuildContext context) async {
     return await Navigator.of(context).push(CustomRoute(
       builder: (context) => HalamanVideo(link),
@@ -121,72 +171,19 @@ class ApiService {
 
   Future<bool> pushToCbt(
       String scanResult, String jenjang, BuildContext context) async {
+    log(scanResult);
+    List<WidgetQuestion> data = await getUjian(scanResult);
     return await Navigator.of(context).push(CustomRoute(
       builder: (context) => HalamanSoal(
-          scanResult,
-          jenjang == "cbtsd"
-              ? "Soal SD/MI"
-              : jenjang == "cbtsmp"
-                  ? "Soal SMP/MI"
-                  : "Soal SMA/MA",
-          true,
-          jenjang),
+        questionlenght: data,
+        topicType: "Test",
+        color: Colors.red,
+      ),
     ));
   }
 
   Future<bool> scanQrCbt(String link, BuildContext context) async {
-    String jenjangCbt = "";
-
-    jenjangCbt = link.replaceAll("buku.bupin.id/?", "");
-
-    int kodeTingkat = int.parse(jenjangCbt[jenjangCbt.indexOf(".") + 1] +
-        jenjangCbt[jenjangCbt.indexOf(".") + 2]);
-
-    String jenjang = "cbtsd";
-
-    if (kodeTingkat == 15 ||
-        kodeTingkat == 20 ||
-        kodeTingkat == 26 ||
-        kodeTingkat == 27 ||
-        kodeTingkat == 28 ||
-        kodeTingkat == 36 ||
-        kodeTingkat == 40) {
-      jenjang = "cbtsd";
-    } else if (kodeTingkat == 16 ||
-        kodeTingkat == 17 ||
-        kodeTingkat == 22 ||
-        kodeTingkat == 24 ||
-        kodeTingkat == 29 ||
-        kodeTingkat == 31 ||
-        kodeTingkat == 33 ||
-        kodeTingkat == 34 ||
-        kodeTingkat == 37) {
-      jenjang = "cbtsmp";
-    } else {
-      jenjang = "cbtsma";
-    }
-
-    int? ujianId;
-
-    List<String> parts = link.split("-");
-
-    if (parts.length >= 2) {
-      String numberString = parts[1];
-
-      ujianId = int.tryParse(numberString) ?? 0;
-
-      log("The extracted number is: $ujianId");
-    } else {
-      log("Pattern not found in the URL.");
-    }
-
-    if (jenjang == "cbtsd") {
-      link = "https://cbtsd.bupin.id/login.php?$ujianId";
-    } else {
-      link = "https://tim.bupin.id/$jenjang/login.php?$ujianId";
-    }
-
-    return await pushToCbt(link, jenjang, context);
+    return await pushToCbt(link, "jenjang", context);
   }
 
   Future<bool> scanQrVideo(String link, BuildContext context) async {

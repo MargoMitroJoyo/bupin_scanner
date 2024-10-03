@@ -5,7 +5,8 @@ import 'package:Bupin/Home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
-
+import 'package:html/parser.dart';
+import 'package:html/dom.dart' as dom;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -29,6 +30,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   void initState() {
+     
     super.initState();
     initPlatformState();
   }
@@ -72,10 +74,10 @@ class _MyAppState extends State<MyApp> {
             fontFamily: 'Nunito',
             textTheme:
                 const TextTheme(titleMedium: TextStyle(fontFamily: "Nunito")),
-            scaffoldBackgroundColor: const Color.fromRGBO(70, 89, 166, 1),
+            scaffoldBackgroundColor:    Color.fromRGBO(106, 90, 224, 1,),
             colorScheme: ColorScheme.fromSwatch().copyWith(
-                secondary: const Color.fromRGBO(236, 180, 84, 1),
-                primary: const Color.fromRGBO(70, 89, 166, 1))),
+                secondary: const Color.fromRGBO(124, 120, 209, 1),
+                primary: const Color.fromRGBO(106, 90, 224, 1))),
         home: const Home());
   }
 }
