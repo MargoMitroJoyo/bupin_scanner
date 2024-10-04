@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:Bupin/ApiServices.dart';
 import 'package:Bupin/camera/camera.dart';
 import 'package:Bupin/navigation/component/recent_video_item.dart';
-import 'package:Bupin/navigation/provider/navigation_provider.dart';
+import 'package:Bupin/navigation/navigation_provider.dart';
 import 'package:Bupin/styles/PageTransitionTheme.dart';
 import 'package:Bupin/youtube_video/Halaman_Video.dart';
 import 'package:provider/provider.dart';

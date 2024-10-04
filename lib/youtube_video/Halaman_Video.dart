@@ -5,8 +5,9 @@
 import 'dart:developer';
 
 import 'package:Bupin/ApiServices.dart';
+import 'package:Bupin/camera/camera_provider.dart';
 import 'package:Bupin/models/recent_video.dart';
-import 'package:Bupin/navigation/provider/navigation_provider.dart';
+import 'package:Bupin/navigation/navigation_provider.dart';
 import 'package:Bupin/youtube_video/Halaman_Laporan_Error.dart';
 import 'package:Bupin/models/video.dart';
 import 'package:dio/dio.dart';
@@ -106,9 +107,14 @@ class HalamanVideoState extends State<HalamanVideo>
     }
     if (video != null) {
       _controller = YoutubePlayerController(
-        params: const YoutubePlayerParams(strictRelatedVideos: true),
+          params: const YoutubePlayerParams(
+        strictRelatedVideos: true,
+        showFullscreenButton: true,
+        color: "red",
+      ));
+      _controller.setFullScreenListener(
+        (isFullScreen) {},
       );
-
       if (Provider.of<NavigationProvider>(context, listen: false)
               .selectedRecentVideo !=
           null) {
@@ -139,9 +145,15 @@ class HalamanVideoState extends State<HalamanVideo>
     // ignore: deprecated_member_use
     return WillPopScope(
       onWillPop: () async {
+        if (_controller.value.fullScreenOption.enabled) {
+          _controller.exitFullScreen();
+          return Future.value(false);
+        }
+        Provider.of<CameraProvider>(context, listen: false).scaning = false;
+
         updatingRecent();
-        Navigator.of(context).pop();
-        return Future.value(false);
+
+        return Future.value(true);
       },
       child: FutureBuilder<void>(
           future: fetchApi(),
@@ -180,6 +192,10 @@ class HalamanVideoState extends State<HalamanVideo>
                                   padding: const EdgeInsets.all(15.0),
                                   child: GestureDetector(
                                       onTap: () {
+                                        Provider.of<CameraProvider>(context,
+                                                listen: false)
+                                            .scaning = false;
+
                                         _controller.stopVideo();
                                         updatingRecent();
                                         Navigator.pop(context, false);

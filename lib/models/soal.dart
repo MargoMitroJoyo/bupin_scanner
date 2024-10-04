@@ -8,7 +8,6 @@ class WidgetQuestion {
   final List<WiidgetOption> options;
   bool isLocked;
   WiidgetOption? selectedWiidgetOption;
-  WiidgetOption correctAnswer;
 
   WidgetQuestion({
     required this.htmlText,
@@ -16,7 +15,6 @@ class WidgetQuestion {
     required this.options,
     this.isLocked = false,
     this.selectedWiidgetOption,
-    required this.correctAnswer,
   });
   
   factory WidgetQuestion.fromMap(Map<String, dynamic> data) {
@@ -24,42 +22,38 @@ class WidgetQuestion {
         text: Helper.convertSoal(data["soal"])
             .map(
               (e) => e
-                  .replaceAll("<strong>", "")
-                  .replaceAll("</strong>", "")
-                  .replaceAll("<br>", "")
-                  .replaceAll("<p>", "")
-                  .replaceAll("</p>", ""),
+         
             )
             .toList(),
         options: [
           WiidgetOption(
             isCorrect: data["jawaban"] == "pilA",
-            text: data["pilA"]
+            text:Helper.convertSoal( data["pilA"])[0]
              
           ),
           WiidgetOption(
             isCorrect: data["jawaban"] == "pilB",
-            text: (data["pilB"])
+            text: Helper.convertSoal( data["pilB"])[0]
              
           ),
           WiidgetOption(
             isCorrect: data["jawaban"] == "pilC",
-            text: (data["pilC"])
+            text: Helper.convertSoal( data["pilC"])[0]
              
           ),
           WiidgetOption(
             isCorrect: data["jawaban"] == ("pilD"),
-            text: data["pilD"]
+            text:  Helper.convertSoal( data["pilD"])[0]
              
           ),
           WiidgetOption(
             isCorrect: data["jawaban"] == ("pilE"),
-            text: data["pilE"]
+            text:  Helper.convertSoal( data["pilE"])[0]
              
           )
         ],
      
-        correctAnswer: WiidgetOption(isCorrect: true, text: data["jawaban"]));
+       );
   }
 }
 

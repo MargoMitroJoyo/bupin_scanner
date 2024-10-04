@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:typed_data';
 
+import 'package:Bupin/camera/camera_provider.dart';
 import 'package:Bupin/quiz/Halaman_PDF_Soal.dart';
 import 'package:Bupin/models/soal.dart';
 import 'package:Bupin/widgets/image_memory.dart';
@@ -8,7 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'dart:convert';
-
+import 'package:provider/provider.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 
 Image imageFromBase64String(String base64String) {
@@ -70,13 +71,16 @@ class _HalamanSoalState extends State<HalamanSoal> {
   @override
   Widget build(BuildContext context) {
     Color bgColor3 = widget.color;
-    Color bgColor = widget.color.withOpacity(0.5);
 
     // ignore: deprecated_member_use
     return WillPopScope(
       onWillPop: () {
+        Provider.of<CameraProvider>(
+          context,listen: false
+        ).scaning = false;
+
         Navigator.of(context).pop();
-        return Future.value(false);
+        return Future.value(true);
       },
       child: Scaffold(
         backgroundColor: bgColor3,
@@ -99,8 +103,10 @@ class _HalamanSoalState extends State<HalamanSoal> {
                             padding: const EdgeInsets.all(15.0),
                             child: GestureDetector(
                                 onTap: () {
-                                  // controller.pause();
-                                  Navigator.pop(context, false);
+                                  Provider.of<CameraProvider>(
+                                    context,listen: false
+                                  ).scaning = false;
+                                    Navigator.of(context).pop();
                                 },
                                 child: Center(
                                   child: Icon(
@@ -116,18 +122,16 @@ class _HalamanSoalState extends State<HalamanSoal> {
                               left: 10,
                               right: 10,
                             ),
-                            child: Flexible(
-                              child: Text(
-                                "${widget.topicType}",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyLarge!
-                                    .copyWith(
-                                        color: Colors.white,
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w400),
-                                overflow: TextOverflow.ellipsis,
-                              ),
+                            child: Text(
+                              "${widget.topicType}",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge!
+                                  .copyWith(
+                                      color: Colors.white,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w400),
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
                         ],
@@ -190,137 +194,115 @@ class _HalamanSoalState extends State<HalamanSoal> {
             itemBuilder: (context, index) {
               final WidgetQuestion myquestions = widget.questionlenght[index];
 
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ListView(
-                  children: [
-                    // HtmlWidget(myquestions.htmlText),
-                    ...myquestions.text
-                        .map(
-                          (e) => e.contains("data:image/png;base64")
-                              ? Base64Image(e)
-                              : Text(e),
-                        )
-                        .toList(),
-                    const SizedBox(
-                      height: 25,
-                    ),
-                    Column(
-                      children: myquestions.options.map((e) {
-                        var color = Colors.grey.shade200;
+              return ListView(padding: const EdgeInsets.all(8.0), children: [
+                //  HtmlWidget(myquestions.htmlText),
+                ...myquestions.text
+                    .map(
+                      (e) => e.contains("image/png") ? Base64Image(e) : Text(e),
+                    )
+                    .toList(),
+                const SizedBox(
+                  height: 25,
+                ),
+                ...myquestions.options.map((e) {
+                  var color = Colors.grey.shade200;
 
-                        var questionOption = e;
-                        String letters =
-                            optionsLetters[myquestions.options.indexOf(e)];
+                  var questionOption = e;
+                  String letters =
+                      optionsLetters[myquestions.options.indexOf(e)];
 
-                        if (myquestions.isLocked) {
-                          if (questionOption ==
-                              myquestions.selectedWiidgetOption) {
-                            color = questionOption.isCorrect!
-                                ? Colors.green
-                                : Colors.red;
-                          } else if (questionOption.isCorrect!) {
-                            color = Colors.green;
-                          }
-                        }
-                        return (questionOption.text!.isEmpty &&
-                                    letters == "E." ||
-                                questionOption.text!.isEmpty && letters == "D.")
-                            ? SizedBox()
-                            : InkWell(
-                                onTap: () {
-                                  if (!myquestions.isLocked) {
-                                    listSelectedOption.add(questionOption);
-                                    setState(() {
-                                      myquestions.isLocked = true;
-                                      myquestions.selectedWiidgetOption =
-                                          questionOption;
-                                    });
+                  if (myquestions.isLocked) {
+                    if (questionOption == myquestions.selectedWiidgetOption) {
+                      color =
+                          questionOption.isCorrect! ? Colors.green : Colors.red;
+                    } else if (questionOption.isCorrect!) {
+                      color = Colors.green;
+                    }
+                  }
+                  return (questionOption.text!.isEmpty && letters == "E." ||
+                          questionOption.text!.isEmpty && letters == "D.")
+                      ? SizedBox()
+                      : InkWell(
+                          onTap: () {
+                            if (!myquestions.isLocked) {
+                              listSelectedOption.add(questionOption);
+                              setState(() {
+                                myquestions.isLocked = true;
+                                myquestions.selectedWiidgetOption =
+                                    questionOption;
+                              });
 
-                                    isLocked = myquestions.isLocked;
-                                    if (myquestions
-                                        .selectedWiidgetOption!.isCorrect!) {
-                                      score++;
-                                    }
-                                  }
-                                },
-                                child: Container(
-                                  padding: const EdgeInsets.all(10),
-                                  margin:
-                                      const EdgeInsets.symmetric(vertical: 8),
-                                  decoration: BoxDecoration(
-                                    border: Border.all(color: color),
-                                    color: Colors.grey.shade100,
-                                    borderRadius: const BorderRadius.all(
-                                        Radius.circular(10)),
-                                  ),
-                                  child: Center(
-                                    child: Row(
-                                      // crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Align(
-                                          alignment: Alignment.topCenter,
-                                          child: Text(
-                                            "$letters",
-                                            style:
-                                                const TextStyle(fontSize: 16),
-                                          ),
-                                        ),
-                                        Expanded(
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(
-                                                left: 10, right: 4),
-                                            child: HtmlWidget(
-                                              // the first parameter (`html`) is required
-                                              questionOption.text!,
-
-                                              // all other parameters are optional, a few notable params:
-
-                                              // specify custom styling for an element
-                                              // see supported inline styling below
-
-                                              // this callback will be triggered when user taps a link
-
-                                              // select the render mode for HTML body
-                                              // by default, a simple `Column` is rendered
-                                              // consider using `ListView` or `SliverList` for better performance
-                                            ),
-                                          ),
-                                        ),
-                                        isLocked == true
-                                            ? questionOption.isCorrect!
-                                                ? const Icon(
-                                                    Icons.check_circle,
-                                                    color: Colors.green,
-                                                  )
-                                                : const Icon(
-                                                    Icons.cancel,
-                                                    color: Colors.red,
-                                                  )
-                                            : Opacity(
-                                                opacity: 0,
-                                                child: const Icon(
-                                                  Icons.check_circle,
-                                                  color: Colors.green,
-                                                ),
-                                              )
-                                      ],
+                              isLocked = myquestions.isLocked;
+                              if (myquestions
+                                  .selectedWiidgetOption!.isCorrect!) {
+                                score++;
+                              }
+                            }
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.all(10),
+                            margin: const EdgeInsets.symmetric(vertical: 8),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: color),
+                              color: Colors.grey.shade100,
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(10)),
+                            ),
+                            child: Center(
+                              child: Row(
+                                // crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Align(
+                                    alignment: Alignment.topCenter,
+                                    child: Text(
+                                      "$letters",
+                                      style: const TextStyle(fontSize: 16),
                                     ),
                                   ),
-                                ),
-                              );
-                      }).toList(),
-                    ),
-                    isLocked
-                        ? Center(
-                            child: Padding(
-                            padding: const EdgeInsets.all(20.0),
-                            child: buildElevatedButton(),
-                          ))
-                        : const SizedBox.shrink(),
-                  ],
-                ),
-              );
+                                  Expanded(
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 10, right: 4),
+                                      child: questionOption.text!.contains(
+                                              "data:image/png;base64,")
+                                          ? Base64Image(questionOption.text!)
+                                          : Text(
+                                              questionOption.text!,
+                                            ),
+                                    ),
+                                  ),
+                                  isLocked == true
+                                      ? questionOption.isCorrect!
+                                          ? const Icon(
+                                              Icons.check_circle,
+                                              color: Colors.green,
+                                            )
+                                          : const Icon(
+                                              Icons.cancel,
+                                              color: Colors.red,
+                                            )
+                                      : Opacity(
+                                          opacity: 0,
+                                          child: const Icon(
+                                            Icons.check_circle,
+                                            color: Colors.green,
+                                          ),
+                                        )
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                }).toList(),
+
+                isLocked
+                    ? Center(
+                        child: Padding(
+                        padding: const EdgeInsets.all(20.0),
+                        child: buildElevatedButton(),
+                      ))
+                    : const SizedBox.shrink(),
+              ]);
             },
           ),
         ),

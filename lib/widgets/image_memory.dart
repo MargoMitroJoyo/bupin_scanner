@@ -20,7 +20,7 @@ class _Base64ImageState extends State<Base64Image>
         base64Decode(
           widget.image
               .replaceAll("data:image/png;base64,", "")
-              .replaceAll(" ", ""),
+             
         ),
         height: MediaQuery.of(context).size.width * 9 / 16,
         gaplessPlayback: true,

@@ -2,7 +2,8 @@ import 'dart:developer';
 
 
 import 'package:Bupin/Navigation/navigation.dart';
-import 'package:Bupin/navigation/provider/navigation_provider.dart';
+import 'package:Bupin/camera/camera_provider.dart';
+import 'package:Bupin/navigation/navigation_provider.dart';
 import 'package:provider/provider.dart';
 
 import 'package:flutter/material.dart';
@@ -24,6 +25,8 @@ void main() async {
       providers: [
         ChangeNotifierProvider(
           create: (context) => NavigationProvider(),
+        ), ChangeNotifierProvider(
+          create: (context) => CameraProvider(),
         ),
        
       ],

@@ -5,7 +5,7 @@ import 'package:Bupin/helper.dart';
 
 import 'package:Bupin/models/Video.dart';
 import 'package:Bupin/models/recent_video.dart';
-import 'package:Bupin/navigation/provider/navigation_provider.dart';
+import 'package:Bupin/navigation/navigation_provider.dart';
 import 'package:Bupin/youtube_video/Halaman_Video.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

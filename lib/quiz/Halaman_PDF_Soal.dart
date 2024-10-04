@@ -40,14 +40,7 @@ class _HalamanPDFSoalStateState extends State<HalamanPDFSoalState>
   List optionsLetters = ["A.", "B.", "C.", "D.", "E."];
   @override
   void initState() {
-    if (widget.list[0].options.length == 4) {
-      optionsLetters = [
-        "A.",
-        "B.",
-        "C.",
-        "D.",
-      ];
-    }
+  
     super.initState();
   }
 

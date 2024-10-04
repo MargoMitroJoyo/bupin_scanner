@@ -8,7 +8,9 @@ class Helper {
     return text.replaceAll(RegExp(r'<[^>]*>|&[^;]+;'), ' ');
   }
 
-  static List<String> convertSoal(String soal) {
+  static List<String> convertSoal(String soal) {if(soal.isEmpty){
+      return [soal];
+    }
     List<String> list = [];
     var document = parse(soal);
     for (var i = 0; i < document.querySelectorAll("p").length; i++) {
@@ -17,11 +19,9 @@ class Helper {
         var image = document.querySelectorAll("p")[i];
         dom.Element? link = image.querySelector('img');
         String? imageLink = link != null ? link.attributes['src'] : "";
-        log(imageLink.toString().replaceAll("data:image/png;base64,", ""));
         list.add(imageLink.toString());
       } else {
-        list.add(document.querySelectorAll("p")[i].innerHtml.toString());
-        log(document.querySelectorAll("p")[i].innerHtml.toString());
+        list.add(document.querySelectorAll("p")[i].text);
       }
     }
     return list;
@@ -41,13 +41,11 @@ class Helper {
     return newStr;
   }
 
-  static  printDuration(Duration duration) {
+  static String printDuration(Duration duration) {
     String negativeSign = duration.isNegative ? '-' : '';
     String twoDigits(int n) => n.toString().padLeft(2, "0");
     String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60).abs());
     String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60).abs());
-    return "$negativeSign$twoDigitMinutes:$twoDigitSeconds";
     return "$negativeSign${twoDigits(duration.inHours)}:$twoDigitMinutes:$twoDigitSeconds";
-
   }
 }
