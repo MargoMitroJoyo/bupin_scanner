@@ -1,4 +1,4 @@
-import 'package:Bupin/models/Het.dart';
+import 'package:Bupin/models/het.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'dart:developer';
@@ -34,14 +34,14 @@ List<String> listKelas = <String>[
   "XII"
 ];
 
-class HalmanHet extends StatefulWidget {
-  const HalmanHet({super.key});
+class BSE extends StatefulWidget {
+  const BSE({super.key});
 
   @override
-  State<HalmanHet> createState() => _HalmanHetState();
+  State<BSE> createState() => _BSEState();
 }
 
-class _HalmanHetState extends State<HalmanHet> with AutomaticKeepAliveClientMixin{
+class _BSEState extends State<BSE> with AutomaticKeepAliveClientMixin{
   List<Het> listHET = [];
 
   Future<void> fetchApi() async {

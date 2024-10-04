@@ -1,23 +1,22 @@
-import 'package:Bupin/Banner.dart';
-import 'package:Bupin/Halaman_Soal.dart';
-import 'package:Bupin/Home_Bank_Soal.dart';
-import 'package:Bupin/Home_Het.dart';
-import 'package:Bupin/Home_LeaderBoard.dart';
-import 'package:Bupin/Home_PTS&PAS.dart';
-import 'package:Bupin/Home_Scan.dart';
+
+import 'package:Bupin/banner/Banner.dart';
+import 'package:Bupin/navigation/views/het.dart';
+import 'package:Bupin/navigation/views/leaderboard.dart';
+import 'package:Bupin/navigation/views/bank_soal.dart';
+import 'package:Bupin/navigation/views/home.dart';
 import 'package:Bupin/styles/PageTransitionTheme.dart';
 import 'package:flutter/material.dart';
 
 /// Flutter code sample for [BottomNavigationBar].
 
-class Home extends StatefulWidget {
-  const Home({super.key});
+class Navigation extends StatefulWidget {
+  const Navigation({super.key});
 
   @override
-  State<Home> createState() => _HomeState();
+  State<Navigation> createState() => _NavigationState();
 }
 
-class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
+class _NavigationState extends State<Navigation> with SingleTickerProviderStateMixin {
   late TabController _controller;
 
   @override
@@ -30,10 +29,10 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   int _selectedIndex = 3;
 
   static const List<Widget> _widgetOptions = <Widget>[
-    HalmanHet(),
-    HalmanScan(),
-    HalamanBelajar(),
-    HomeLeaderboard(),
+    BSE(),
+    Home(),
+    BankSoal(),
+   Leaderboard(),
   ];
 
   void _onItemTapped(int index) {

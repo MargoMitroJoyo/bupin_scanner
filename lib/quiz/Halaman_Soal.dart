@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:typed_data';
 
-import 'package:Bupin/Halaman_PDF_Soal.dart';
+import 'package:Bupin/quiz/Halaman_PDF_Soal.dart';
 import 'package:Bupin/models/soal.dart';
 import 'package:Bupin/widgets/image_memory.dart';
 import 'package:flutter/cupertino.dart';
@@ -72,6 +72,7 @@ class _HalamanSoalState extends State<HalamanSoal> {
     Color bgColor3 = widget.color;
     Color bgColor = widget.color.withOpacity(0.5);
 
+    // ignore: deprecated_member_use
     return WillPopScope(
       onWillPop: () {
         Navigator.of(context).pop();
@@ -193,30 +194,14 @@ class _HalamanSoalState extends State<HalamanSoal> {
                 padding: const EdgeInsets.all(8.0),
                 child: ListView(
                   children: [
-                    HtmlWidget(
-                                // the first parameter (`html`) is required
-                                 myquestions.text, 
-  
-
-                                // all other parameters are optional, a few notable params:
-
-                                // specify custom styling for an element
-                                // see supported inline styling below
-                              
-                              
-
-                                // this callback will be triggered when user taps a link
-
-                                // select the render mode for HTML body
-                                // by default, a simple `Column` is rendered
-                                // consider using `ListView` or `SliverList` for better performance
-                                renderMode: RenderMode.column,
-
-                                // set the default styling for text
-                                textStyle: TextStyle(fontSize: 14),
-                              ),
-                            
-                            
+                    // HtmlWidget(myquestions.htmlText),
+                    ...myquestions.text
+                        .map(
+                          (e) => e.contains("data:image/png;base64")
+                              ? Base64Image(e)
+                              : Text(e),
+                        )
+                        .toList(),
                     const SizedBox(
                       height: 25,
                     ),
@@ -225,7 +210,7 @@ class _HalamanSoalState extends State<HalamanSoal> {
                         var color = Colors.grey.shade200;
 
                         var questionOption = e;
-                        final letters =
+                        String letters =
                             optionsLetters[myquestions.options.indexOf(e)];
 
                         if (myquestions.isLocked) {
@@ -238,108 +223,92 @@ class _HalamanSoalState extends State<HalamanSoal> {
                             color = Colors.green;
                           }
                         }
-                        return questionOption.text!.isEmpty?SizedBox(): InkWell(
-                          onTap: () {
-                            if (!myquestions.isLocked) {
-                              listSelectedOption.add(questionOption);
-                              setState(() {
-                                myquestions.isLocked = true;
-                                myquestions.selectedWiidgetOption =
-                                    questionOption;
-                              });
+                        return (questionOption.text!.isEmpty &&
+                                    letters == "E." ||
+                                questionOption.text!.isEmpty && letters == "D.")
+                            ? SizedBox()
+                            : InkWell(
+                                onTap: () {
+                                  if (!myquestions.isLocked) {
+                                    listSelectedOption.add(questionOption);
+                                    setState(() {
+                                      myquestions.isLocked = true;
+                                      myquestions.selectedWiidgetOption =
+                                          questionOption;
+                                    });
 
-                              isLocked = myquestions.isLocked;
-                              if (myquestions
-                                  .selectedWiidgetOption!.isCorrect!) {
-                                score++;
-                              }
-                            }
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.all(10),
-                            margin: const EdgeInsets.symmetric(vertical: 8),
-                            decoration: BoxDecoration(
-                              border: Border.all(color: color),
-                              color: Colors.grey.shade100,
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(10)),
-                            ),
-                            child: Center(
-                              child: Row(
-                                // crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Align(
-                                    alignment: Alignment.topCenter,
-                                    child: Text(
-                                      "$letters",
-                                      style: const TextStyle(fontSize: 16),
-                                    ),
+                                    isLocked = myquestions.isLocked;
+                                    if (myquestions
+                                        .selectedWiidgetOption!.isCorrect!) {
+                                      score++;
+                                    }
+                                  }
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.all(10),
+                                  margin:
+                                      const EdgeInsets.symmetric(vertical: 8),
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: color),
+                                    color: Colors.grey.shade100,
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(10)),
                                   ),
-                                  // questionOption.text!.contains("data:image")
-                                  //     ? Expanded(
-                                  //         child: Padding(
-                                  //           padding:
-                                  //               const EdgeInsets.only(left: 10),
-                                  //           child: ClipRRect(
-                                  //               borderRadius:
-                                  //                   BorderRadius.circular(5),
-                                  //               child: AspectRatio(
-                                  //                 aspectRatio: 16 / 9,
-                                  //                 child: Base64Image( questionOption.text!),
-                                  //               )),
-                                  //         ),
-                                  //       )
-                                  //     :
-
-                                  Expanded(
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 10, right: 4),
-                                      child: HtmlWidget(
-                                // the first parameter (`html`) is required
-                                questionOption.text!,
-
-                                // all other parameters are optional, a few notable params:
-
-                                // specify custom styling for an element
-                                // see supported inline styling below
-                              
-                              
-
-                                // this callback will be triggered when user taps a link
-
-                                // select the render mode for HTML body
-                                // by default, a simple `Column` is rendered
-                                // consider using `ListView` or `SliverList` for better performance
-                                renderMode: RenderMode.column,
-
-                                // set the default styling for text
-                                textStyle: TextStyle(fontSize: 14),
-                              ),
-                                    ),
-                                  ),
-                                  isLocked == true
-                                      ? questionOption.isCorrect!
-                                          ? const Icon(
-                                              Icons.check_circle,
-                                              color: Colors.green,
-                                            )
-                                          : const Icon(
-                                              Icons.cancel,
-                                              color: Colors.red,
-                                            )
-                                      : Opacity(
-                                          opacity: 0,
-                                          child: const Icon(
-                                            Icons.check_circle,
-                                            color: Colors.green,
+                                  child: Center(
+                                    child: Row(
+                                      // crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Align(
+                                          alignment: Alignment.topCenter,
+                                          child: Text(
+                                            "$letters",
+                                            style:
+                                                const TextStyle(fontSize: 16),
                                           ),
-                                        )
-                                ],
-                              ),
-                            ),
-                          ),
-                        );
+                                        ),
+                                        Expanded(
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 10, right: 4),
+                                            child: HtmlWidget(
+                                              // the first parameter (`html`) is required
+                                              questionOption.text!,
+
+                                              // all other parameters are optional, a few notable params:
+
+                                              // specify custom styling for an element
+                                              // see supported inline styling below
+
+                                              // this callback will be triggered when user taps a link
+
+                                              // select the render mode for HTML body
+                                              // by default, a simple `Column` is rendered
+                                              // consider using `ListView` or `SliverList` for better performance
+                                            ),
+                                          ),
+                                        ),
+                                        isLocked == true
+                                            ? questionOption.isCorrect!
+                                                ? const Icon(
+                                                    Icons.check_circle,
+                                                    color: Colors.green,
+                                                  )
+                                                : const Icon(
+                                                    Icons.cancel,
+                                                    color: Colors.red,
+                                                  )
+                                            : Opacity(
+                                                opacity: 0,
+                                                child: const Icon(
+                                                  Icons.check_circle,
+                                                  color: Colors.green,
+                                                ),
+                                              )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              );
                       }).toList(),
                     ),
                     isLocked

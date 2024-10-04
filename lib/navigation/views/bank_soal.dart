@@ -69,7 +69,7 @@ class IconMapel extends StatelessWidget {
   }
 }
 
-class HalamanBelajar extends StatelessWidget {
+class BankSoal extends StatelessWidget {
   Future<void> _launchInBrowser(Uri url) async {
     if (!await launchUrl(
       url,
@@ -79,7 +79,7 @@ class HalamanBelajar extends StatelessWidget {
     }
   }
 
-  const HalamanBelajar({Key? key}) : super(key: key);
+  const BankSoal({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

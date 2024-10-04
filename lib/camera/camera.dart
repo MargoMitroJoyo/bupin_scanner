@@ -2,7 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:Bupin/ApiServices.dart';
-import 'package:Bupin/widgets/scann_aniamtion/scanning_effect.dart';
+import 'package:Bupin/camera/scann_aniamtion/scanning_effect.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';

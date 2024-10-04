@@ -1,7 +1,7 @@
 // Thank you to the author of the original post that this widget was build base on it.
 // https://medium.com/@webianks/scanning-animation-in-flutter-99fb26aabbb7
 
-import 'package:Bupin/widgets/scann_aniamtion/scanner_animation.dart';
+import 'package:Bupin/camera/scann_aniamtion/scanner_animation.dart';
 
 import 'package:flutter/material.dart';
 

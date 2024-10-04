@@ -10,19 +10,24 @@ class Base64Image extends StatefulWidget {
   State<Base64Image> createState() => _Base64ImageState();
 }
 
-class _Base64ImageState extends State<Base64Image> with AutomaticKeepAliveClientMixin {
+class _Base64ImageState extends State<Base64Image>
+    with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return  Center(
-      child: Image.memory(base64Decode(widget.image.replaceAll("data:image/png;base64,", "").replaceAll(" ", ""),),height: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                9 /
-                                                16,gaplessPlayback: true,),
+    return Center(
+      child: Image.memory(
+        base64Decode(
+          widget.image
+              .replaceAll("data:image/png;base64,", "")
+              .replaceAll(" ", ""),
+        ),
+        height: MediaQuery.of(context).size.width * 9 / 16,
+        gaplessPlayback: true,
+      ),
     );
   }
-  
+
   @override
   // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;

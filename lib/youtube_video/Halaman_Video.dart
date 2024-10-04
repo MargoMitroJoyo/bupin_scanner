@@ -5,13 +5,15 @@
 import 'dart:developer';
 
 import 'package:Bupin/ApiServices.dart';
-import 'package:Bupin/Halaman_Laporan_Error.dart';
-import 'package:Bupin/models/Video.dart';
+import 'package:Bupin/models/recent_video.dart';
+import 'package:Bupin/navigation/provider/navigation_provider.dart';
+import 'package:Bupin/youtube_video/Halaman_Laporan_Error.dart';
+import 'package:Bupin/models/video.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
-
-import 'widgets/play_pause_button_bar.dart';
+import 'package:provider/provider.dart';
+import 'component/play_pause_button_bar.dart';
 
 ///
 class HalamanVideo extends StatefulWidget {
@@ -24,27 +26,64 @@ class HalamanVideo extends StatefulWidget {
 
 class HalamanVideoState extends State<HalamanVideo>
     with TickerProviderStateMixin {
-  late final AnimationController _controller2 = AnimationController(
+  late final AnimationController _animationController = AnimationController(
     duration: const Duration(seconds: 2),
     vsync: this,
   )..animateTo(1);
   late final Animation<double> _animation = CurvedAnimation(
-    parent: _controller2,
+    parent: _animationController,
     curve: Curves.easeIn,
   );
-
-  @override
-  void dispose() {
-    _controller2.dispose();
-
-    super.dispose();
-  }
 
   double aspectRatio = 16 / 9;
   late YoutubePlayerController _controller;
   String linkQrVideo = "";
   Video? video;
   bool noInternet = true;
+  String videoThumbnail = "";
+  updatingRecent() async {
+    var recent = await _controller.currentTime;
+    var total = _controller.value.metaData.duration;
+    if (Provider.of<NavigationProvider>(context, listen: false)
+            .selectedRecentVideo ==
+        null) {
+      log("addRcentVideo");
+
+      Provider.of<NavigationProvider>(context, listen: false)
+          .addRecentVideo(RecentVideo(
+              widget.link,
+              videoThumbnail,
+              video!.namaVideo!,
+              Duration(
+                seconds: recent.toInt(),
+              ),
+              Duration(
+                seconds: total.inSeconds,
+              )));
+    } else {
+      log("update recent");
+      Provider.of<NavigationProvider>(context, listen: false)
+          .updateRecentVideo(RecentVideo(
+              widget.link,
+              videoThumbnail,
+              video!.namaVideo!,
+              Duration(
+                seconds: recent.toInt(),
+              ),
+              Duration(
+                seconds: total.inSeconds,
+              )));
+    }
+    Provider.of<NavigationProvider>(context, listen: false)
+        .selectingRecentVideo = null;
+  }
+
+  @override
+  void dispose() async {
+    _animationController.dispose();
+
+    super.dispose();
+  }
 
   Future<void> fetchApi() async {
     final dio = Dio();
@@ -67,23 +106,26 @@ class HalamanVideoState extends State<HalamanVideo>
     }
     if (video != null) {
       _controller = YoutubePlayerController(
-        params: const YoutubePlayerParams(
-            mute: false,
-            showFullscreenButton: false,
-            color: "red",
-            loop: false,
-            strictRelatedVideos: true),
+        params: const YoutubePlayerParams(strictRelatedVideos: true),
       );
 
-      _controller.setFullScreenListener(
-        (isFullScreen) {},
-      );
-
-      _controller.loadVideo(video!.linkVideo!);
-
-      final isVertical = await ApiService.isVertical(video!);
-
-      if (isVertical) {
+      if (Provider.of<NavigationProvider>(context, listen: false)
+              .selectedRecentVideo !=
+          null) {
+        var seconds = Provider.of<NavigationProvider>(context, listen: false)
+            .selectedRecentVideo!
+            .recentDuration
+            .inSeconds
+            .toString();
+        log("seek to");
+        _controller.loadVideo("${video!.linkVideo!}&t=$seconds");
+      } else {
+        _controller.loadVideo(video!.linkVideo!);
+      }
+      final data = await ApiService.isVertical(video!);
+      videoThumbnail = data!["imageUrl"];
+      log(videoThumbnail);
+      if (data["isVertical"]) {
         aspectRatio = 9 / 16;
       } else {
         aspectRatio = 16 / 9;
@@ -92,21 +134,14 @@ class HalamanVideoState extends State<HalamanVideo>
   }
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     log("Video");
     // ignore: deprecated_member_use
     return WillPopScope(
-      onWillPop: () {
-        Navigator.pop(context, false);
-        if (noInternet == false) {
-          _controller.stopVideo();
-        }
-        return Future.value(true);
+      onWillPop: () async {
+        updatingRecent();
+        Navigator.of(context).pop();
+        return Future.value(false);
       },
       child: FutureBuilder<void>(
           future: fetchApi(),
@@ -146,7 +181,7 @@ class HalamanVideoState extends State<HalamanVideo>
                                   child: GestureDetector(
                                       onTap: () {
                                         _controller.stopVideo();
-                                        // _controller.close();
+                                        updatingRecent();
                                         Navigator.pop(context, false);
                                       },
                                       child: CircleAvatar(
@@ -201,11 +236,13 @@ class HalamanVideoState extends State<HalamanVideo>
                                                   aspectRatio == 9 / 16
                                                       ? const SizedBox()
                                                       : Positioned.fill(
-                                                          child: Opacity( opacity: 0.05,
+                                                          child: Opacity(
+                                                            opacity: 0.05,
                                                             child: Image.asset(
                                                               "asset/Halaman_Scan/Cahaya Halaman Scan@4x.png",
-                                                              repeat: ImageRepeat
-                                                                  .repeatY,
+                                                              repeat:
+                                                                  ImageRepeat
+                                                                      .repeatY,
                                                               color: Theme.of(
                                                                       context)
                                                                   .primaryColor,
@@ -214,8 +251,8 @@ class HalamanVideoState extends State<HalamanVideo>
                                                                           context)
                                                                       .size
                                                                       .width,
-                                                              fit:
-                                                                  BoxFit.fitWidth,
+                                                              fit: BoxFit
+                                                                  .fitWidth,
                                                             ),
                                                           ),
                                                         ),
@@ -223,11 +260,13 @@ class HalamanVideoState extends State<HalamanVideo>
                                                       ? const SizedBox()
                                                       : Positioned.fill(
                                                           top: 0,
-                                                          child: Opacity( opacity: 0.05,
+                                                          child: Opacity(
+                                                            opacity: 0.05,
                                                             child: Image.asset(
                                                               "asset/Halaman_Scan/Cahaya Halaman Scan@4x.png",
-                                                              repeat: ImageRepeat
-                                                                  .repeatY,
+                                                              repeat:
+                                                                  ImageRepeat
+                                                                      .repeatY,
                                                               color: Theme.of(
                                                                       context)
                                                                   .primaryColor,
@@ -236,11 +275,10 @@ class HalamanVideoState extends State<HalamanVideo>
                                                                           context)
                                                                       .size
                                                                       .width,
-                                                              fit:
-                                                                  BoxFit.fitWidth,
+                                                              fit: BoxFit
+                                                                  .fitWidth,
                                                             ),
                                                           ),
-                                                        
                                                         ),
                                                   const Padding(
                                                     padding: EdgeInsets.only(

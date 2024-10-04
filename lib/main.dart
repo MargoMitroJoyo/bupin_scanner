@@ -1,6 +1,9 @@
 import 'dart:developer';
 
-import 'package:Bupin/Home.dart';
+
+import 'package:Bupin/Navigation/navigation.dart';
+import 'package:Bupin/navigation/provider/navigation_provider.dart';
+import 'package:provider/provider.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -17,7 +20,15 @@ void main() async {
     DeviceOrientation.portraitUp,
   ]);
 
-  return runApp(MyApp());
+  return runApp(MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => NavigationProvider(),
+        ),
+       
+      ],
+      child: const MyApp(),
+    ),);
 }
 
 class MyApp extends StatefulWidget {
@@ -78,6 +89,6 @@ class _MyAppState extends State<MyApp> {
             colorScheme: ColorScheme.fromSwatch().copyWith(
                 secondary: const Color.fromRGBO(124, 120, 209, 1),
                 primary: const Color.fromRGBO(106, 90, 224, 1))),
-        home: const Home());
+        home: const Navigation());
   }
 }

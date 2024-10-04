@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
-class HomeLeaderboard extends StatefulWidget {
-  const HomeLeaderboard({super.key});
+class Leaderboard extends StatefulWidget {
+  const Leaderboard({super.key});
 
   @override
-  State<HomeLeaderboard> createState() => _HomeLeaderboardState();
+  State<Leaderboard> createState() => _LeaderboardState();
 }
 
-class _HomeLeaderboardState extends State<HomeLeaderboard> {
+class _LeaderboardState extends State<Leaderboard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

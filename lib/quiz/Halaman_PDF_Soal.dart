@@ -1,8 +1,8 @@
 import 'dart:typed_data';
 
 import 'package:Bupin/ApiServices.dart';
-import 'package:Bupin/generate_pdf.dart';
 import 'package:Bupin/models/soal.dart';
+import 'package:Bupin/quiz/pdf_soal.dart';
 import 'package:flutter/material.dart';
 import 'package:printing/printing.dart';
 import 'package:pdf/pdf.dart';
@@ -97,10 +97,10 @@ class _HalamanPDFSoalStateState extends State<HalamanPDFSoalState>
         pdfFileName: 'Laporan_Bulanan.pdf',
         canDebug: false, allowPrinting: false, actions: [], allowSharing: false,
         build: (format) async {
-          asu = await printAllx[0]
-              .builder(format, widget.list, widget.listOption, widget.skor);
-          return printAllx[0]
-              .builder(format, widget.list, widget.listOption, widget.skor);
+          asu = await printAll
+              (format, widget.list, widget.listOption, widget.skor);
+          return printAll
+              (format, widget.list, widget.listOption, widget.skor);
         },
         onPrinted: _showPrintedToast,
         canChangeOrientation: false,
