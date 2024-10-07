@@ -10,7 +10,9 @@ import 'package:Bupin/youtube_video/Halaman_Video.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-class RecenVideoItem extends StatefulWidget {
+import 'package:fl_chart/fl_chart.dart';
+
+class RecenVideoItem extends StatelessWidget {
   final RecentVideo video;
 
   RecenVideoItem(
@@ -18,49 +20,45 @@ class RecenVideoItem extends StatefulWidget {
   );
 
   @override
-  State<RecenVideoItem> createState() => _RecenVideoItemState();
-}
-
-class _RecenVideoItemState extends State<RecenVideoItem> {
-  @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Provider.of<NavigationProvider>(context,listen: false).selectedRecentVideo=widget.video;
+        Provider.of<NavigationProvider>(context, listen: false)
+            .selectedRecentVideo = video;
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => HalamanVideo(widget.video.link),
+          builder: (context) => HalamanVideo(video.link),
         ));
       },
-      child: Container(
-        height: MediaQuery.of(context).size.width * 0.17,
+      child: Container(margin: EdgeInsets.symmetric(vertical: 5),
+        height: MediaQuery.of(context).size.width * 0.18,
         child: Container(
           // padding: EdgeInsets.all(10),
-          decoration: BoxDecoration(boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.2),
-              spreadRadius: 0.5,
-              blurRadius: 5,
-              offset: Offset(0, 0), // changes position of shadow
-            ),
-          ], borderRadius: BorderRadius.circular(8), color: Colors.white),
+          decoration: BoxDecoration(
+              border: Border.all(
+                  width: 2,
+                  color: Theme.of(context).primaryColor.withOpacity(0.2)),
+              borderRadius: BorderRadius.circular(15),
+              color: Colors.white),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Padding(
                 padding: const EdgeInsets.all(5),
                 child: ClipRRect(
-                    borderRadius: BorderRadius.circular(3.0),
+                    borderRadius: BorderRadius.circular(10.0),
                     child: Stack(
                       alignment: Alignment.center,
                       children: [
                         FadeInImage.assetNetwork(
                           placeholder: "asset/loading.png",
                           placeholderColor: Theme.of(context).primaryColor,
-                          image: widget.video.imageUrl,
-                        ),  FadeInImage.assetNetwork(
+                          image: video.imageUrl,
+                        ),
+                        FadeInImage.assetNetwork(
                           placeholder: "asset/loading.png",
                           placeholderColor: Theme.of(context).primaryColor,
-                          image: widget.video.imageUrl,color: Colors.black.withOpacity(0.4),
+                          image: video.imageUrl,
+                          color: Colors.black.withOpacity(0.5),
                         ),
                         Container(
                           color: Colors.red.withOpacity(0.5),
@@ -68,27 +66,46 @@ class _RecenVideoItemState extends State<RecenVideoItem> {
                       ],
                     )),
               ),
-              Expanded(
-                  child: Padding(
-                padding: const EdgeInsets.only(left: 8, right: 8),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      widget.video.namaSubBab,
-                      maxLines: 2,
-                      overflow: TextOverflow.clip,
+              Padding(
+                    padding: const EdgeInsets.only(left: 8, right: 8),
+                    child:Column(crossAxisAlignment: CrossAxisAlignment.start,mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Flexible(
+                      child:  Padding(
+                      padding: const EdgeInsets.only(bottom:  10),
+                      child: Text(
+                        video.namaSubBab,
+                        maxLines: 2,
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                        overflow: TextOverflow.clip,
+                      ),
                     ),
-                    Row(
-                      children: [
-                        Text(Helper.printDuration(widget.video.recentDuration)),
-                        Text("/" +
-                            Helper.printDuration(widget.video.totalDuration)),
-                      ],
-                    )
-                  ],
-                ),
+                  ),
+                  Container(
+                    width: 150,
+                    height: 5,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      child: LinearProgressIndicator(
+                        value: video.recentDuration.inSeconds /
+                            video.totalDuration.inSeconds,
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                            Theme.of(context).primaryColor),
+                        backgroundColor:
+                            Theme.of(context).primaryColor.withOpacity(0.2),
+                      ),
+                    ),
+                  )
+                ],
               )),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Icon(
+                  Icons.arrow_forward_ios_rounded,
+                  color: Theme.of(context).primaryColor,
+                  size: 16,
+                ),
+              )
             ],
           ),
         ),

@@ -87,11 +87,10 @@ class _MyAppState extends State<MyApp> {
                 actionsIconTheme: IconThemeData(color: Colors.white)),
             fontFamily: 'Nunito',
             textTheme:
-                const TextTheme(titleMedium: TextStyle(fontFamily: "Nunito")),
-            scaffoldBackgroundColor:    Color.fromRGBO(106, 90, 224, 1,),
+                const TextTheme(titleMedium: TextStyle(fontFamily: "Nunito")),scaffoldBackgroundColor:  Color.fromRGBO(74, 74, 165, 1),
             colorScheme: ColorScheme.fromSwatch().copyWith(
                 secondary: const Color.fromRGBO(124, 120, 209, 1),
-                primary: const Color.fromRGBO(106, 90, 224, 1))),
+                primary: const Color.fromRGBO(74, 74, 165, 1))),
         home: const Navigation());
   }
 }

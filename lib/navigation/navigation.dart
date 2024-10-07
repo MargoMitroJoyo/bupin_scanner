@@ -1,5 +1,5 @@
-
 import 'package:Bupin/banner/Banner.dart';
+import 'package:Bupin/camera/camera.dart';
 import 'package:Bupin/navigation/views/het.dart';
 import 'package:Bupin/navigation/views/leaderboard.dart';
 import 'package:Bupin/navigation/views/bank_soal.dart';
@@ -16,7 +16,8 @@ class Navigation extends StatefulWidget {
   State<Navigation> createState() => _NavigationState();
 }
 
-class _NavigationState extends State<Navigation> with SingleTickerProviderStateMixin {
+class _NavigationState extends State<Navigation>
+    with SingleTickerProviderStateMixin {
   late TabController _controller;
 
   @override
@@ -32,7 +33,7 @@ class _NavigationState extends State<Navigation> with SingleTickerProviderStateM
     BSE(),
     Home(),
     BankSoal(),
-   Leaderboard(),
+    Leaderboard(),
   ];
 
   void _onItemTapped(int index) {
@@ -48,13 +49,47 @@ class _NavigationState extends State<Navigation> with SingleTickerProviderStateM
       alignment: Alignment.center,
       children: [
         Scaffold(
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.miniCenterDocked,
+          floatingActionButton: Stack(alignment: Alignment.center, children: [
+            InkWell(
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => const QRViewExample(false),
+                ));
+              },
+              child: Container(
+                  width: MediaQuery.of(context).size.width * 0.15,
+                  height: MediaQuery.of(context).size.width * 0.15,
+                  padding: EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).primaryColor,
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(100),
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.white.withOpacity(0.2),
+                        spreadRadius: 5,
+                        blurRadius: 20,
+                        offset: const Offset(0.5, 0.5),
+                      ),
+                    ],
+                  ),
+                  child: Icon(
+                    Icons.qr_code_scanner_rounded,
+                    color: Colors.white,
+                    size: MediaQuery.of(context).size.width * 0.09,
+                  )),
+            )
+          ]),
           body: TabBarView(
             physics: const NeverScrollableScrollPhysics(),
             controller: _controller,
             children: _widgetOptions,
           ),
           bottomNavigationBar: BottomNavigationBar(
-            backgroundColor: Colors.white,
+            backgroundColor: Colors.white,type: BottomNavigationBarType.fixed,
             items: const <BottomNavigationBarItem>[
               BottomNavigationBarItem(
                 icon: Icon(Icons.menu_book_rounded),
@@ -73,8 +108,7 @@ class _NavigationState extends State<Navigation> with SingleTickerProviderStateM
                 label: 'Leaderboard',
               ),
             ],
-            currentIndex: _selectedIndex,
-            unselectedItemColor: Theme.of(context).primaryColor,
+            currentIndex: _selectedIndex,unselectedItemColor: Colors.grey,
             selectedItemColor: Theme.of(context).primaryColor,
             onTap: _onItemTapped,
           ),

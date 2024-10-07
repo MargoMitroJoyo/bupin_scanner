@@ -9,12 +9,11 @@ import 'package:printing/printing.dart';
 import 'package:pdf/pdf.dart';
 import 'package:provider/provider.dart';
 class HalamanPDFSoalState extends StatefulWidget {
-  final Color color;
   final List<dynamic> list;
   final List<WiidgetOption> listOption;
   final int skor;
   final String judul;
-  const HalamanPDFSoalState(this.list, this.listOption, this.color, this.skor,this.judul);
+  const HalamanPDFSoalState(this.list, this.listOption,  this.skor,this.judul);
 
   @override
   State<HalamanPDFSoalState> createState() => _HalamanPDFSoalStateState();
@@ -60,7 +59,7 @@ class _HalamanPDFSoalStateState extends State<HalamanPDFSoalState>
       },
       child: Scaffold(
       appBar: AppBar(title: Text(widget.judul,style: TextStyle(color: Colors.white),),
-        backgroundColor: widget.color,
+      
         leading: Padding(
           padding: const EdgeInsets.all(15.0),
           child: GestureDetector(
@@ -72,7 +71,7 @@ class _HalamanPDFSoalStateState extends State<HalamanPDFSoalState>
                 child: Center(
                   child: Icon(
                     Icons.arrow_back_rounded,
-                    color: widget.color,
+                    color: Theme.of(context).primaryColor,
                     size: 15,
                     weight: 100,
                   ),

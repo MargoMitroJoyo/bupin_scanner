@@ -166,31 +166,21 @@ class ApiService {
     return Quiz.fromMap(response.data, response2.data);
   }
 
-  Future<bool> pushToVideo(String link, BuildContext context) async {
-    return await Navigator.of(context).push(CustomRoute(
+  pushToVideo(String link, BuildContext context) {
+    Navigator.of(context).push(CustomRoute(
       builder: (context) => HalamanVideo(link),
     ));
+    return;
   }
 
-  Future<bool> pushToCbt(
-      String scanResult, String jenjang, BuildContext context) async {
+  pushToCbt(String scanResult, BuildContext context) {
     log(scanResult);
-    Quiz data = await getUjian(scanResult);
-    return await Navigator.of(context).push(CustomRoute(
+     Navigator.of(context).push(CustomRoute(
       builder: (context) => HalamanSoal(
-        questionlenght: data.questions,
-        namaBab: data.namaBab,
-        namaMapel: data.namaMapel.toTitleCase(),
-        color: Theme.of(context).primaryColor,
+        link: scanResult,
       ),
     ));
+    return;
   }
 
-  Future<bool> scanQrCbt(String link, BuildContext context) async {
-    return await pushToCbt(link, "jenjang", context);
-  }
-
-  Future<bool> scanQrVideo(String link, BuildContext context) async {
-    return await pushToVideo(link, context);
-  }
 }

@@ -50,6 +50,7 @@ dependencies:
   flutter_animate: ^4.5.0
   flutter_widget_from_html: ^0.15.2
   shared_preferences: ^2.3.2
+  fl_chart: ^0.69.0
  
 
 dev_dependencies:

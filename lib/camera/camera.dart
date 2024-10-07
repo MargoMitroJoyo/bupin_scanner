@@ -38,7 +38,7 @@ class _QRViewExampleState extends State<QRViewExample> {
         : MediaQuery.of(context).size.width / 2;
     return Consumer<CameraProvider>(builder: (context, data, x) {
       log("consumer");
-      if (controller != null&&data.scanned==false) {
+      if (controller != null && data.scanned==false ) {
         controller!.resumeCamera();
       }
 
@@ -58,18 +58,21 @@ class _QRViewExampleState extends State<QRViewExample> {
                         controller = controller2;
                         controller2!.scannedDataStream.listen(
                           (scanData) async {
+                            log(scanData.code.toString());
                             if (data.scanned == false) {
                               if (scanData.code!.contains("VID")) {
+                                controller2.pauseCamera();
+
                                 data.scaning = true;
-                                controller2!.pauseCamera();
 
                                 ApiService()
-                                    .scanQrVideo(scanData.code!, context);
+                                    .pushToVideo(scanData.code!, context);
                               } else if (scanData.code!.contains("UJN")) {
+                                controller2.pauseCamera();
+
                                 data.scaning = true;
 
-                                controller2!.pauseCamera();
-                                ApiService().scanQrCbt(scanData.code!, context);
+                                ApiService().pushToCbt(scanData.code!, context);
                               }
                             }
                           },

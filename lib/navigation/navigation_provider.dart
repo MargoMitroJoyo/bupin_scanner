@@ -23,7 +23,7 @@ class NavigationProvider extends ChangeNotifier {
           (e) => e.namaBab,
         )
         .toList()
-        .contains(data.namaMapel)) {
+        .contains(data.namaBab)) {
       recentSoalList.add(data);
     }
 
@@ -88,7 +88,7 @@ class NavigationProvider extends ChangeNotifier {
   }
 
   getRecentVideo() async {
-    recentSoalList.clear();
+    recentVideoList.clear();
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     var data = prefs.getStringList(
           "recentVideo",
