@@ -1,12 +1,13 @@
 import 'dart:typed_data';
 
 import 'package:Bupin/ApiServices.dart';
+import 'package:Bupin/camera/camera_provider.dart';
 import 'package:Bupin/models/soal.dart';
 import 'package:Bupin/quiz/pdf_soal.dart';
 import 'package:flutter/material.dart';
 import 'package:printing/printing.dart';
 import 'package:pdf/pdf.dart';
-
+import 'package:provider/provider.dart';
 class HalamanPDFSoalState extends StatefulWidget {
   final Color color;
   final List<dynamic> list;
@@ -20,7 +21,7 @@ class HalamanPDFSoalState extends StatefulWidget {
 }
 
 class _HalamanPDFSoalStateState extends State<HalamanPDFSoalState>
-    with AutomaticKeepAliveClientMixin {
+    {
   void _showPrintedToast(BuildContext context) {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
@@ -47,15 +48,23 @@ class _HalamanPDFSoalStateState extends State<HalamanPDFSoalState>
   Uint8List? asu;
   @override
   Widget build(BuildContext context) {
-    super.build(context);
-    return Scaffold(
+    
+    return  WillPopScope(
+      onWillPop: () {
+        Provider.of<CameraProvider>(
+          context,listen: false
+        ).scaning = false;
+
+        Navigator.of(context).pop();
+        return Future.value(true);
+      },
+      child: Scaffold(
       appBar: AppBar(title: Text(widget.judul,style: TextStyle(color: Colors.white),),
         backgroundColor: widget.color,
         leading: Padding(
           padding: const EdgeInsets.all(15.0),
           child: GestureDetector(
               onTap: () {
-                // controller.pause();
                 Navigator.pop(context, false);
               },
               child: CircleAvatar(
@@ -100,7 +109,7 @@ class _HalamanPDFSoalStateState extends State<HalamanPDFSoalState>
         canChangePageFormat: false,
         onShared: _showSharedToast,
       ),
-    );
+    ));
   }
 
   @override

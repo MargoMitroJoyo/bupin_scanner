@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:Bupin/ApiServices.dart';
-import 'package:Bupin/helper.dart';
+import 'package:Bupin/helper/helper.dart';
 
 import 'package:Bupin/models/Video.dart';
 import 'package:Bupin/models/recent_video.dart';

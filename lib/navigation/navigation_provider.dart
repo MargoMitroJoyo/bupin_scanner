@@ -7,9 +7,60 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class NavigationProvider extends ChangeNotifier {
-  List<RecentVideo> recentVideoList = [];
   List<RecentSoal> recentSoalList = [];
+  RecentSoal? selectedRecentSoal;
+  List<RecentVideo> recentVideoList = [];
   RecentVideo? selectedRecentVideo;
+
+  set selectingRecentSoal(val) {
+    selectedRecentSoal = val;
+    notifyListeners();
+  }
+
+  addRecentSoal(RecentSoal data) {
+    if (!recentSoalList
+        .map(
+          (e) => e.namaBab,
+        )
+        .toList()
+        .contains(data.namaMapel)) {
+      recentSoalList.add(data);
+    }
+
+    saveRecentSoal();
+    notifyListeners();
+  }
+
+  updateRecentSoal(RecentSoal data) {
+    recentSoalList[recentSoalList.indexOf(selectedRecentSoal!)] = data;
+    saveRecentSoal();
+    notifyListeners();
+  }
+
+  getRecentSoal() async {
+    recentSoalList.clear();
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    var data = prefs.getStringList(
+          "recentSoal",
+        ) ??
+        [];
+
+    for (var element in data) {
+      recentSoalList.add(RecentSoal.fromMap(jsonDecode(element)));
+    }
+    notifyListeners();
+  }
+
+  saveRecentSoal() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setStringList(
+        "recentSoal",
+        recentSoalList
+            .map(
+              (e) => jsonEncode(RecentSoal.toJson(e)),
+            )
+            .toList());
+  }
 
   set selectingRecentVideo(val) {
     selectedRecentVideo = val;

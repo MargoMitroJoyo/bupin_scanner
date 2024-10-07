@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:Bupin/helper/capital.dart';
 import 'package:Bupin/quiz/Halaman_Soal.dart';
 import 'package:Bupin/youtube_video/Halaman_Video.dart';
 import 'package:Bupin/models/het.dart';
@@ -90,8 +91,6 @@ class ApiService {
     }
   }
 
-
-
   Future<String> fetchCs() async {
     try {
       final dio = Dio();
@@ -130,37 +129,41 @@ class ApiService {
     }
   }
 
-  static Future<Map<String,dynamic>?> isVertical(Video video) async {
+  static Future<Map<String, dynamic>?> isVertical(Video video) async {
     final dio = Dio();
     final response = await dio.get(
         "https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${video.ytId}&key=AIzaSyDgsDwiV1qvlNa7aes8aR1KFzRSWLlP6Bw");
 
-   
-      return {"imageUrl":response.data["items"][0]["snippet"]["thumbnails"]["medium"]["url"],"isVertical":(response.data["items"][0]["snippet"]["localized"]["description"]
-            as String)
-        .contains("ctv")};
-    
+    return {
+      "imageUrl": response.data["items"][0]["snippet"]["thumbnails"]["medium"]
+          ["url"],
+      "isVertical": (response.data["items"][0]["snippet"]["localized"]
+              ["description"] as String)
+          .contains("ctv")
+    };
   }
 
-  static Future<List<WidgetQuestion>> getUjian(String link) async {
+  static Future<Quiz> getUjian(String link) async {
     final dio = Dio();
     String newLink =
         link.replaceRange(0, 22, "https://buku.bupin.id/api/ujn.php");
     log(newLink);
     final response = await dio.get(newLink);
 
-    log(response.statusCode.toString());
+    String jenjang = "sd";
+    if ((response.data["namaKelas"] as String).contains("SD")) {
+      jenjang = "sd";
+    }
+    if ((response.data["namaKelas"] as String).contains("SMP")) {
+      jenjang = "smp";
+    }
+    if ((response.data["namaKelas"] as String).contains("SMA")) {
+      jenjang = "sma";
+    }
     final response2 = await dio.get(
-        "https://be-cbt-sd.bupin.id/api/mapel/${response.data["idUjian"]}?type=id_ujian");
-    log(response2.data.toString());
+        "https://cbt.api.bupin.id/api/mapel/${response.data["idUjian"]}?level=$jenjang");
 
-    var myData = (response2.data["data"]["soal"] as List<dynamic>)
-        .map(
-          (e) => WidgetQuestion.fromMap(e),
-        )
-        .toList();
-    log(myData.length.toString());
-    return myData;
+    return Quiz.fromMap(response.data, response2.data);
   }
 
   Future<bool> pushToVideo(String link, BuildContext context) async {
@@ -172,12 +175,13 @@ class ApiService {
   Future<bool> pushToCbt(
       String scanResult, String jenjang, BuildContext context) async {
     log(scanResult);
-    List<WidgetQuestion> data = await getUjian(scanResult);
+    Quiz data = await getUjian(scanResult);
     return await Navigator.of(context).push(CustomRoute(
       builder: (context) => HalamanSoal(
-        questionlenght: data,
-        topicType: "Test",
-        color: Colors.red,
+        questionlenght: data.questions,
+        namaBab: data.namaBab,
+        namaMapel: data.namaMapel.toTitleCase(),
+        color: Theme.of(context).primaryColor,
       ),
     ));
   }

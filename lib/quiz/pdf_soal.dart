@@ -15,6 +15,7 @@
  */
 
 import 'dart:async';
+import 'dart:convert';
 import 'dart:developer';
 import 'package:Bupin/models/soal.dart';
 import 'package:collection/collection.dart';
@@ -183,18 +184,14 @@ Future<Uint8List> printAll(PdfPageFormat format, List<dynamic> as,
                                   //                               ),
                                   //                             )
                                   //                           : pw.SizedBox(),
-                                  pw.Padding(
-                                    padding:
-                                        const pw.EdgeInsets.only(bottom: 10),
-                                    child: pw.Text(
-                                      "myquestions.text",
-                                      style: pw.TextStyle(fontSize: 11),
-                                    ),
-                                  ),
 
-                                  // ...myquestions.options.map((e) {
-
-                                  //   return Text(e.toString());}).toList()
+                                  ...myquestions.text.map((e) {
+                                    return e.contains("data")
+                                        ? pw.Image(pw.MemoryImage(base64Decode(
+                                            e.replaceAll(
+                                                "data:image/png;base64,", ""))))
+                                        : pw.Text(e.toString());
+                                  }).toList(),
 
                                   pw.Column(
                                     children:
@@ -288,10 +285,9 @@ Future<Uint8List> printAll(PdfPageFormat format, List<dynamic> as,
           listSelectedOption.getRange(i - 5, i).toList());
       for (var element in as.getRange(i - 5, i).toList()) {
         temp.remove(element);
-       
       }
       for (var element in listSelectedOption.getRange(i - 5, i).toList()) {
-       temp2.remove(element);
+        temp2.remove(element);
       }
     } else if (i + 1 == listSelectedOption.length && i % 5 != 0) {
       log(temp.length.toString());

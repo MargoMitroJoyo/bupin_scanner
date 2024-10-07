@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:Bupin/camera/camera_provider.dart';
+import 'package:Bupin/helper/helper.dart';
+import 'package:Bupin/models/recent_soal.dart';
 import 'package:Bupin/quiz/Halaman_PDF_Soal.dart';
 import 'package:Bupin/models/soal.dart';
 import 'package:Bupin/widgets/image_memory.dart';
@@ -11,6 +13,8 @@ import 'package:flutter/widgets.dart';
 import 'dart:convert';
 import 'package:provider/provider.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
+
+import '../navigation/navigation_provider.dart';
 
 Image imageFromBase64String(String base64String) {
   return Image.memory(base64Decode(base64String));
@@ -25,14 +29,16 @@ String base64String(Uint8List data) {
 }
 
 class HalamanSoal extends StatefulWidget {
-  final String topicType;
+  final String namaBab;
+  final String namaMapel;
   final List<dynamic> questionlenght;
   final Color color;
   const HalamanSoal(
       {super.key,
       required this.color,
       required this.questionlenght,
-      required this.topicType});
+      required this.namaBab,
+      required this.namaMapel});
 
   @override
   State<HalamanSoal> createState() => _HalamanSoalState();
@@ -64,8 +70,25 @@ class _HalamanSoalState extends State<HalamanSoal> {
   @override
   void initState() {
     super.initState();
+
     _controller = PageController(initialPage: 0);
     _resetQuestionLocks();
+  }
+
+  recentSoal() {
+    if (Provider.of<NavigationProvider>(context, listen: false)
+            .selectedRecentSoal ==
+        null) {
+      Provider.of<NavigationProvider>(context, listen: false).addRecentSoal(
+          RecentSoal(widget.namaBab, widget.namaMapel,
+              Helper.localMapelName(widget.namaMapel)));
+    } else {
+      Provider.of<NavigationProvider>(context, listen: false).updateRecentSoal(
+          RecentSoal(widget.namaBab, widget.namaMapel,
+              Helper.localMapelName(widget.namaMapel)));
+    }
+    Provider.of<NavigationProvider>(context, listen: false)
+        .selectingRecentSoal = null;
   }
 
   @override
@@ -75,10 +98,8 @@ class _HalamanSoalState extends State<HalamanSoal> {
     // ignore: deprecated_member_use
     return WillPopScope(
       onWillPop: () {
-        Provider.of<CameraProvider>(
-          context,listen: false
-        ).scaning = false;
-
+        Provider.of<CameraProvider>(context, listen: false).scaning = false;
+        recentSoal();
         Navigator.of(context).pop();
         return Future.value(true);
       },
@@ -103,10 +124,12 @@ class _HalamanSoalState extends State<HalamanSoal> {
                             padding: const EdgeInsets.all(15.0),
                             child: GestureDetector(
                                 onTap: () {
-                                  Provider.of<CameraProvider>(
-                                    context,listen: false
-                                  ).scaning = false;
-                                    Navigator.of(context).pop();
+                                  Provider.of<CameraProvider>(context,
+                                          listen: false)
+                                      .scaning = false;
+                                  recentSoal();
+
+                                  Navigator.of(context).pop();
                                 },
                                 child: Center(
                                   child: Icon(
@@ -123,7 +146,7 @@ class _HalamanSoalState extends State<HalamanSoal> {
                               right: 10,
                             ),
                             child: Text(
-                              "${widget.topicType}",
+                              "${widget.namaBab}",
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyLarge!
@@ -345,7 +368,7 @@ class _HalamanSoalState extends State<HalamanSoal> {
             context,
             MaterialPageRoute(
               builder: (context) => HalamanPDFSoalState(widget.questionlenght,
-                  listSelectedOption, widget.color, score, widget.topicType),
+                  listSelectedOption, widget.color, score, widget.namaBab),
             ),
           );
         }
