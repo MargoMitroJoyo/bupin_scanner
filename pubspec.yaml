@@ -83,7 +83,6 @@ flutter:
     - asset/Halaman_HET/
     - asset/Halaman_Latihan_PAS&PTS/
     - asset/Halaman_Scan/
-    - asset/Icon/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 

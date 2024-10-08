@@ -50,22 +50,24 @@ Future<Uint8List> printAll(
 
   final double percentageScore = (skor / quiz.questions.length) * 100;
   List<Widget> widgets = [];
+
   widgets.add(Padding(
-      padding: EdgeInsets.all(20),
+      padding: EdgeInsets.only(top: 20, left: 20, right: 20, bottom: 5),
       child: Column(children: [
         Divider(),
         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           Image(asu, width: 60),
           Text(quiz.namaBab,
               style: TextStyle(
-                fontSize: 15,
+                fontSize: 15,fontWeight: FontWeight.bold,fontStyle: FontStyle.italic
               )),
           Text(percentageScore.round().toString(),
-              style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
+              style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold,color: percentageScore.round()<76?red:green)),
         ]),
         Divider(thickness: 2),
       ])));
   for (var i = 0; i < quiz.questions.length; i++) {
+    log("message");
     var data = quiz.questions[i];
     widgets.add(Container(
         child: Container(
@@ -79,117 +81,115 @@ Future<Uint8List> printAll(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  ...data.text.mapIndexed((index, element) {
-                    return Container(
-                      margin: EdgeInsets.all(5),
-                      padding:
-                          const EdgeInsets.only(top: 20, left: 20, right: 20),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "No. " +
-                                (quiz.questions.indexOf(data) + 1).toString(),
-                            style: TextStyle(
-                                fontSize: 11, fontWeight: FontWeight.bold),
-                          ),
-                          ...data.text.map((e) {
-                            return e.contains("data")
-                                ? Image(
-                                    MemoryImage(base64Decode(e.replaceAll(
-                                        "data:image/png;base64,", ""))),
-                                    width: 300)
-                                : Text(e.toString());
-                          }).toList(),
-                          Column(
-                            children: data.options.mapIndexed((j, e) {
-                              final letters =
-                                  optionsLetters[data.options.indexOf(e)];
-                              var questionOption = e;
+                  Container(
+                    margin: EdgeInsets.all(5),
+                    padding:
+                        const EdgeInsets.only(top: 20, left: 20, right: 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "No. " +
+                              (quiz.questions.indexOf(data) + 1).toString(),
+                          style: TextStyle(
+                              fontSize: 11, fontWeight: FontWeight.bold),
+                        ),
+                        ...data.text.map((e) {
+                          return e.contains("data")
+                              ? Image(
+                                  MemoryImage(base64Decode(e.replaceAll(
+                                      "data:image/png;base64,", ""))),
+                                  width: 300)
+                              : Text(e.toString());
+                        }).toList(),
+                        Column(
+                          children: data.options.mapIndexed((j, e) {
+                            final letters =
+                                optionsLetters[data.options.indexOf(e)];
+                            var questionOption = e;
 
-                              return (questionOption.text!.isEmpty &&
-                                          letters == "E." ||
-                                      questionOption.text!.isEmpty &&
-                                          letters == "D.")
-                                  ? SizedBox()
-                                  : Container(
-                                      child: Container(
-                                        margin: const EdgeInsets.symmetric(
-                                            vertical: 3),
-                                        decoration: BoxDecoration(
-                                          borderRadius: const BorderRadius.all(
-                                              Radius.circular(10)),
-                                        ),
-                                        child: Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              "$letters",
-                                              style:
-                                                  const TextStyle(fontSize: 11),
-                                            ),
-                                            questionOption.text!
-                                                    .contains("data")
-                                                ? Flexible(
-                                                    child: Padding(
-                                                      padding:
-                                                          const EdgeInsets.only(
-                                                              left: 10),
-                                                      child: ClipRRect(
-                                                          child: Image(
-                                                              MemoryImage(base64Decode(
-                                                                  questionOption
-                                                                      .text!
-                                                                      .replaceAll(
-                                                                          "data:image/png;base64,",
-                                                                          ""))),
-                                                              width: 100)),
-                                                    ),
-                                                  )
-                                                : Flexible(
-                                                    child: Padding(
-                                                      padding: EdgeInsets.only(
-                                                          left: 10, right: 4),
-                                                      child: Text(
-                                                        "${questionOption.text}",
-                                                        style: TextStyle(
-                                                            fontSize: 11),
-                                                      ),
+                            return (questionOption.text!.isEmpty &&
+                                        letters == "E." ||
+                                    questionOption.text!.isEmpty &&
+                                        letters == "D.")
+                                ? SizedBox()
+                                : Container(
+                                    child: Container(
+                                      margin: const EdgeInsets.symmetric(
+                                          vertical: 3),
+                                      decoration: BoxDecoration(
+                                        borderRadius: const BorderRadius.all(
+                                            Radius.circular(10)),
+                                      ),
+                                      child: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            "$letters",
+                                            style:
+                                                const TextStyle(fontSize: 11),
+                                          ),
+                                          questionOption.text!.contains("data")
+                                              ? Flexible(
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            left: 10),
+                                                    child: ClipRRect(
+                                                        child: Image(
+                                                            MemoryImage(base64Decode(
+                                                                questionOption
+                                                                    .text!
+                                                                    .replaceAll(
+                                                                        "data:image/png;base64,",
+                                                                        ""))),
+                                                            width: 100)),
+                                                  ),
+                                                )
+                                              : Flexible(
+                                                  child: Padding(
+                                                    padding: EdgeInsets.only(
+                                                        left: 10, right: 4),
+                                                    child: Text(
+                                                      "${questionOption.text}",
+                                                      style: TextStyle(
+                                                          fontSize: 11),
                                                     ),
                                                   ),
-                                            (questionOption.isCorrect!)
-                                                ? Text(
-                                                    " Benar",
-                                                    style: TextStyle(
-                                                        fontSize: 11,
-                                                        color: green),
-                                                  )
-                                                : (questionOption ==
-                                                        listSelectedOption[i])
-                                                    ? Text(
-                                                        " Salah",
-                                                        style: TextStyle(
-                                                            fontSize: 11,
-                                                            color: red),
-                                                      )
-                                                    : SizedBox()
-                                          ],
-                                        ),
+                                                ),
+                                          (questionOption.isCorrect!)
+                                              ? Text(
+                                                  " Benar",
+                                                  style: TextStyle(
+                                                      fontSize: 11,
+                                                      color: green),
+                                                )
+                                              : (questionOption ==
+                                                      listSelectedOption[i])
+                                                  ? Text(
+                                                      " Salah",
+                                                      style: TextStyle(
+                                                          fontSize: 11,
+                                                          color: red),
+                                                    )
+                                                  : SizedBox()
+                                        ],
                                       ),
-                                    );
-                            }).toList(),
-                          ),
-                        ],
-                      ),
-                    );
-                  }).toList()
+                                    ),
+                                  );
+                          }).toList(),
+                        ),
+                      ],
+                    ),
+                  )
                 ]))));
   }
   document.addPage(
     MultiPage(
       pageTheme: const PageTheme(
         margin: EdgeInsets.all(10),
+        clip: true,
         pageFormat: PdfPageFormat.a4,
       ),
 

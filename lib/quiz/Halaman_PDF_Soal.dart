@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:Bupin/ApiServices.dart';
@@ -17,7 +18,8 @@ class HalamanPDFSoalState extends StatefulWidget {
   final List<WiidgetOption> listOption;
   final int skor;
   final String judul;
-  const HalamanPDFSoalState(this.quiz, this.listOption, this.skor, this.judul,this.recentSoal);
+  const HalamanPDFSoalState(
+      this.quiz, this.listOption, this.skor, this.judul, this.recentSoal);
 
   @override
   State<HalamanPDFSoalState> createState() => _HalamanPDFSoalStateState();
@@ -50,9 +52,12 @@ class _HalamanPDFSoalStateState extends State<HalamanPDFSoalState> {
     if (Provider.of<NavigationProvider>(context, listen: false)
             .selectedRecentSoal ==
         null) {
-      Provider.of<NavigationProvider>(context, listen: false).addRecentSoal(
-          RecentSoal(namaBab:  widget.recentSoal.namaBab,namaMapel:  widget.recentSoal.namaMapel,link:  widget.recentSoal.link,
-           ));
+      Provider.of<NavigationProvider>(context, listen: false)
+          .addRecentSoal(RecentSoal(
+        namaBab: widget.recentSoal.namaBab,
+        namaMapel: widget.recentSoal.namaMapel,
+        link: widget.recentSoal.link,
+      ));
     } else {
       // Provider.of<NavigationProvider>(context, listen: false)
       //     .updateRecentSoal(RecentSoal(
@@ -69,10 +74,11 @@ class _HalamanPDFSoalStateState extends State<HalamanPDFSoalState> {
   Uint8List? asu;
   @override
   Widget build(BuildContext context) {
+    log("pdf");
     return WillPopScope(
         onWillPop: () {
           Provider.of<CameraProvider>(context, listen: false).scaning = false;
-recentSoalG();
+          recentSoalG();
           Navigator.of(context).pop();
           return Future.value(true);
         },
@@ -80,6 +86,7 @@ recentSoalG();
           appBar: AppBar(
             title: Text(
               widget.judul,
+              
               style: TextStyle(color: Colors.white),
             ),
             backgroundColor: Theme.of(context).primaryColor,
@@ -87,7 +94,7 @@ recentSoalG();
               padding: const EdgeInsets.all(15.0),
               child: GestureDetector(
                   onTap: () {
-recentSoalG();
+                    recentSoalG();
 
                     Navigator.pop(context, false);
                   },
@@ -106,6 +113,8 @@ recentSoalG();
             actions: [
               IconButton(
                   onPressed: () async {
+                    asu = await printAll(
+                        widget.quiz, widget.listOption, widget.skor);
                     await Printing.sharePdf(
                         bytes: asu!, filename: widget.judul + ".pdf");
                   },
@@ -124,10 +133,7 @@ recentSoalG();
             canDebug: false, allowPrinting: false, actions: [],
             allowSharing: false,
             build: (format) async {
-              asu = await printAll(
-                 widget.quiz, widget.listOption, widget.skor);
-              return printAll(
-                 widget.quiz, widget.listOption, widget.skor);
+              return printAll(widget.quiz, widget.listOption, widget.skor);
             },
             onPrinted: _showPrintedToast,
             canChangeOrientation: false,
@@ -136,8 +142,4 @@ recentSoalG();
           ),
         ));
   }
-
-  @override
-  // TODO: implement wantKeepAlive
-  bool get wantKeepAlive => true;
 }

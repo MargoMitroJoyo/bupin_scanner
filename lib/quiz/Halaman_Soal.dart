@@ -157,7 +157,8 @@ class _HalamanSoalState extends State<HalamanSoal> {
                                   .bodyLarge!
                                   .copyWith(
                                       color: Colors.white,
-                                      fontSize: 20,
+
+                                      fontSize: 18,
                                       fontWeight: FontWeight.w400),
                               overflow: TextOverflow.ellipsis,
                             ),
