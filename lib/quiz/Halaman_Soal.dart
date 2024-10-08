@@ -80,9 +80,12 @@ class _HalamanSoalState extends State<HalamanSoal> {
     if (Provider.of<NavigationProvider>(context, listen: false)
             .selectedRecentSoal ==
         null) {
-      Provider.of<NavigationProvider>(context, listen: false).addRecentSoal(
-          RecentSoal(namaBab:  data!.namaBab,namaMapel:  data!.namaMapel,link:  widget.link,
-           ));
+      Provider.of<NavigationProvider>(context, listen: false)
+          .addRecentSoal(RecentSoal(
+        namaBab: data!.namaBab,
+        namaMapel: data!.namaMapel,
+        link: widget.link,
+      ));
     } else {
       // Provider.of<NavigationProvider>(context, listen: false)
       //     .updateRecentSoal(RecentSoal(
@@ -99,7 +102,7 @@ class _HalamanSoalState extends State<HalamanSoal> {
   @override
   Widget build(BuildContext context) {
     // ignore: deprecated_member_use
-    return  WillPopScope(
+    return WillPopScope(
       onWillPop: () {
         Provider.of<CameraProvider>(context, listen: false).scaning = false;
         recentSoal();
@@ -185,12 +188,12 @@ class _HalamanSoalState extends State<HalamanSoal> {
                         ),
                         child: Padding(
                           padding: const EdgeInsets.all(4.0),
-                          child: Center(
-                            child: Text(
-                              "Pertanyaan $_questionNumber/${data?.questions.length ?? "0"}",
-                              style: TextStyle(
-                                  fontSize: 16, color: Colors.grey.shade500),
-                            ),
+                          child: Text(
+                            loading
+                                ? ""
+                                : "Pertanyaan  $_questionNumber/${data?.questions.length ?? "0"}",
+                            style: TextStyle(
+                                fontSize: 16, color: Colors.grey.shade500),
                           ),
                         ),
                       ),
@@ -389,7 +392,15 @@ class _HalamanSoalState extends State<HalamanSoal> {
             context,
             MaterialPageRoute(
               builder: (context) => HalamanPDFSoalState(
-                  data!.questions, listSelectedOption, score, data!.namaBab),
+                  data!,
+                  listSelectedOption,
+                  score,
+                  data!.namaBab,
+                  RecentSoal(
+                    namaBab: data!.namaBab,
+                    namaMapel: data!.namaMapel,
+                    link: widget.link,
+                  )),
             ),
           );
         }
