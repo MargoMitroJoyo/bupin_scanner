@@ -86,7 +86,6 @@ class _HalamanPDFSoalStateState extends State<HalamanPDFSoalState> {
           appBar: AppBar(
             title: Text(
               widget.judul,
-              
               style: TextStyle(color: Colors.white),
             ),
             backgroundColor: Theme.of(context).primaryColor,
@@ -94,6 +93,8 @@ class _HalamanPDFSoalStateState extends State<HalamanPDFSoalState> {
               padding: const EdgeInsets.all(15.0),
               child: GestureDetector(
                   onTap: () {
+                    Provider.of<CameraProvider>(context, listen: false)
+                        .scaning = false;
                     recentSoalG();
 
                     Navigator.pop(context, false);
