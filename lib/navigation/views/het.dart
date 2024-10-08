@@ -41,7 +41,7 @@ class BSE extends StatefulWidget {
   State<BSE> createState() => _BSEState();
 }
 
-class _BSEState extends State<BSE> with AutomaticKeepAliveClientMixin{
+class _BSEState extends State<BSE> with AutomaticKeepAliveClientMixin {
   List<Het> listHET = [];
 
   Future<void> fetchApi() async {
@@ -87,19 +87,19 @@ class _BSEState extends State<BSE> with AutomaticKeepAliveClientMixin{
     log("het");
     return Column(
       children: [
-        
         Stack(
           alignment: Alignment.center,
-          children: [Positioned.fill(
-            child: Container(
-          color: Theme.of(context).primaryColor,
-        )),
+          children: [
+            Positioned.fill(
+                child: Container(
+              color: Theme.of(context).primaryColor,
+            )),
             Transform.flip(
                 flipX: false,
                 child: Opacity(
-                  opacity: 0.1,
+                  opacity: 0.5,
                   child: Image.asset(
-                    "asset/Halaman_Scan/Cahaya Halaman Scan@4x.png",
+                    "asset/Halaman_HET/Doodle HET-8.png",
                     color: Colors.white,
                   ),
                 )),
@@ -292,7 +292,7 @@ class _BSEState extends State<BSE> with AutomaticKeepAliveClientMixin{
       ],
     );
   }
-  
+
   @override
   // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;

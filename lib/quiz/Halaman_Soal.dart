@@ -188,12 +188,14 @@ class _HalamanSoalState extends State<HalamanSoal> {
                         ),
                         child: Padding(
                           padding: const EdgeInsets.all(4.0),
-                          child: Text(
-                            loading
-                                ? ""
-                                : "Pertanyaan  $_questionNumber/${data?.questions.length ?? "0"}",
-                            style: TextStyle(
-                                fontSize: 16, color: Colors.grey.shade500),
+                          child: Center(
+                            child: Text(
+                              loading
+                                  ? ""
+                                  : "Pertanyaan  $_questionNumber/${data?.questions.length ?? "0"}",
+                              style: TextStyle(
+                                  fontSize: 16, color: Colors.grey.shade500),
+                            ),
                           ),
                         ),
                       ),
