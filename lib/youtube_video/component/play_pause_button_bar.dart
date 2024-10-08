@@ -7,8 +7,6 @@ import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
 ///
 class PlayPauseButtonBar extends StatelessWidget {
-
-
   const PlayPauseButtonBar({super.key});
   @override
   Widget build(BuildContext context) {
@@ -24,7 +22,7 @@ class PlayPauseButtonBar extends StatelessWidget {
             padding: const EdgeInsets.only(right: 5, left: 10),
             margin: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-                color: Colors.grey.shade300,
+                color: Colors.grey.shade200,
                 borderRadius: BorderRadius.circular(10)),
             child: Row(
               children: [

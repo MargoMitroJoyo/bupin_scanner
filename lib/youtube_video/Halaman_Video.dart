@@ -253,9 +253,9 @@ class HalamanVideoState extends State<HalamanVideo>
                                                       ? const SizedBox()
                                                       : Positioned.fill(
                                                           child: Opacity(
-                                                            opacity: 0.05,
+                                                            opacity: 0.8,
                                                             child: Image.asset(
-                                                              "asset/Halaman_Scan/Cahaya Halaman Scan@4x.png",
+                                                              "asset/Halaman_HET/Doodle HET-8.png",
                                                               repeat:
                                                                   ImageRepeat
                                                                       .repeatY,
