@@ -81,16 +81,16 @@ class _HalamanSoalState extends State<HalamanSoal> {
             .selectedRecentSoal ==
         null) {
       Provider.of<NavigationProvider>(context, listen: false).addRecentSoal(
-          RecentSoal(data!.namaBab, data!.namaMapel, widget.link,
-              Helper.localAsset(data!.namaMapel)));
+          RecentSoal(namaBab:  data!.namaBab,namaMapel:  data!.namaMapel,link:  widget.link,
+           ));
     } else {
-      Provider.of<NavigationProvider>(context, listen: false)
-          .updateRecentSoal(RecentSoal(
-        data!.namaBab,
-        data!.namaMapel,
-        widget.link,
-        Helper.localAsset(data!.namaMapel),
-      ));
+      // Provider.of<NavigationProvider>(context, listen: false)
+      //     .updateRecentSoal(RecentSoal(
+      //   data!.namaBab,
+      //   data!.namaMapel,
+      //   widget.link,
+      //   Helper.localAsset(data!.namaMapel),
+      // ));
     }
     Provider.of<NavigationProvider>(context, listen: false)
         .selectingRecentSoal = null;
@@ -99,7 +99,7 @@ class _HalamanSoalState extends State<HalamanSoal> {
   @override
   Widget build(BuildContext context) {
     // ignore: deprecated_member_use
-    return WillPopScope(
+    return  WillPopScope(
       onWillPop: () {
         Provider.of<CameraProvider>(context, listen: false).scaning = false;
         recentSoal();

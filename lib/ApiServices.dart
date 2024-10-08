@@ -144,6 +144,7 @@ class ApiService {
   }
 
   static Future<Quiz> getUjian(String link) async {
+    log(link);
     final dio = Dio();
     String newLink =
         link.replaceRange(0, 22, "https://buku.bupin.id/api/ujn.php");

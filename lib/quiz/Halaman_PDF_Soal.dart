@@ -58,7 +58,7 @@ class _HalamanPDFSoalStateState extends State<HalamanPDFSoalState>
         return Future.value(true);
       },
       child: Scaffold(
-      appBar: AppBar(title: Text(widget.judul,style: TextStyle(color: Colors.white),),
+      appBar: AppBar(title: Text(widget.judul,style: TextStyle(color: Colors.white),),backgroundColor: Theme.of(context).primaryColor,
       
         leading: Padding(
           padding: const EdgeInsets.all(15.0),
@@ -81,8 +81,8 @@ class _HalamanPDFSoalStateState extends State<HalamanPDFSoalState>
         actions: [
           IconButton(
               onPressed: () async {
-                // await Printing.sharePdf(
-                //     bytes: asu!, filename: ApiService.user!.jenjang+"_"+widget.judul+".pdf" );
+                await Printing.sharePdf(
+                    bytes: asu!, filename: widget.judul+".pdf" );
               },
               icon: Icon(
                 Icons.share,
