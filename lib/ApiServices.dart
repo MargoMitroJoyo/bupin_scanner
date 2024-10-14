@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:Bupin/helper/capital.dart';
 import 'package:Bupin/quiz/Halaman_Soal.dart';
 import 'package:Bupin/youtube_video/Halaman_Video.dart';
 import 'package:Bupin/models/het.dart';
@@ -12,18 +11,18 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 const List<String> list = <String>[
-  'SD/MI  I',
-  'SD/MI  II',
-  'SD/MI  III',
-  'SD/MI  IV',
-  'SD/MI  V',
-  'SD/MI  VI',
-  'SMP/MTS  VII',
-  "SMP/MTS  VIII",
-  "SMP/MTS  IX",
-  "SMA/MA  X",
-  "SMA/MA  XI",
-  "SMA/MA  XII"
+  'SD I',
+  'SD II',
+  'SD III',
+  'SD IV',
+  'SD V',
+  'SD VI',
+  'SMP VII',
+  "SMP VIII",
+  "SMP IX",
+  "SMA X",
+  "SMA XI",
+  "SMA XII"
 ];
 const List<String> listKelas = <String>[
   'I',

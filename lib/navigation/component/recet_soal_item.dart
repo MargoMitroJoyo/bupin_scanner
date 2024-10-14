@@ -24,103 +24,129 @@ class RecenSoalItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        Provider.of<NavigationProvider>(context, listen: false)
-            .selectedRecentSoal = soal;
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => HalamanSoal(link: soal.link),
-        ));
-      },
-      child: Container(
-        margin: EdgeInsets.symmetric(vertical: 5),
-        height: MediaQuery.of(context).size.width * 0.2,
+    return Container(
+        margin: EdgeInsets.symmetric(vertical: 6),
+        height: MediaQuery.of(context).size.width * 0.19,
         child: Container(
-                     padding: EdgeInsets.all(2),
-
-          decoration: BoxDecoration(
-              border: Border.all(
-                  width: 2,
-                  color: Helper.localColor(soal.namaMapel!).withOpacity(0.2)),
-              borderRadius: BorderRadius.circular(15),
-              color: Colors.white),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(5),
-                child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10.0),
-                    child: AspectRatio(
-                        aspectRatio: 16 / 16,
-                        child: Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            Stack(
-                              alignment: Alignment.center,
-                              clipBehavior: Clip.none,
-                              children: [
-                                Opacity(
-                                    opacity: 1,
-                                    child: Image.asset(
-                                      "asset/Icon/Bg Icon2.png",
-                                      color: Helper.localColor(soal.namaMapel!),
-                                    )),
-                                Opacity(
-                                    opacity: 0.3,
-                                    child: Image.asset("asset/Icon/Bg t.png")),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Image.asset(
-                                    Helper.localAsset(soal.namaMapel!),
-                                    width: 50,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ))),
-              ),
-              Flexible(flex: 15,
-                child: Padding(
-                    padding: const EdgeInsets.only(left: 15, right: 8),
+            padding: EdgeInsets.all(2),
+            decoration: BoxDecoration(
+                border: Border.all(
+                    width: 1.5,
+                    color:  Helper
+                                                                              .localColor(
+                                                                                  soal.namaMapel!) .withOpacity(0.2)),
+                borderRadius: BorderRadius.circular(15),
+                color: Colors.white),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+               Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(5.0),
+                                                    child: ClipRRect(
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                                15.0),
+                                                        child: AspectRatio(
+                                                            aspectRatio: 16 / 16,
+                                                            child: Stack(
+                                                              alignment:
+                                                                  Alignment.center,
+                                                              children: [
+                                                                Stack(
+                                                                  alignment:
+                                                                      Alignment
+                                                                          .center,
+                                                                  clipBehavior:
+                                                                      Clip.none,
+                                                                  children: [
+                                                                    Opacity(
+                                                                        opacity: 1,
+                                                                        child: Image
+                                                                            .asset(
+                                                                          "asset/Icon/Bg Icon2.png",
+                                                                          color: Helper
+                                                                              .localColor(
+                                                                                  soal.namaMapel!).withOpacity(0.8),
+                                                                        )),
+                                                                    // Opacity(
+                                                                    //     opacity:
+                                                                    //         0.3,
+                                                                    //     child: Image
+                                                                    //         .asset(
+                                                                    //             "asset/Icon/Bg t.png")),
+                                                                   Padding(
+                                                                          padding: const EdgeInsets.all(8.0),
+                                                                          child: Image.asset(
+                                                                              Helper.localAsset( soal.namaMapel!),
+                                                                            ),
+                                                                        ),
+                                                                  ],
+                                                                ),
+                                                              ],
+                                                            ))),
+                                                  ), 
+                                
+                            
+                          
+                
+                Padding(
+                  padding: const EdgeInsets.only(left: 8),
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.5,
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Flexible(
-                          child: Container(
-                            child: Text(
-                              soal.namaBab!, softWrap: false,
-                              maxLines: 1,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 15),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
+                        Spacer(),
+                        Spacer(),
+                        Spacer(),
+                        Text(
+                          soal.namaBab!.toTitleCase(),
+                          overflow: TextOverflow.clip,
+                          maxLines: 1,
+                          style: TextStyle(
+                            color:  Helper
+                                                                              .localColor(
+                                                                                  soal.namaMapel!),
+                              
+                              fontSize: 15,fontFamily: "Rubik"
+                              ),
                         ),
+                        Spacer(),
                         Text(
                           soal.namaMapel!.toTitleCase(),
-                          maxLines: 2,
-                          style: TextStyle(fontSize: 10, color: Colors.grey),
+                          maxLines: 1,
+                          style: TextStyle(fontSize: 13, color: Colors.grey,),
                           overflow: TextOverflow.clip,
                         ),
+                        Spacer(),
+                        Spacer(),
+                        Spacer(),
                       ],
-                    )),
-              ),
-              Spacer(),
-              Padding(
-                padding: const EdgeInsets.only(right: 16),
-                child: Icon(
-                  Icons.arrow_forward_ios_rounded,
-                  color: Helper.localColor(soal.namaMapel!),
-                  size: 16,
+                    ),
+                  ),
                 ),
-              )
-            ],
-          ),
-        ),
-      ),
-    );
+                Spacer(),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: InkWell(
+                      onTap: () {
+                        Provider.of<NavigationProvider>(context, listen: false)
+                            .selectedRecentSoal = soal;
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => HalamanSoal(link: soal.link),
+                        ));
+                      },
+                      child: Icon(
+                        Icons.arrow_forward_ios_rounded,
+                        color:  Helper
+                                                                              .localColor(
+                                                                                  soal.namaMapel!) ,
+                        size: 16,
+                      )),
+                ),
+              
+           ] )));
   }
 }

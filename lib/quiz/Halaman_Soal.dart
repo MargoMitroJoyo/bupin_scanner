@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:Bupin/ApiServices.dart';
 import 'package:Bupin/camera/camera_provider.dart';
+import 'package:Bupin/helper/capital.dart';
 import 'package:Bupin/helper/helper.dart';
 import 'package:Bupin/models/recent_soal.dart';
 import 'package:Bupin/quiz/Halaman_PDF_Soal.dart';
@@ -52,15 +54,12 @@ class ClipPad extends CustomClipper<Rect> {
 
 class _HalamanSoalState extends State<HalamanSoal> {
   Quiz? data;
-  int questionTimerSeconds = 60;
-  Timer? _timer;
   int _questionNumber = 1;
   PageController _controller = PageController();
-  int score = 0;
-  bool isLocked = false;
   List optionsLetters = ["A.", "B.", "C.", "D.", "E."];
   List<WiidgetOption> listSelectedOption = [];
   bool loading = true;
+
   @override
   void initState() {
     getUjian();
@@ -70,7 +69,6 @@ class _HalamanSoalState extends State<HalamanSoal> {
 
   getUjian() async {
     data = await ApiService.getUjian(widget.link);
-    _resetQuestionLocks();
 
     loading = false;
     setState(() {});
@@ -86,14 +84,6 @@ class _HalamanSoalState extends State<HalamanSoal> {
         namaMapel: data!.namaMapel,
         link: widget.link,
       ));
-    } else {
-      // Provider.of<NavigationProvider>(context, listen: false)
-      //     .updateRecentSoal(RecentSoal(
-      //   data!.namaBab,
-      //   data!.namaMapel,
-      //   widget.link,
-      //   Helper.localAsset(data!.namaMapel),
-      // ));
     }
     Provider.of<NavigationProvider>(context, listen: false)
         .selectingRecentSoal = null;
@@ -110,6 +100,106 @@ class _HalamanSoalState extends State<HalamanSoal> {
         return Future.value(true);
       },
       child: Scaffold(
+        bottomNavigationBar: loading
+            ? SizedBox()
+            : Container(
+                padding: EdgeInsets.all(25),
+                color: Colors.white,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    ElevatedButton(
+                        onPressed: () {
+                          if (_questionNumber >= 1) {
+                            _controller.previousPage(
+                              duration: const Duration(milliseconds: 300),
+                              curve: Curves.easeInOut,
+                            );
+                            setState(() {
+                              _questionNumber--;
+                            });
+                          } else {
+                            Navigator.of(context).pop();
+                            Provider.of<CameraProvider>(context, listen: false)
+                                .scaning = false;
+                            recentSoal();
+                          }
+                        },
+                        child: Text(
+                          _questionNumber == 1 ? "Kembali" : 'Prev',
+                          style:
+                              Theme.of(context).textTheme.bodySmall!.copyWith(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                        ),
+                        style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all(Colors.orange),
+                          fixedSize: MaterialStateProperty.all(
+                            Size(MediaQuery.sizeOf(context).width * 0.40, 40),
+                          ),
+                          elevation: MaterialStateProperty.all(4),
+                        )),
+                    ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(data!
+                                    .questions[_questionNumber - 1]
+                                    .selectedWiidgetOption ==
+                                null
+                            ? Colors.grey
+                            : _questionNumber < data!.questions.length
+                                ? Theme.of(context).primaryColor
+                                : Colors.green),
+                        fixedSize: MaterialStateProperty.all(
+                          Size(MediaQuery.sizeOf(context).width * 0.40, 40),
+                        ),
+                        elevation: MaterialStateProperty.all(4),
+                      ),
+                      onPressed: data!.questions[_questionNumber - 1]
+                                  .selectedWiidgetOption ==
+                              null
+                          ? null
+                          : () {
+                              if (_questionNumber < data!.questions.length) {
+                                _controller.nextPage(
+                                  duration: const Duration(milliseconds: 300),
+                                  curve: Curves.easeInOut,
+                                );
+                                setState(() {
+                                  _questionNumber++;
+                                });
+                              } else {
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => HalamanPDFSoalState(
+                                        data!,
+                                        data!.namaBab,
+                                        RecentSoal(
+                                          namaBab: data!.namaBab,
+                                          namaMapel: data!.namaMapel,
+                                          link: widget.link,
+                                        )),
+                                  ),
+                                );
+                              }
+                            },
+                      child: Text(
+                        _questionNumber < data!.questions.length
+                            ? 'Next'
+                            : 'Lihat Hasil',
+                        style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                            ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
         appBar: PreferredSize(
           preferredSize:
               Size.fromHeight(MediaQuery.of(context).size.height * 0.2),
@@ -148,19 +238,20 @@ class _HalamanSoalState extends State<HalamanSoal> {
                           Padding(
                             padding: const EdgeInsets.only(
                               left: 10,
-                              right: 10,
                             ),
-                            child: Text(
-                              data?.namaBab ?? "",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyLarge!
-                                  .copyWith(
-                                      color: Colors.white,
-
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w400),
-                              overflow: TextOverflow.ellipsis,
+                            child: Container(
+                              width: MediaQuery.of(context).size.width * 0.7,
+                              child: Text(
+                                data?.namaBab.toTitleCase() ?? "",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge!
+                                    .copyWith(
+                                        color: Colors.white,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w400),
+                                overflow: TextOverflow.ellipsis,
+                              ),
                             ),
                           ),
                         ],
@@ -224,8 +315,7 @@ class _HalamanSoalState extends State<HalamanSoal> {
                   onPageChanged: (value) {
                     // setState(() {
                     _questionNumber = value + 1;
-                    isLocked = false;
-                    _resetQuestionLocks();
+
                     // });
                   },
                   itemBuilder: (context, index) {
@@ -234,14 +324,23 @@ class _HalamanSoalState extends State<HalamanSoal> {
                     return ListView(
                         padding: const EdgeInsets.all(8.0),
                         children: [
-                          //  HtmlWidget(myquestions.htmlText),
-                          ...myquestions.text
-                              .map(
-                                (e) => e.contains("image/png")
-                                    ? Base64Image(e)
-                                    : Text(e),
-                              )
-                              .toList(),
+                          HtmlWidget(
+                            myquestions.htmlText,
+                            textStyle: TextStyle(fontSize: 16),
+                            onLoadingBuilder:
+                                (context, element, loadingProgress) =>
+                                    Image.asset("asset/loading.png",color: Theme.of(context).primaryColor,),
+                          ),
+                          // ...myquestions.text
+                          //     .map(
+                          //       (e) => e.contains("image/png")
+                          //           ? Base64Image(e)
+                          //           : Text(
+                          //               e,
+                          //               style: TextStyle(fontSize: 16),
+                          //             ),
+                          //     )
+                          //     .toList(),
                           const SizedBox(
                             height: 25,
                           ),
@@ -252,16 +351,6 @@ class _HalamanSoalState extends State<HalamanSoal> {
                             String letters =
                                 optionsLetters[myquestions.options.indexOf(e)];
 
-                            if (myquestions.isLocked) {
-                              if (questionOption ==
-                                  myquestions.selectedWiidgetOption) {
-                                color = questionOption.isCorrect!
-                                    ? Colors.green
-                                    : Colors.red;
-                              } else if (questionOption.isCorrect!) {
-                                color = Colors.green;
-                              }
-                            }
                             return (questionOption.text!.isEmpty &&
                                         letters == "E." ||
                                     questionOption.text!.isEmpty &&
@@ -269,27 +358,29 @@ class _HalamanSoalState extends State<HalamanSoal> {
                                 ? SizedBox()
                                 : InkWell(
                                     onTap: () {
-                                      if (!myquestions.isLocked) {
-                                        listSelectedOption.add(questionOption);
-                                        setState(() {
-                                          myquestions.isLocked = true;
-                                          myquestions.selectedWiidgetOption =
-                                              questionOption;
-                                        });
-
-                                        isLocked = myquestions.isLocked;
-                                        if (myquestions.selectedWiidgetOption!
-                                            .isCorrect!) {
-                                          score++;
-                                        }
-                                      }
+                                      data!.questions[_questionNumber - 1]
+                                              .selectedWiidgetOption =
+                                          questionOption;
+                                      setState(() {
+                                        myquestions.selectedWiidgetOption =
+                                            questionOption;
+                                        data!.questions[_questionNumber - 1]
+                                                .selectedWiidgetOption =
+                                            questionOption;
+                                      });
                                     },
                                     child: Container(
                                       padding: const EdgeInsets.all(10),
                                       margin: const EdgeInsets.symmetric(
                                           vertical: 8),
                                       decoration: BoxDecoration(
-                                        border: Border.all(color: color),
+                                        border: Border.all(
+                                            width: 1.3,
+                                            color: myquestions
+                                                        .selectedWiidgetOption ==
+                                                    questionOption
+                                                ? Colors.green
+                                                : color),
                                         color: Colors.grey.shade100,
                                         borderRadius: const BorderRadius.all(
                                             Radius.circular(10)),
@@ -317,106 +408,21 @@ class _HalamanSoalState extends State<HalamanSoal> {
                                                         questionOption.text!)
                                                     : Text(
                                                         questionOption.text!,
+                                                        style: TextStyle(
+                                                            fontSize: 16),
                                                       ),
                                               ),
                                             ),
-                                            isLocked == true
-                                                ? questionOption.isCorrect!
-                                                    ? const Icon(
-                                                        Icons.check_circle,
-                                                        color: Colors.green,
-                                                      )
-                                                    : const Icon(
-                                                        Icons.cancel,
-                                                        color: Colors.red,
-                                                      )
-                                                : Opacity(
-                                                    opacity: 0,
-                                                    child: const Icon(
-                                                      Icons.check_circle,
-                                                      color: Colors.green,
-                                                    ),
-                                                  )
                                           ],
                                         ),
                                       ),
                                     ),
                                   );
                           }).toList(),
-
-                          isLocked
-                              ? Center(
-                                  child: Padding(
-                                  padding: const EdgeInsets.all(20.0),
-                                  child: buildElevatedButton(),
-                                ))
-                              : const SizedBox.shrink(),
                         ]);
                   },
                 ),
               ),
-      ),
-    );
-  }
-
-  void _resetQuestionLocks() {
-    for (var question in data!.questions) {
-      question.isLocked = false;
-    }
-    questionTimerSeconds = 60;
-  }
-
-  ElevatedButton buildElevatedButton() {
-    //  const Color bgColor3 = Color(0xFF5170FD);
-
-    return ElevatedButton(
-      style: ButtonStyle(
-        backgroundColor:
-            MaterialStateProperty.all(Theme.of(context).primaryColor),
-        fixedSize: MaterialStateProperty.all(
-          Size(MediaQuery.sizeOf(context).width * 0.80, 40),
-        ),
-        elevation: MaterialStateProperty.all(4),
-      ),
-      onPressed: () {
-        if (_questionNumber < data!.questions.length) {
-          _controller.nextPage(
-            duration: const Duration(milliseconds: 800),
-            curve: Curves.easeInOut,
-          );
-          setState(() {
-            _questionNumber++;
-            isLocked = false;
-          });
-          _resetQuestionLocks();
-        } else {
-          _timer?.cancel();
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => HalamanPDFSoalState(
-                  data!,
-                  listSelectedOption,
-                  score,
-                  data!.namaBab,
-                  RecentSoal(
-                    namaBab: data!.namaBab,
-                    namaMapel: data!.namaMapel,
-                    link: widget.link,
-                  )),
-            ),
-          );
-        }
-      },
-      child: Text(
-        _questionNumber < data!.questions.length
-            ? 'Selanjutnya'
-            : 'Lihat Hasil',
-        style: Theme.of(context).textTheme.bodySmall!.copyWith(
-              color: Colors.white,
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-            ),
       ),
     );
   }

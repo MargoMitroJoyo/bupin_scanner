@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-
 import 'package:Bupin/Navigation/navigation.dart';
 import 'package:Bupin/camera/camera_provider.dart';
 import 'package:Bupin/navigation/navigation_provider.dart';
@@ -11,6 +10,7 @@ import 'package:flutter/services.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:html/parser.dart';
 import 'package:html/dom.dart' as dom;
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -21,17 +21,19 @@ void main() async {
     DeviceOrientation.portraitUp,
   ]);
 
-  return runApp(MultiProvider(
+  return runApp(
+    MultiProvider(
       providers: [
         ChangeNotifierProvider(
           create: (context) => NavigationProvider(),
-        ), ChangeNotifierProvider(
-          create: (context) => CameraProvider(),
         ),
-       
+        ChangeNotifierProvider(
+          create: (context) => CameraProvider(),
+        )
       ],
       child: const MyApp(),
-    ),);
+    ),
+  );
 }
 
 class MyApp extends StatefulWidget {
@@ -44,7 +46,6 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   void initState() {
-     
     super.initState();
     initPlatformState();
   }
@@ -86,8 +87,10 @@ class _MyAppState extends State<MyApp> {
             appBarTheme: const AppBarTheme(
                 actionsIconTheme: IconThemeData(color: Colors.white)),
             fontFamily: 'Nunito',
-            textTheme:
-                const TextTheme(titleMedium: TextStyle(fontFamily: "Nunito")),scaffoldBackgroundColor:  Color.fromRGBO(74, 74, 165, 1),
+            textTheme: TextTheme(
+                titleMedium: TextStyle(
+                    fontFamily: "Rubik", color: Colors.grey.shade700)),
+            scaffoldBackgroundColor: Color.fromRGBO(74, 74, 165, 1),
             colorScheme: ColorScheme.fromSwatch().copyWith(
                 secondary: const Color.fromRGBO(124, 120, 209, 1),
                 primary: const Color.fromRGBO(74, 74, 165, 1))),

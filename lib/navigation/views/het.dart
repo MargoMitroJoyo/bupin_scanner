@@ -1,49 +1,29 @@
-import 'package:Bupin/models/het.dart';
-import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
 import 'dart:developer';
 
+import 'package:Bupin/models/het.dart';
+import 'package:Bupin/quiz/pdf_soal.dart';
+import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
+import 'dart:collection' as c;
+import 'package:Bupin/ApiServices.dart';
+import 'package:collection/collection.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:intl/intl.dart' as intl;
 
-const List<String> list = <String>[
-  'SD/MI  I',
-  'SD/MI  II',
-  'SD/MI  III',
-  'SD/MI  IV',
-  'SD/MI  V',
-  'SD/MI  VI',
-  'SMP/MTS  VII',
-  "SMP/MTS  VIII",
-  "SMP/MTS  IX",
-  "SMA/MA  X",
-  "SMA/MA  XI",
-  "SMA/MA  XII"
-];
-List<String> listKelas = <String>[
-  'I',
-  'II',
-  'III',
-  'IV',
-  'V',
-  'VI',
-  'VII',
-  "VIII",
-  "IX",
-  "X",
-  "XI",
-  "XII"
-];
-
-class BSE extends StatefulWidget {
-  const BSE({super.key});
+class HET extends StatefulWidget {
+  const HET({Key? key}) : super(key: key);
 
   @override
-  State<BSE> createState() => _BSEState();
+  State<HET> createState() => _HETState();
 }
 
-class _BSEState extends State<BSE> with AutomaticKeepAliveClientMixin {
+class _HETState extends State<HET> {
   List<Het> listHET = [];
-
+  String dropdownValue = list.first;
+  RegExp romanNumerals = RegExp(r"\b[IVXLCDM]+\b");
   Future<void> fetchApi() async {
     try {
       listHET.clear();
@@ -54,10 +34,15 @@ class _BSEState extends State<BSE> with AutomaticKeepAliveClientMixin {
 
       if (response.statusCode == 200) {
         for (Map<String, dynamic> element in response.data) {
-          log(element.toString());
-          listHET.add(Het.fromMap(element));
+          if (!listHET
+              .map(
+                (e) => e.imgUrl,
+              )
+              .contains(element["cover"])) {
+            listHET.add(Het.fromMap(element));
+          }
         }
-
+        listHET.sort((a, b) => a.namaBuku.compareTo(b.namaBuku));
         setState(() {});
       }
     } catch (e) {
@@ -80,220 +65,290 @@ class _BSEState extends State<BSE> with AutomaticKeepAliveClientMixin {
     }
   }
 
-  String dropdownValue = list.first;
   @override
   Widget build(BuildContext context) {
-    super.build(context);
-    log("het");
-    return Column(
-      children: [
-        Stack(
-          alignment: Alignment.center,
-          children: [
-            Positioned.fill(
-                child: Container(
-              color: Theme.of(context).primaryColor,
-            )),
-            Transform.flip(
-                flipX: false,
-                child: Opacity(
-                  opacity: 0.5,
-                  child: Image.asset(
-                    "asset/Halaman_HET/Doodle HET-8.png",
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      body: Stack(
+        children: [
+          Image.asset("asset/4.png"),
+          NestedScrollView(
+            headerSliverBuilder:
+                (BuildContext context, bool innerBoxIsScrolled) {
+              return [HomAppBar()];
+            },
+            body: Stack(
+              children: [
+                Container(
+                  margin: EdgeInsets.only(
+                      top: MediaQuery.of(context).padding.top * 1.5),
+                  decoration: BoxDecoration(
                     color: Colors.white,
                   ),
-                )),
-            Positioned(
-                right: 20,
-                bottom: 10,
-                child: Image.asset(
-                  "asset/Halaman_HET/Bukut Het-9.png",
-                  width: MediaQuery.of(context).size.width * 0.28,
-                )),
-            const Positioned(
-                left: 10,
-                bottom: 10,
-                child: Text(
-                  "Buku Sekolah\nElektronik (BSE)",
-                  style: TextStyle(
-                      height: 1.22,
-                      color: Colors.white,
-                      shadows: <Shadow>[
-                        Shadow(
-                            offset: Offset(0.0, 0.0),
-                            blurRadius: 15,
-                            color: Colors.white),
-                        Shadow(
-                          offset: Offset(1, 1),
-                          blurRadius: 5.0,
-                          color: Color.fromARGB(123, 37, 37, 37),
-                        ),
-                      ],
-                      fontSize: 20,
-                      fontWeight: FontWeight.w900,
-                      fontStyle: FontStyle.italic),
-                )),
-            Positioned(
-                left: 10,
-                top: 30,
-                child: CircleAvatar(
-                    backgroundColor: Colors.white,
-                    child: Padding(
-                      padding: const EdgeInsets.all(3.0),
-                      child: Image.asset(
-                        "asset/Halaman_HET/kemendikbud.png",
-                        width: MediaQuery.of(context).size.width * 0.19,
-                      ),
-                    ))),
-          ],
-        ),
-        Container(
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(10), topRight: Radius.circular(10)),
-          ),
-          child: Padding(
-            padding:
-                const EdgeInsets.only(right: 7, left: 7, top: 7, bottom: 7),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Image.asset(
-                  "asset/Halaman_HET/Logo Kurmer.png",
-                  width: MediaQuery.of(context).size.width * 0.21,
+                  width: MediaQuery.of(context).size.width,
+                  child: GridView(
+                    padding: EdgeInsets.only(top: 30),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        mainAxisSpacing: 2,
+                        crossAxisCount: 2,
+                        childAspectRatio: 0.8),
+                    children: listHET
+                        .map((e) => Container(
+                              child: InkWell(
+                                  onTap: () {
+                                    _launchInBrowser(Uri.parse(e.pdf));
+                                  },
+                                  child: Container(
+                                    child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Container(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.30,
+                                            margin: const EdgeInsets.only(
+                                                bottom: 8),
+                                            child: Container(
+                                              child: ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(5),
+                                                  child: FadeInImage(
+                                                    imageErrorBuilder: (context,
+                                                        error, stackTrace) {
+                                                      return Image.asset(
+                                                        "asset/place.png",
+                                                      );
+                                                    },
+                                                    image: NetworkImage(
+                                                      e.imgUrl,
+                                                    ),
+                                                    placeholder:
+                                                        const AssetImage(
+                                                      "asset/place.png",
+                                                    ),
+                                                  )),
+                                            ),
+                                          ),
+                                          Center(
+                                              child: Container(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.30,
+                                            child: Text(
+                                              e.namaBuku
+                                                  .replaceAll("KMA-MI", "")
+                                                  .replaceAll("SD/MI", "")
+                                                  .replaceAll("KELAS", "")
+                                                  .replaceAll("KMA-MA", "")
+                                                  .replaceAll("SMA/MA", "")
+                                                  .replaceAll("KMA-MTS", "")
+                                                  .replaceAll(romanNumerals, "")
+                                                  .replaceAll("SMP/MTS", ""),
+                                              textAlign: TextAlign.center,
+                                              style: const TextStyle(
+                                                fontWeight: FontWeight.w700,
+                                                color: Color.fromARGB(
+                                                    255, 66, 66, 66),
+                                                fontSize: 12,
+                                                overflow: TextOverflow.fade,
+                                              ),
+                                            ),
+                                          )),
+                                        ]),
+                                  )),
+                            ))
+                        .toList(),
+                  ),
                 ),
                 Container(
-                  height: MediaQuery.of(context).size.width * 0.19 * 9 / 16,
-                  padding: const EdgeInsets.only(left: 10, right: 10),
+                  height: MediaQuery.of(context).size.width * 0.3 * 9 / 16,
                   decoration: BoxDecoration(
-                      color: Colors.grey.shade200,
-                      borderRadius: BorderRadius.circular(10)),
-                  child: DropdownButton<String>(
-                    padding: EdgeInsets.zero,
-                    value: dropdownValue,
-                    dropdownColor: Colors.white,
-                    iconEnabledColor: const Color.fromARGB(255, 66, 66, 66),
-                    icon: const Padding(
-                      padding: EdgeInsets.only(left: 10),
-                      child: Icon(
-                        Icons.arrow_downward_rounded,
-                        size: 16,
-                        weight: 10,
-                      ),
-                    ),
-                    elevation: 16,
-                    style: const TextStyle(
-                        fontFamily: "Nunito",
-                        fontWeight: FontWeight.w900,
-                        color: Color.fromARGB(255, 66, 66, 66)),
-                    underline: Container(
-                      height: 0,
-                      color: Colors.transparent,
-                    ),
-                    onChanged: (String? value) {
-                      // This is called when the user selects an item.
+                      border: Border(
+                          bottom: BorderSide(color: Colors.grey.shade300)),
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(15),
+                          topRight: Radius.circular(15))),
+                  child: Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Center(
+                          child: Image.asset(
+                            "asset/Halaman_HET/Logo Kurmer.png",
+                            width: MediaQuery.of(context).size.width * 0.22,
+                            alignment: Alignment.center,
+                          ),
+                        ),
+                        Container(
+                          height:
+                              MediaQuery.of(context).size.width * 0.19 * 9 / 16,
+                          padding: const EdgeInsets.only(left: 10, right: 10),
+                          decoration: BoxDecoration(
+                              color: Colors.grey.shade200,
+                              borderRadius: BorderRadius.circular(10)),
+                          child: DropdownButton<String>(
+                            padding: EdgeInsets.zero,
+                            value: dropdownValue,
+                            dropdownColor: Colors.white,
+                            iconEnabledColor:
+                                const Color.fromARGB(255, 66, 66, 66),
+                            icon: const Padding(
+                              padding: EdgeInsets.only(left: 10),
+                              child: Icon(
+                                Icons.arrow_drop_down_rounded,
+                                size: 20,
+                                weight: 10,
+                              ),
+                            ),
+                            elevation: 16,
+                            style: const TextStyle(
+                                fontFamily: "Nunito",
+                                fontWeight: FontWeight.w700,
+                                color: Color.fromARGB(255, 66, 66, 66)),
+                            underline: Container(
+                              height: 0,
+                              color: Colors.transparent,
+                            ),
+                            onChanged: (String? value) {
+                              // This is called when the user selects an item.
 
-                      dropdownValue = value!;
-                      setState(() {});
-                      fetchApi();
-                    },
-                    items: list.map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
+                              dropdownValue = value!;
+                              setState(() {});
+                              fetchApi();
+                            },
+                            items: list
+                                .map<DropdownMenuItem<String>>((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(value),
+                              );
+                            }).toList(),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],
             ),
           ),
-        ),
-        listHET.isEmpty
-            ? Expanded(
-                child: Container(
-                  color: Colors.white,
-                  child: Center(
-                    child: CircularProgressIndicator(
-                      color: Theme.of(context).primaryColor,
-                    ),
-                  ),
-                ),
-              )
-            : Expanded(
-                flex: 10,
-                child: Container(
-                  color: Colors.white,
-                  child: GridView.builder(
-                    padding: const EdgeInsets.only(top: 10),
-                    itemCount: listHET.length,
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                            mainAxisSpacing: 0,
-                            crossAxisCount: 2,
-                            childAspectRatio: 0.8),
-                    itemBuilder: (context, index) => Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: InkWell(
-                          splashColor: Theme.of(context).primaryColor,
-                          hoverColor: Theme.of(context).primaryColor,
-                          highlightColor: Theme.of(context).primaryColor,
-                          focusColor: Theme.of(context).primaryColor,
-                          onTap: () {
-                            _launchInBrowser(Uri.parse(listHET[index].pdf));
-                          },
-                          child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Container(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.3,
-                                  margin: const EdgeInsets.only(bottom: 8),
-                                  child: Container(
-                                    child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(5),
-                                        child: FadeInImage(
-                                          imageErrorBuilder:
-                                              (context, error, stackTrace) {
-                                            return Image.asset(
-                                              "asset/place.png",
-                                            );
-                                          },
-                                          image: NetworkImage(
-                                            listHET[index].imgUrl,
-                                          ),
-                                          placeholder: const AssetImage(
-                                            "asset/place.png",
-                                          ),
-                                        )),
-                                  ),
-                                ),
-                                Center(
-                                    child: Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 10.0, right: 10),
-                                  child: Text(
-                                    listHET[index].namaBuku,
-                                    textAlign: TextAlign.center,
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.w700,
-                                      color: Color.fromARGB(255, 66, 66, 66),
-                                      fontSize: 10,
-                                      overflow: TextOverflow.fade,
-                                    ),
-                                  ),
-                                )),
-                              ])),
-                    ),
-                  ),
-                ),
-              )
-      ],
+        ],
+      ),
     );
   }
+}
 
+class HomAppBar extends StatelessWidget {
+  double top = 0;
+  final List<Widget> sliders = [
+    Image.asset(
+      "asset/2.png",
+      fit: BoxFit.cover,
+    ),
+    Image.asset(
+      "asset/3.png",
+      fit: BoxFit.cover,
+    ),
+    Image.asset(
+      "asset/1.png",
+      fit: BoxFit.cover,
+    ),
+  ];
   @override
-  // TODO: implement wantKeepAlive
-  bool get wantKeepAlive => true;
+  Widget build(BuildContext context) {
+    return SliverAppBar(
+        backgroundColor: Colors.transparent,
+        surfaceTintColor: Colors.transparent,
+        automaticallyImplyLeading: false,
+        stretch: true,
+        expandedHeight: MediaQuery.of(context).size.height * 0.15,
+        floating: false,
+        actions: [],
+        pinned: true,
+        flexibleSpace: Stack(alignment: Alignment.topCenter, children: [
+          Positioned.fill(
+              child: Image.asset(
+            "asset/4.png",
+            fit: BoxFit.fitWidth,
+          )),
+          LayoutBuilder(
+              builder: (BuildContext context, BoxConstraints constraints) {
+            top = constraints.biggest.height;
+            log(top.toString());
+            return FlexibleSpaceBar(
+              titlePadding: EdgeInsets.all(0),
+              title: AnimatedOpacity(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Image.asset(
+                        'asset/sibi.png',color: Colors.white,
+                        width: MediaQuery.of(context).size.width * 0.5,
+                      ),
+                    ),
+                  ],
+                ),
+                duration: const Duration(milliseconds: 200),
+                opacity:
+                    top <= MediaQuery.of(context).padding.top + kToolbarHeight
+                        ? 1.0
+                        : 0.0,
+              ),
+              background: Container(
+                color: Colors.white,
+                child: OverflowBox(
+                  child: Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      Positioned.fill(
+                          child: Image.asset(
+                        "asset/4.png",
+                        fit: BoxFit.fitWidth,
+                      )),
+                      SafeArea(
+                        child: Center(
+                            child: Padding(
+                          padding: EdgeInsets.only(),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Halo, Steve!",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 28,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              Container(
+                                margin: EdgeInsets.symmetric(vertical: 5),
+                                child: Text(
+                                  textAlign: TextAlign.center,
+                                  "E-book dari Kemendikbud & Kemenag\nSemuanya dalam genggaman",
+                                  style: TextStyle(
+                                    color: Colors.white.withOpacity(0.8),
+                                    height: 0,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        )),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            );
+          })
+        ]));
+  }
 }

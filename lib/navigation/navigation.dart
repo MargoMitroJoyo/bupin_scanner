@@ -1,6 +1,7 @@
 import 'package:Bupin/WebivewPolos.dart';
 import 'package:Bupin/banner/Banner.dart';
 import 'package:Bupin/camera/camera.dart';
+import 'package:Bupin/camera/scann_aniamtion/scanning_effect.dart';
 import 'package:Bupin/navigation/views/het.dart';
 import 'package:Bupin/navigation/views/leaderboard.dart';
 import 'package:Bupin/navigation/views/bank_soal.dart';
@@ -25,150 +26,25 @@ class _NavigationState extends State<Navigation>
   @override
   void initState() {
     super.initState();
-    _controller = TabController(length: 3, vsync: this);
+    _controller = TabController(length: 5, vsync: this);
     _controller.animateTo(1);
   }
 
   int _selectedIndex = 1;
 
-  static const List<Widget> _widgetOptions = <Widget>[
-    BSE(),
+  static List<Widget> _widgetOptions = <Widget>[
+    HET(),
     Home(),
+    Container(),
     BankSoal(),
-    // Leaderboard(),
+    Leaderboard(),
   ];
 
-void _onItemTapped(int index) {
-    if (index != 2) {
-      _selectedIndex = index;
-      setState(() {
-        _controller.animateTo(index);
-      });
-    } else {
-      _selectedIndex = index;
-
-      showModalBottomSheet(
-          context: context,
-          builder: (builder) {
-            return Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).push(CustomRoute(
-                      builder: (context) => const  WebviewSoal(
-                          "https://tim.bupin.id/cbtakm/login.php?6666",
-                          "Bank Soal SD/MI",
-                          false,
-                          ""),
-                    ));
-                  },
-                  child: Container(
-                      color: const Color.fromRGBO(205, 32, 49, 0.1),
-                      child: Row(children: [
-                        Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Image.asset(
-                              "asset/Halaman_Latihan_PAS&PTS/Icon SD@4x.png",
-                              width: 50),
-                        ),
-                        const Spacer(),
-                        const Text(
-                          "SD/MI",
-                          style: TextStyle(
-                              fontWeight: FontWeight.w700,
-                              color: Color.fromRGBO(205, 32, 49, 1),
-                              fontSize: 18),
-                        ),
-                        const Spacer(),
-                  Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Image.asset(
-                              "asset/Halaman_Latihan_PAS&PTS/Icon SMA@4x.png",
-                              color: Colors.transparent,
-                              width: 50),
-                        ),
-                      ])),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).push(CustomRoute(
-                      builder: (context) => const  WebviewSoal(
-                          "https://tim.bupin.id/cbtakm/login.php?7777",
-                          'Bank Soal SMP/MTS',
-                          false,
-                          ""),
-                    ));
-                  },
-                  child: Container(
-                      color: const Color.fromRGBO(58, 88, 167, 0.1),
-                      child: Row(children: [
-                        Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Image.asset(
-                              "asset/Halaman_Latihan_PAS&PTS/Icon SMP@4x.png",
-                              width: 50),
-                        ),
-                        const Spacer(),
-                        const Text(
-                          "SMP/MTS",
-                          style: TextStyle(
-                              fontWeight: FontWeight.w700,
-                              color: Color.fromRGBO(58, 88, 167, 1),
-                              fontSize: 18),
-                        ),
-                        const Spacer(),
-                    Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Image.asset(
-                              "asset/Halaman_Latihan_PAS&PTS/Icon SMA@4x.png",
-                              color: Colors.transparent,
-                              width: 50),
-                        ),
-                      ])),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).push(CustomRoute(
-                      builder: (context) => const WebviewSoal(
-                          "https://tim.bupin.id/cbtakm/login.php?9999",
-                          'Bank Soal SMA/MA',
-                          false,
-                          ""),
-                    ));
-                  },
-                  child: Container(
-                      color: const Color.fromRGBO(120, 163, 215, 0.1),
-                      child: Row(children: [
-                        Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Image.asset(
-                              "asset/Halaman_Latihan_PAS&PTS/Icon SMA@4x.png",
-                              width: 50),
-                        ),
-                        const Spacer(),
-                        const Text(
-                          "SMA/MA",
-                          style: TextStyle(
-                              fontWeight: FontWeight.w700,
-                              color: Color.fromRGBO(120, 163, 215, 1),
-                              fontSize: 18),
-                        ),
-                        const Spacer(),
-                        Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Image.asset(
-                              "asset/Halaman_Latihan_PAS&PTS/Icon SMA@4x.png",
-                              color: Colors.transparent,
-                              width: 50),
-                        ),
-                      ])),
-                ),
-              ],
-            );
-          });
-    }
+  void _onItemTapped(int index) {
+    _selectedIndex = index;
+    setState(() {
+      _controller.animateTo(index);
+    });
   }
 
   @override
@@ -177,35 +53,96 @@ void _onItemTapped(int index) {
       alignment: Alignment.center,
       children: [
         Scaffold(
-          
           body: TabBarView(
             physics: const NeverScrollableScrollPhysics(),
             controller: _controller,
             children: _widgetOptions,
           ),
-          bottomNavigationBar: BottomNavigationBar(
-            backgroundColor: Colors.white,type: BottomNavigationBarType.fixed,
-            items: const <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
-                icon: Icon(Icons.menu_book_rounded),
-                label: 'E-Book BSE',
+          bottomNavigationBar: Stack(
+            children: [
+              BottomNavigationBar(
+                backgroundColor: Colors.white,
+                type: BottomNavigationBarType.fixed,
+                selectedFontSize: 12,
+                unselectedFontSize: 12,
+                items: <BottomNavigationBarItem>[
+                  BottomNavigationBarItem(
+                    icon: Icon(
+                      Icons.book_outlined,
+                    ),
+                    activeIcon: Icon(Icons.book_rounded),
+                    label: 'E-Book BSE',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.home_outlined),
+                    activeIcon: Icon(Icons.home),
+                    label: 'Home',
+                  ),
+                  BottomNavigationBarItem(
+                      label: '',
+                      icon: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Stack(
+                          alignment: Alignment.center,
+                          clipBehavior: Clip.none,
+                          children: [
+                            Icon(Icons.qr_code_2_rounded),
+                            Positioned(
+                              top: -10,
+                              child: GestureDetector(
+                                onTap: () {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) =>
+                                        const QRViewExample(false),
+                                  ));
+                                },
+                                child: Container(
+                                    width: MediaQuery.of(context).size.width *
+                                        0.15,
+                                    height: MediaQuery.of(context).size.width *
+                                        0.15,
+                                    decoration: BoxDecoration(
+                                      color: Theme.of(context).primaryColor,
+                                      borderRadius: const BorderRadius.all(
+                                        Radius.circular(100),
+                                      ),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.white.withOpacity(0.2),
+                                          spreadRadius: 5,
+                                          blurRadius: 20,
+                                          offset: const Offset(0.5, 0.5),
+                                        ),
+                                      ],
+                                    ),
+                                    child: Icon(
+                                      Icons.qr_code_scanner_rounded,
+                                      color: Colors.white,
+                                      size: MediaQuery.of(context).size.width *
+                                          0.09,
+                                    )),
+                              ),
+                            ),
+                          ],
+                        ),
+                      )),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.menu_book_rounded),
+                    activeIcon: Icon(Icons.menu_book_rounded),
+                    label: 'Bank Soal',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.leaderboard_outlined),
+                    activeIcon: Icon(Icons.leaderboard),
+                    label: 'Leaderboard',
+                  ),
+                ],
+                currentIndex: _selectedIndex,
+                unselectedItemColor: Colors.grey,
+                selectedItemColor: Theme.of(context).primaryColor,
+                onTap: _onItemTapped,
               ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.home),
-                label: 'Home',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.library_books_rounded),
-                label: 'Bank Soal',
-              ),
-              // BottomNavigationBarItem(
-              //   icon: Icon(Icons.leaderboard),
-              //   label: 'Leaderboard',
-              // ),
             ],
-            currentIndex: _selectedIndex,unselectedItemColor: Colors.grey,
-            selectedItemColor: Theme.of(context).primaryColor,
-            onTap: _onItemTapped,
           ),
         ),
         const HalamanBanner()

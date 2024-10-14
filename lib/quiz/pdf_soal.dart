@@ -13,17 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+import 'package:google_fonts/google_fonts.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
+import 'package:Bupin/helper/helper.dart';
 import 'package:Bupin/models/soal.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/services.dart';
 
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
-
 import 'package:printing/printing.dart';
 
 PdfColor green = PdfColor.fromHex("009933");
@@ -31,7 +31,8 @@ PdfColor green = PdfColor.fromHex("009933");
 PdfColor red = PdfColor.fromHex("ff0000");
 
 Future<Uint8List> printAll(
-    Quiz quiz, List<WiidgetOption> listSelectedOption, int skor) async {
+  Quiz quiz,
+) async {
   final document = Document();
   // TextStyle bold = TextStyle(fontWeight: FontWeight.bold);
   // TextStyle bold2 =
@@ -48,9 +49,21 @@ Future<Uint8List> printAll(
   // );
   List optionsLetters = ["A.", "B.", "C.", "D.", "E."];
 
-  final double percentageScore = (skor / quiz.questions.length) * 100;
+  final double percentageScore = (quiz.questions
+              .where(
+                (element) => element.selectedWiidgetOption!.isCorrect!,
+              )
+
+              .toList()
+              .length /
+          quiz.questions.length) *
+      100;
   List<Widget> widgets = [];
 
+  final theme = ThemeData.withFont(
+    base: await PdfGoogleFonts.amiriRegular(),
+    fontFallback: [await PdfGoogleFonts.poppinsMedium()],
+  );
   widgets.add(Padding(
       padding: EdgeInsets.only(top: 20, left: 20, right: 20, bottom: 5),
       child: Column(children: [
@@ -59,10 +72,14 @@ Future<Uint8List> printAll(
           Image(asu, width: 60),
           Text(quiz.namaBab,
               style: TextStyle(
-                fontSize: 15,fontWeight: FontWeight.bold,fontStyle: FontStyle.italic
-              )),
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                  fontStyle: FontStyle.italic)),
           Text(percentageScore.round().toString(),
-              style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold,color: percentageScore.round()<76?red:green)),
+              style: TextStyle(
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                  color: percentageScore.round() < 76 ? red : green)),
         ]),
         Divider(thickness: 2),
       ])));
@@ -95,12 +112,28 @@ Future<Uint8List> printAll(
                               fontSize: 11, fontWeight: FontWeight.bold),
                         ),
                         ...data.text.map((e) {
-                          return e.contains("data")
-                              ? Image(
-                                  MemoryImage(base64Decode(e.replaceAll(
-                                      "data:image/png;base64,", ""))),
-                                  width: 300)
-                              : Text(e.toString());
+                          return e.startsWith("iV")
+                              ? Image(MemoryImage(base64Decode(e)), width: 300)
+                              : Helper.containsArabic(e)
+                                  ? Container(
+                                      margin:
+                                          EdgeInsets.symmetric(vertical: 10),
+                                      padding: EdgeInsets.only(
+                                          left: 15,
+                                          right: 15,
+                                          top: 13,
+                                          bottom: 8),
+                                      decoration:
+                                          BoxDecoration(border: Border.all()),
+                                      child: Text(Helper.extractArabic(e),
+                                          textDirection: TextDirection.rtl),
+                                    )
+                                  : Container(
+                                      margin: EdgeInsets.symmetric(vertical: 0),
+                                      child: Text(
+                                        e,
+                                        softWrap: true,
+                                      ));
                         }).toList(),
                         Column(
                           children: data.options.mapIndexed((j, e) {
@@ -116,7 +149,7 @@ Future<Uint8List> printAll(
                                 : Container(
                                     child: Container(
                                       margin: const EdgeInsets.symmetric(
-                                          vertical: 3),
+                                          vertical: 0),
                                       decoration: BoxDecoration(
                                         borderRadius: const BorderRadius.all(
                                             Radius.circular(10)),
@@ -166,7 +199,12 @@ Future<Uint8List> printAll(
                                                       color: green),
                                                 )
                                               : (questionOption ==
-                                                      listSelectedOption[i])
+                                                      quiz.questions
+                                                          .map(
+                                                            (e) => e
+                                                                .selectedWiidgetOption,
+                                                          )
+                                                          .toList()[i])
                                                   ? Text(
                                                       " Salah",
                                                       style: TextStyle(
@@ -187,7 +225,8 @@ Future<Uint8List> printAll(
   }
   document.addPage(
     MultiPage(
-      pageTheme: const PageTheme(
+      pageTheme: PageTheme(
+        theme: theme,
         margin: EdgeInsets.all(10),
         clip: true,
         pageFormat: PdfPageFormat.a4,

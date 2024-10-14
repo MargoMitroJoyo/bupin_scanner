@@ -52,6 +52,10 @@ dependencies:
   shared_preferences: ^2.3.2
   fl_chart: ^0.69.0
   flutter_carousel_widget: ^3.0.1
+  intl: ^0.19.0
+  google_fonts: ^6.2.1
+  video_player: ^2.9.2
+  pod_player: ^0.2.2
  
 
 dev_dependencies:
@@ -83,6 +87,7 @@ flutter:
     - asset/Halaman_HET/
     - asset/Halaman_Latihan_PAS&PTS/
     - asset/Halaman_Scan/
+    - asset/Icon/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 
@@ -102,6 +107,12 @@ flutter:
           weight: 700
         - asset: fonts/Nunito-ExtraBold.ttf
           weight: 900
+
+    - family: Rubik
+      fonts:
+        - asset: fonts/Rubik-Medium.ttf
+       
+         
    
    
   #

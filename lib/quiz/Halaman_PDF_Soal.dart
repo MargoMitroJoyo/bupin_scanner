@@ -15,11 +15,10 @@ import 'package:provider/provider.dart';
 class HalamanPDFSoalState extends StatefulWidget {
   final Quiz quiz;
   final RecentSoal recentSoal;
-  final List<WiidgetOption> listOption;
-  final int skor;
+
   final String judul;
   const HalamanPDFSoalState(
-      this.quiz, this.listOption, this.skor, this.judul, this.recentSoal);
+      this.quiz,  this.judul, this.recentSoal);
 
   @override
   State<HalamanPDFSoalState> createState() => _HalamanPDFSoalStateState();
@@ -115,7 +114,7 @@ class _HalamanPDFSoalStateState extends State<HalamanPDFSoalState> {
               IconButton(
                   onPressed: () async {
                     asu = await printAll(
-                        widget.quiz, widget.listOption, widget.skor);
+                        widget.quiz, );
                     await Printing.sharePdf(
                         bytes: asu!, filename: widget.judul + ".pdf");
                   },
@@ -134,7 +133,7 @@ class _HalamanPDFSoalStateState extends State<HalamanPDFSoalState> {
             canDebug: false, allowPrinting: false, actions: [],
             allowSharing: false,
             build: (format) async {
-              return printAll(widget.quiz, widget.listOption, widget.skor);
+              return printAll(widget.quiz, );
             },
             onPrinted: _showPrintedToast,
             canChangeOrientation: false,

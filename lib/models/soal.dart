@@ -29,21 +29,21 @@ class WidgetQuestion {
   final List<String> text;
   final String htmlText;
   final List<WiidgetOption> options;
-  bool isLocked;
+
   WiidgetOption? selectedWiidgetOption;
 
   WidgetQuestion({
     required this.htmlText,
     required this.text,
     required this.options,
-    this.isLocked = false,
+
     this.selectedWiidgetOption,
   });
 
   factory WidgetQuestion.fromMap(Map<String, dynamic> data) {
     return WidgetQuestion(
       htmlText: data["soal"],
-      text: Helper.convertSoal(data["soal"]).map((e) => e).toList(),
+      text: Helper.convertToList(data["soal"]).map((e) => e).toList(),
       options: [
         WiidgetOption(
             isCorrect: data["jawaban"] == "pilA",

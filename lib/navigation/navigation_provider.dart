@@ -4,6 +4,7 @@ import 'package:Bupin/models/recent_soal.dart';
 import 'package:Bupin/models/recent_video.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:pod_player/pod_player.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class NavigationProvider extends ChangeNotifier {
@@ -11,6 +12,21 @@ class NavigationProvider extends ChangeNotifier {
   RecentSoal? selectedRecentSoal;
   List<RecentVideo> recentVideoList = [];
   RecentVideo? selectedRecentVideo;
+  late PodPlayerController controller;
+
+  set setConttoler(val) {
+    controller = val;
+  }
+
+  pause() {
+    controller.pause();
+    notifyListeners();
+  }
+
+  play() {
+    controller.play();
+    notifyListeners();
+  }
 
   set selectingRecentSoal(val) {
     selectedRecentSoal = val;

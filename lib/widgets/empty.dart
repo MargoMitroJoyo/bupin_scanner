@@ -8,7 +8,7 @@ class Empty extends StatelessWidget {
     return Center(
                             child: Padding(
                             padding: const EdgeInsets.all(16),
-                            child: Column(
+                            child: Column(mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Image.asset(
                                   "asset/notfound.png",

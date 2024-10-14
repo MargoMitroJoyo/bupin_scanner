@@ -1,75 +1,23 @@
 import 'dart:developer';
 
+import 'package:Bupin/helper/helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 import 'package:Bupin/ApiServices.dart';
+import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
 
 import 'package:url_launcher/url_launcher.dart';
 
-class IconMapel extends StatelessWidget {
-  final Color color;
-  final String image;
-  final String idMapel;
-  final String judul;
-  IconMapel(
-      {required this.image,
-      required this.judul,
-      required this.color,
-      required this.idMapel});
+class BankSoal extends StatefulWidget {
+  BankSoal({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 4, horizontal: 4),
-      child: Column(
-        children: [
-          Container(
-            width: MediaQuery.of(context).size.width * 0.15,
-            height: MediaQuery.of(context).size.width * 0.15,
-            // decoration: BoxDecoration(
-            //   borderRadius: BorderRadius.circular(15),
-            // ),
-            child: InkWell(
-              onTap: () {},
-              child: Stack(
-                alignment: Alignment.center,
-                clipBehavior: Clip.none,
-                children: [
-                  Opacity(
-                      opacity: 1,
-                      child: Image.asset(
-                        "asset/Icon/Bg Icon2.png",
-                        color: color,
-                      )),
-                  Opacity(
-                      opacity: 0.3, child: Image.asset("asset/Icon/Bg t.png")),
-                  Hero(
-                      tag: judul,
-                      child: Image.asset(image,
-                          width: MediaQuery.of(context).size.width * 0.10,
-                          height: MediaQuery.of(context).size.width * 0.10)),
-                ],
-              ),
-            ),
-          ),
-          Text(
-            textAlign: TextAlign.center,
-            judul,
-            maxLines: 1,
-            overflow: TextOverflow.visible,
-            style: TextStyle(
-              fontSize: 12,
-            ),
-          )
-        ],
-      ),
-    );
-  }
+  State<BankSoal> createState() => _BankSoalState();
 }
 
-class BankSoal extends StatelessWidget {
+class _BankSoalState extends State<BankSoal> {
   Future<void> _launchInBrowser(Uri url) async {
     if (!await launchUrl(
       url,
@@ -79,7 +27,46 @@ class BankSoal extends StatelessWidget {
     }
   }
 
-  const BankSoal({Key? key}) : super(key: key);
+  String dropdownValue = list.first;
+
+  List<String> subjects = [
+    'Bahasa Indonesia',
+    'Bahasa Inggris',
+    'Bahasa Jawa',
+    'Bahasa Jawa Timur',
+    'Bahasa Sunda',
+    'Biologi',
+    'Fisika',
+    'Kimia',
+    // 'IPA',
+    // 'IPAS',
+    'Informatika',
+    'Matematika',
+    // 'Matematika Peminatan',
+    // 'IPS',
+    'Geografi',
+    'Ekonomi',
+    'Antropologi',
+    'Sosiologi',
+    'Sejarah',
+    // 'Sejarah Indonesia',
+    // 'Seni Budaya',
+    'Seni Musik',
+    'Seni Rupa',
+    'Penjas',
+    //  'Prakarya',
+    'Pendidikan Pancasila',
+    // 'PKWU',
+
+    // 'BK',
+    'Bahasa Arab',
+    // 'BTQ',
+    // 'Akidah Akhlak',
+    // 'Fikih',
+    // 'PAIBP',
+    // 'Qurdis',
+    // 'SKI',
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -105,104 +92,200 @@ class BankSoal extends StatelessWidget {
                             topRight: Radius.circular(15))),
                     width: MediaQuery.of(context).size.width,
                   ),
-                  Positioned.fill(
-                      child: Image.asset(
-                    "asset/Halaman_Scan/Doodle Halaman Scan@4x.png",
-                    repeat: ImageRepeat.repeatY,
-                    color: Theme.of(context).primaryColor,
-                  )),
                   Container(
                       decoration: BoxDecoration(
                         color: Colors.transparent,
                       ),
                       child: ListView(padding: EdgeInsets.zero, children: [
-                        Card(
-                          margin:
-                              EdgeInsets.only(left: 6, right: 6, bottom: 10),
-                          elevation: 2,
-                          color: Colors.white,
-                          surfaceTintColor: Colors.white,
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(15),
+                              topRight: Radius.circular(15),
+                            ),
+                          ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Padding(
-                                padding: const EdgeInsets.only(top: 10),
-                                child: Text(
-                                  "Pelajaran " + "ApiService.user!.jenjang",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w900,
-                                      fontSize: 15,
-                                      color: Theme.of(context).primaryColor),
+                              Container(
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(15),
+                                      topRight: Radius.circular(15),
+                                    ),
+                                    border: Border(
+                                        bottom: BorderSide(
+                                            color: Colors.grey.shade300))),
+                                padding: const EdgeInsets.all(10.0),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "Banksoal",
+                                          style: TextStyle(
+                                              fontSize: 18,
+                                              color: Theme.of(context)
+                                                  .primaryColor,
+                                              fontWeight: FontWeight.w900),
+                                        ),
+                                        Text(
+                                          "Persiapan PTS/PAS",
+                                          style: TextStyle(fontSize: 12,color: const Color.fromARGB(
+                                            255, 66, 66, 66)),
+                                        ),
+                                      ],
+                                    ),
+                                    Container(
+                                      height:
+                                          MediaQuery.of(context).size.width *
+                                              0.19 *
+                                              9 /
+                                              16,
+                                      padding: const EdgeInsets.only(
+                                          left: 10, right: 10),
+                                      decoration: BoxDecoration(
+                                          color: Colors.grey.shade200,
+                                          borderRadius:
+                                              BorderRadius.circular(10)),
+                                      child: DropdownButton<String>(
+                                        padding: EdgeInsets.zero,
+                                        value: dropdownValue,
+                                        dropdownColor: Colors.white,
+                                        iconEnabledColor: const Color.fromARGB(
+                                            255, 66, 66, 66),
+                                        icon: const Padding(
+                                          padding: EdgeInsets.only(left: 0),
+                                          child: Icon(
+                                            Icons.arrow_drop_down_rounded,
+                                            size: 20,
+                                            color:
+                                                Color.fromARGB(255, 81, 87, 97),
+                                            weight: 10,
+                                          ),
+                                        ),
+                                        elevation: 16,
+                                        style: const TextStyle(
+                                          fontFamily: "Nunito",
+                                          fontWeight: FontWeight.w700,
+                                          color:
+                                              Color.fromARGB(255, 81, 87, 97),
+                                        ),
+                                        underline: Container(
+                                          height: 0,
+                                          color: Colors.transparent,
+                                        ),
+                                        onChanged: (String? value) {
+                                          // This is called when the user selects an item.
+
+                                          dropdownValue = value!;
+                                          setState(() {});
+                                          // fetchApi();
+                                        },
+                                        items: list
+                                            .map<DropdownMenuItem<String>>(
+                                                (String value) {
+                                          return DropdownMenuItem<String>(
+                                            value: value,
+                                            child: Text(value),
+                                          );
+                                        }).toList(),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                               Container(
                                   child: Container(
-                                      padding: const EdgeInsets.only(
-                                          left: 10,
-                                          right: 10,
-                                          bottom: 10,
-                                          top: 10),
-                                      child: FutureBuilder(
-                                          future: ApiService().getMapel(),
-                                          builder: (context, snapshot) {
-                                            return snapshot.connectionState ==
-                                                    ConnectionState.waiting
-                                                ? CircularProgressIndicator()
-                                                : GridView.builder(
-                                                    padding: EdgeInsets.zero,
-                                                    shrinkWrap: true,
-                                                    physics:
-                                                        NeverScrollableScrollPhysics(),
-                                                    gridDelegate:
-                                                        SliverGridDelegateWithFixedCrossAxisCount(
-                                                            crossAxisCount: 4),
-                                                    itemCount: ApiService
-                                                        .listMapel!.length,
-                                                    itemBuilder: (context,
-                                                            index) =>
-                                                        IconMapel(
-                                                            image: ApiService
-                                                                .listMapel![
-                                                                    index]
-                                                                .asset,
-                                                            judul: ApiService
-                                                                .listMapel![
-                                                                    index]
-                                                                .mapel,
-                                                            idMapel: ApiService
-                                                                .listMapel![
-                                                                    index]
-                                                                .idMapel,
-                                                            color: ApiService
-                                                                .listMapel![
-                                                                    index]
-                                                                .color),
-                                                  );
-                                          }))),
+                                    
+                                      child: GridView.builder(
+                                         padding: const EdgeInsets.only(
+                                          
+                                          top: 25,right: 5,left: 5),
+                                          gridDelegate:
+                                              SliverGridDelegateWithFixedCrossAxisCount(
+                                                  crossAxisCount: 2,
+                                                  childAspectRatio: 1.8),
+                                          shrinkWrap: true,
+                                          physics:
+                                              NeverScrollableScrollPhysics(),
+                                          itemCount: subjects.length,
+                                          itemBuilder: (context, index) =>
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                children: [
+                                                  Container(
+                                                    margin:
+                                                        EdgeInsets.symmetric(
+                                                            vertical: 5),
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                        horizontal: 15),
+                                                    child: Stack(
+                                                      alignment:
+                                                          Alignment.centerRight,
+                                                      clipBehavior: Clip.none,
+                                                      children: [
+                                                        Container(
+                                                          height: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .width *
+                                                              0.2,
+                                                          decoration:
+                                                              BoxDecoration(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              15),
+                                                                  color: Helper.localColor(
+                                                                          subjects[
+                                                                              index])
+                                                                      .withOpacity(
+                                                                          0.8),
+                                                                  border:
+                                                                      Border(
+                                                                    bottom: BorderSide(
+                                                                        width:
+                                                                            3,
+                                                                        color: Helper.localColor(
+                                                                            subjects[index])),
+                                                                  )),
+                                                        ),
+                                                        // Opacity(
+                                                        //     opacity:
+                                                        //         0.3,
+                                                        //     child:
+                                                        //         Image.asset("asset/Icon/Bg t.png")),
+                                                        Positioned(
+                                                            top: -25,
+                                                            right: -10,
+                                                            child: Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(
+                                                                      10.0),
+                                                              child:
+                                                                  Image.asset(
+                                                                Helper.localAsset(
+                                                                    subjects[
+                                                                        index]),
+                                                                height: 60,
+                                                                width: 60,
+                                                              ),
+                                                            )),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ],
+                                              )))),
                             ],
-                          ),
-                        ),
-                        InkWell(
-                          onTap: () {},
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 10),
-                            child: ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: Image.asset("asset/tutor.png")),
-                          ),
-                        ),
-                        InkWell(
-                          onTap: () async {
-                            _launchInBrowser(
-                                Uri.parse("https://pemesanan.bupin.id/"));
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 10),
-                            child: ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: Image.asset("asset/beli.png")),
                           ),
                         ),
                       ])),
@@ -213,41 +296,18 @@ class BankSoal extends StatelessWidget {
     );
   }
 }
-
 class HomAppBar extends StatelessWidget {
   double top = 0;
-  final List<Widget> sliders = [
-    Image.asset(
-      "asset/2.png",
-      fit: BoxFit.cover,
-    ),
-    Image.asset(
-      "asset/3.png",
-      fit: BoxFit.cover,
-    ),
-    Image.asset(
-      "asset/1.png",
-      fit: BoxFit.cover,
-    ),
-  ];
+ 
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
         backgroundColor: Colors.transparent,
-        // bottom: PreferredSize(
-        //   preferredSize: Size.fromHeight(10),
-        //   child: Container(height: 10,
-        //     decoration: BoxDecoration(
-        //         color: Colors.white,
-        //         borderRadius: BorderRadius.only(
-        //             topLeft: Radius.circular(100),
-        //             topRight: Radius.circular(100))),
-        //   ),
-        // ),
+       
         surfaceTintColor: Colors.transparent,
         automaticallyImplyLeading: false,
         stretch: true,
-        expandedHeight: MediaQuery.of(context).size.height * 0.2,
+        expandedHeight: MediaQuery.of(context).size.height * 0.15,
         floating: false,
         actions: [],
         pinned: true,
@@ -262,22 +322,12 @@ class HomAppBar extends StatelessWidget {
             top = constraints.biggest.height;
             log(top.toString());
             return FlexibleSpaceBar(
-              titlePadding:
-                  const EdgeInsets.only(bottom: 5, left: 10, right: 10),
+              titlePadding:  EdgeInsets.all(10),
               title: AnimatedOpacity(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Image.asset(
-                      'asset/gupin.png',
-                      height: 40,
-                    ),
-                    IconButton(
-                        onPressed: () async {},
-                        icon: const Icon(
-                          Icons.power_settings_new_outlined,
-                          color: Colors.white,
-                        )),
+                   
                   ],
                 ),
                 duration: const Duration(milliseconds: 200),
@@ -285,6 +335,51 @@ class HomAppBar extends StatelessWidget {
                     top <= MediaQuery.of(context).padding.top + kToolbarHeight
                         ? 1.0
                         : 0.0,
+              ),
+              background: Container(
+                color: Colors.white,
+                child: OverflowBox(
+                  child: Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      Positioned.fill(
+                          child: Image.asset(
+                        "asset/4.png",
+                        fit: BoxFit.fitWidth,
+                      )),
+                      SafeArea(
+                        child: Center(
+                            child: Padding(
+                          padding: EdgeInsets.only(
+                             ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Halo, Steve!",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 28,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              Container(margin: EdgeInsets.symmetric(vertical: 5),
+                                child: Text(
+                                  textAlign: TextAlign.center,
+                                  "Persiapkan ujian dengan ribuan banksoal\n Disediakan oleh Bupin 4.0",
+                                  style: TextStyle(
+                                    color: Colors.white.withOpacity(0.8),
+                                    height: 0,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        )),
+                      )
+                    ],
+                  ),
+                ),
               ),
             );
           })
