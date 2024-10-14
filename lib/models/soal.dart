@@ -1,20 +1,26 @@
 import 'dart:developer';
 
+import 'package:Bupin/helper/capital.dart';
 import 'package:Bupin/helper/helper.dart';
 
 class Quiz {
   final List<WidgetQuestion> questions;
   final String namaBab;
   final String namaMapel;
+  final String kelas;
 
   Quiz({
     required this.questions,
     required this.namaBab,
     required this.namaMapel,
+    this.kelas = "0",
   });
 
   factory Quiz.fromMap(Map<String, dynamic> data, Map<String, dynamic> data2) {
     return Quiz(
+        kelas: data["namaKelas"] == null
+            ? "0"
+            : data["namaKelas"].toString().extractNumber(),
         questions: (data2["data"]["soal"] as List<dynamic>)
             .map(
               (e) => WidgetQuestion.fromMap(e),
@@ -29,14 +35,12 @@ class WidgetQuestion {
   final List<String> text;
   final String htmlText;
   final List<WiidgetOption> options;
-
   WiidgetOption? selectedWiidgetOption;
 
   WidgetQuestion({
     required this.htmlText,
     required this.text,
     required this.options,
-
     this.selectedWiidgetOption,
   });
 

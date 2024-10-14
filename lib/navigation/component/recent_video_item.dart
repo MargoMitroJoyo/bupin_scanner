@@ -99,9 +99,7 @@ class RecenVideoItem extends StatelessWidget {
                         Spacer(),
                         Text(
                           video.namaSubBab
-                              .substring(
-                                3,
-                              )
+                              
                               .toTitleCase(),
                           overflow: TextOverflow.clip,
                           maxLines: 1,

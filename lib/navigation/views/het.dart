@@ -325,7 +325,8 @@ class HomAppBar extends StatelessWidget {
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 28,
-                                    fontWeight: FontWeight.bold),
+                                    fontFamily: "Rubik",
+                                ),
                               ),
                               Container(
                                 margin: EdgeInsets.symmetric(vertical: 5),

@@ -23,6 +23,7 @@ class _NavigationState extends State<Navigation>
     with SingleTickerProviderStateMixin {
   late TabController _controller;
 
+
   @override
   void initState() {
     super.initState();
@@ -145,7 +146,7 @@ class _NavigationState extends State<Navigation>
             ],
           ),
         ),
-        const HalamanBanner()
+        // const HalamanBanner()
       ],
     );
   }

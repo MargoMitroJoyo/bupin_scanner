@@ -115,7 +115,7 @@ class Helper {
 
     if (mapel.toUpperCase().contains("JAWA")) {
       return Color.fromARGB(
-        355,
+        255,
         186,
         153,
         119,

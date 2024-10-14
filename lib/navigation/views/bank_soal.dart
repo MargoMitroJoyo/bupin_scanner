@@ -1,6 +1,9 @@
 import 'dart:developer';
 
+import 'package:Bupin/bank_soal/Halaman_PTS&PAS.dart';
+import 'package:Bupin/bank_soal/custom_button.dart';
 import 'package:Bupin/helper/helper.dart';
+import 'package:Bupin/styles/PageTransitionTheme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -135,9 +138,11 @@ class _BankSoalState extends State<BankSoal> {
                                               fontWeight: FontWeight.w900),
                                         ),
                                         Text(
-                                          "Persiapan PTS/PAS",
-                                          style: TextStyle(fontSize: 12,color: const Color.fromARGB(
-                                            255, 66, 66, 66)),
+                                          "PTS/PAS",
+                                          style: TextStyle(
+                                              fontSize: 13,
+                                              color: const Color.fromARGB(
+                                                  255, 66, 66, 66)),
                                         ),
                                       ],
                                     ),
@@ -202,11 +207,9 @@ class _BankSoalState extends State<BankSoal> {
                               ),
                               Container(
                                   child: Container(
-                                    
                                       child: GridView.builder(
-                                         padding: const EdgeInsets.only(
-                                          
-                                          top: 25,right: 5,left: 5),
+                                          padding: const EdgeInsets.only(
+                                              top: 25, right: 5, left: 5),
                                           gridDelegate:
                                               SliverGridDelegateWithFixedCrossAxisCount(
                                                   crossAxisCount: 2,
@@ -215,76 +218,9 @@ class _BankSoalState extends State<BankSoal> {
                                           physics:
                                               NeverScrollableScrollPhysics(),
                                           itemCount: subjects.length,
-                                          itemBuilder: (context, index) =>
-                                              Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                children: [
-                                                  Container(
-                                                    margin:
-                                                        EdgeInsets.symmetric(
-                                                            vertical: 5),
-                                                    padding: const EdgeInsets
-                                                        .symmetric(
-                                                        horizontal: 15),
-                                                    child: Stack(
-                                                      alignment:
-                                                          Alignment.centerRight,
-                                                      clipBehavior: Clip.none,
-                                                      children: [
-                                                        Container(
-                                                          height: MediaQuery.of(
-                                                                      context)
-                                                                  .size
-                                                                  .width *
-                                                              0.2,
-                                                          decoration:
-                                                              BoxDecoration(
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              15),
-                                                                  color: Helper.localColor(
-                                                                          subjects[
-                                                                              index])
-                                                                      .withOpacity(
-                                                                          0.8),
-                                                                  border:
-                                                                      Border(
-                                                                    bottom: BorderSide(
-                                                                        width:
-                                                                            3,
-                                                                        color: Helper.localColor(
-                                                                            subjects[index])),
-                                                                  )),
-                                                        ),
-                                                        // Opacity(
-                                                        //     opacity:
-                                                        //         0.3,
-                                                        //     child:
-                                                        //         Image.asset("asset/Icon/Bg t.png")),
-                                                        Positioned(
-                                                            top: -25,
-                                                            right: -10,
-                                                            child: Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(
-                                                                      10.0),
-                                                              child:
-                                                                  Image.asset(
-                                                                Helper.localAsset(
-                                                                    subjects[
-                                                                        index]),
-                                                                height: 60,
-                                                                width: 60,
-                                                              ),
-                                                            )),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ],
-                                              )))),
+                                          itemBuilder:
+                                              (context, index) =>CustomButton(subjects[index]),
+                                                 ))),
                             ],
                           ),
                         ),
@@ -296,14 +232,14 @@ class _BankSoalState extends State<BankSoal> {
     );
   }
 }
+
 class HomAppBar extends StatelessWidget {
   double top = 0;
- 
+
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
         backgroundColor: Colors.transparent,
-       
         surfaceTintColor: Colors.transparent,
         automaticallyImplyLeading: false,
         stretch: true,
@@ -322,13 +258,11 @@ class HomAppBar extends StatelessWidget {
             top = constraints.biggest.height;
             log(top.toString());
             return FlexibleSpaceBar(
-              titlePadding:  EdgeInsets.all(10),
+              titlePadding: EdgeInsets.all(10),
               title: AnimatedOpacity(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                   
-                  ],
+                  children: [],
                 ),
                 duration: const Duration(milliseconds: 200),
                 opacity:
@@ -350,19 +284,20 @@ class HomAppBar extends StatelessWidget {
                       SafeArea(
                         child: Center(
                             child: Padding(
-                          padding: EdgeInsets.only(
-                             ),
+                          padding: EdgeInsets.only(),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
                                 "Halo, Steve!",
                                 style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 28,
-                                    fontWeight: FontWeight.bold),
+                                  color: Colors.white,
+                                  fontFamily: "Rubik",
+                                  fontSize: 28,
+                                ),
                               ),
-                              Container(margin: EdgeInsets.symmetric(vertical: 5),
+                              Container(
+                                margin: EdgeInsets.symmetric(vertical: 5),
                                 child: Text(
                                   textAlign: TextAlign.center,
                                   "Persiapkan ujian dengan ribuan banksoal\n Disediakan oleh Bupin 4.0",

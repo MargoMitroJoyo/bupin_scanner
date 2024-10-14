@@ -82,6 +82,7 @@ class _HalamanSoalState extends State<HalamanSoal> {
           .addRecentSoal(RecentSoal(
         namaBab: data!.namaBab,
         namaMapel: data!.namaMapel,
+        kelas: data!.kelas,
         link: widget.link,
       ));
     }
@@ -178,7 +179,7 @@ class _HalamanSoalState extends State<HalamanSoal> {
                                         data!,
                                         data!.namaBab,
                                         RecentSoal(
-                                          namaBab: data!.namaBab,
+                                          namaBab: data!.namaBab,kelas: data!.kelas,
                                           namaMapel: data!.namaMapel,
                                           link: widget.link,
                                         )),
@@ -329,7 +330,10 @@ class _HalamanSoalState extends State<HalamanSoal> {
                             textStyle: TextStyle(fontSize: 16),
                             onLoadingBuilder:
                                 (context, element, loadingProgress) =>
-                                    Image.asset("asset/loading.png",color: Theme.of(context).primaryColor,),
+                                    Image.asset(
+                              "asset/loading.png",
+                              color: Theme.of(context).primaryColor,
+                            ),
                           ),
                           // ...myquestions.text
                           //     .map(

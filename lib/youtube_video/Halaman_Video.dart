@@ -90,20 +90,20 @@ class HalamanVideoState extends State<HalamanVideo>
     final dio = Dio();
 
     linkQrVideo = widget.link
-        .replaceAll("buku.bupin.id/?", "bupin.id/api/apibarang.php?kodeQR=");
+        .replaceAll("buku.bupin.id/?", "buku.bupin.id/api/vid.php?");
     final response = await dio.get(linkQrVideo);
-
+log(response.data.toString());
     log(response.statusCode.toString());
     if (response.statusCode != 200) {
       noInternet = true;
       return;
     }
     noInternet = false;
-    if (response.data[0]["ytid"] == null &&
-        response.data[0]["ytidDmp"] == null) {
+    if (response.data["ytid"] == null &&
+        response.data["ytidDmp"] == null) {
       return;
     } else {
-      video = Video.fromMap(response.data[0]);
+      video = Video.fromMap(response.data);
     }
     if (video != null) {
       _controller = YoutubePlayerController(

@@ -25,7 +25,7 @@ class TabBarDemo extends StatelessWidget {
                 child: TabBar(indicatorColor:const Color.fromRGBO(74, 74, 166, 1),
                   unselectedLabelStyle: TextStyle(
                       fontWeight: FontWeight.bold,
-                      color: Colors.grey.shade600,
+                      color: Colors.grey.shade500,
                       fontFamily: "Nunito"),
                   tabs: [
                     Tab(

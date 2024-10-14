@@ -55,7 +55,7 @@ class _HalamanPDFSoalStateState extends State<HalamanPDFSoalState> {
           .addRecentSoal(RecentSoal(
         namaBab: widget.recentSoal.namaBab,
         namaMapel: widget.recentSoal.namaMapel,
-        link: widget.recentSoal.link,
+        link: widget.recentSoal.link,kelas:  widget.recentSoal.kelas,
       ));
     } else {
       // Provider.of<NavigationProvider>(context, listen: false)
