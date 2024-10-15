@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:Bupin/models/recent_soal.dart';
 import 'package:Bupin/models/recent_ujian.dart';
@@ -18,7 +19,7 @@ class NavigationProvider extends ChangeNotifier {
    List<RecentSoal> recentSoalList = [];
   RecentSoal? selectedRecentSoal;
   
-   List<RecentUjian> RecentUjianList = [];
+   List<RecentUjian> recentUjianList = [];
   RecentUjian? selectedRecentUjian;
   set selectingRecentUjian(val) {
     selectedRecentUjian = val;
@@ -26,13 +27,13 @@ class NavigationProvider extends ChangeNotifier {
   }
 
   addRecentUjian(RecentUjian data) {
-    if (!RecentUjianList
+    if (!recentUjianList
         .map(
           (e) => e.namaBab,
         )
         .toList()
         .contains(data.namaBab)) {
-      RecentUjianList.add(data);
+      recentUjianList.add(data);
     }
 
     saveRecentUjian();
@@ -40,30 +41,33 @@ class NavigationProvider extends ChangeNotifier {
   }
 
   updateRecentUjian(RecentUjian data) {
-    RecentUjianList[RecentUjianList.indexOf(selectedRecentUjian!)] = data;
+    recentUjianList[recentUjianList.indexOf(selectedRecentUjian!)] = data;
     saveRecentUjian();
     notifyListeners();
   }
 
   getRecentUjian() async {
-    RecentUjianList.clear();
+    log("get recent ujian");
+    recentUjianList.clear();
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     var data = prefs.getStringList(
-          "RecentUjian",
+          "recentUjian",
         ) ??
         [];
 
     for (var element in data) {
-      RecentUjianList.add(RecentUjian.fromMap(jsonDecode(element)));
+      recentUjianList.add(RecentUjian.fromMap(jsonDecode(element)));
     }
+    log(recentUjianList.length.toString());
     notifyListeners();
   }
 
   saveRecentUjian() async {
+    log("saved Recent Ujian");
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setStringList(
-        "RecentUjian",
-        RecentUjianList
+        "recentUjian",
+        recentUjianList
             .map(
               (e) => jsonEncode(RecentUjian.toJson(e)),
             )

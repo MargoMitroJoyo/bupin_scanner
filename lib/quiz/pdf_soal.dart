@@ -53,7 +53,6 @@ Future<Uint8List> printAll(
               .where(
                 (element) => element.selectedWiidgetOption!.isCorrect!,
               )
-
               .toList()
               .length /
           quiz.questions.length) *
@@ -163,7 +162,7 @@ Future<Uint8List> printAll(
                                             style:
                                                 const TextStyle(fontSize: 11),
                                           ),
-                                          questionOption.text!.contains("data")
+                                          questionOption.text!.contains("data:image")
                                               ? Flexible(
                                                   child: Padding(
                                                     padding:
@@ -172,11 +171,10 @@ Future<Uint8List> printAll(
                                                     child: ClipRRect(
                                                         child: Image(
                                                             MemoryImage(base64Decode(
-                                                                questionOption
-                                                                    .text!
-                                                                    .replaceAll(
-                                                                        "data:image/png;base64,",
-                                                                        ""))),
+                                                                Helper.extractBase64FromImgTag(
+                                                                        questionOption
+                                                                            .text!)
+                                                                   )),
                                                             width: 100)),
                                                   ),
                                                 )
@@ -185,7 +183,7 @@ Future<Uint8List> printAll(
                                                     padding: EdgeInsets.only(
                                                         left: 10, right: 4),
                                                     child: Text(
-                                                    Helper.convertSoal( "${questionOption.text}").first,
+                                                     Helper.decodeHtml( questionOption.text!),
                                                       style: TextStyle(
                                                           fontSize: 11),
                                                     ),

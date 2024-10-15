@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:Bupin/ApiServices.dart';
 import 'package:Bupin/bank_soal/Halaman_PDF_Soal.dart';
+import 'package:Bupin/bank_soal/mapel_provider.dart';
 import 'package:Bupin/camera/camera_provider.dart';
 import 'package:Bupin/helper/capital.dart';
 import 'package:Bupin/helper/helper.dart';
@@ -47,8 +48,9 @@ String base64String(Uint8List data) {
 
 class Ujian extends StatefulWidget {
   final String ptspas;
+  final String namaBab;
   final String link;
-  const Ujian({super.key, required this.link, required this.ptspas});
+  const Ujian({super.key, required this.link, required this.ptspas, required this.namaBab});
 
   @override
   State<Ujian> createState() => _UjianState();
@@ -70,8 +72,9 @@ class _UjianState extends State<Ujian> {
   }
 
   getUjian() async {
+    var prov=Provider.of<MapelProvider>(context,listen: false);
     data = await ApiService.detailPtsPas(
-      widget.link,
+      widget.link,prov.selectedKelas.toString(),widget.namaBab,prov.selectedMapel,
     );
 
     loading = false;
@@ -79,9 +82,7 @@ class _UjianState extends State<Ujian> {
   }
 
   recentUjian() {
-    if (Provider.of<NavigationProvider>(context, listen: false)
-            .selectedRecentUjian ==
-        null) {
+   
       Provider.of<NavigationProvider>(context, listen: false)
           .addRecentUjian(RecentUjian(
         namaBab: data!.namaBab,ptsPas:widget.ptspas ,
@@ -91,9 +92,8 @@ class _UjianState extends State<Ujian> {
         link: widget.link,
       ));
     }
-    Provider.of<NavigationProvider>(context, listen: false)
-        .selectingRecentUjian = null;
-  }
+ 
+  
 
   @override
   Widget build(BuildContext context) {

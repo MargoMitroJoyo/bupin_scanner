@@ -5,6 +5,17 @@ import 'package:html/parser.dart' as html;
 import 'package:html/dom.dart' as dom;
 
 class Helper {
+static  String decodeHtml(String htmlString) {
+ // Replace Unicode escape sequences
+  String decoded = htmlString
+      .replaceAll(r'\u003C', '<')  // Replace \u003C with <
+      .replaceAll(r'\u003E', '>');  // Replace \u003E with >
+
+  // Remove HTML tags using a regular expression
+  String withoutHtmlTags = decoded.replaceAll(RegExp(r'<[^>]*>'), '');
+
+  return withoutHtmlTags;
+}
   static bool containsArabic(String input) {
     final arabicRegExp = RegExp(r'[\u0600-\u06FF]');
     return arabicRegExp.hasMatch(input);
@@ -17,10 +28,20 @@ class Helper {
     return matches.map((match) => match.group(0)).join(' ');
     // Combine all matches into a single string
   }
-
-  static String stripHtmlIfNeeded(String text) {
-    return text.replaceAll(RegExp(r'<[^>]*>|&[^;]+;'), ' ');
+static String extractBase64FromImgTag(String htmlString) {
+  // Regular expression to find base64 data inside the img tag
+  RegExp regExp = RegExp(r'<img[^>]+src="data:image\/[^;]+;base64,([^"]+)"[^>]*>', caseSensitive: false);
+  
+  // Search for the base64 data
+  Match? match = regExp.firstMatch(htmlString);
+  
+  if (match != null) {
+    // Return the base64 part
+    return match.group(1) ?? '';
   }
+  
+  return 'No base64 data found';
+}
 
   static List<String> convertToList(String encodedString) {
     // Decode the encoded string

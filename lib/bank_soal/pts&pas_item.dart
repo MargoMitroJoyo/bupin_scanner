@@ -1,6 +1,5 @@
 import 'package:Bupin/ApiServices.dart';
 import 'package:Bupin/bank_soal/Halaman_PTS&PAS.dart';
-import 'package:Bupin/bank_soal/halaman_soal2.dart';
 import 'package:Bupin/bank_soal/halaman_ujian.dart';
 import 'package:Bupin/bank_soal/mapel_provider.dart';
 import 'package:Bupin/helper/helper.dart';
@@ -50,7 +49,7 @@ class _PtsPasItemState extends State<PtsPasItem> {
               .selectedJenjang
               .toLowerCase();
           Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => Ujian(ptspas: widget.ptspas,
+              builder: (context) => Ujian(ptspas: widget.ptspas,namaBab:widget.subject ,
                 
                   link:
                       "https://cbt.api.bupin.id/api/mapel/${widget.idMapel}?level=$jenjang&noscan=true")));

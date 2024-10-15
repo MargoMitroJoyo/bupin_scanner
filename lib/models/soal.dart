@@ -51,19 +51,19 @@ class WidgetQuestion {
       options: [
         WiidgetOption(
             isCorrect: data["jawaban"] == "pilA",
-            text: data["pilA"]),
+            text:data["pilA"]),
         WiidgetOption(
             isCorrect: data["jawaban"] == "pilB",
-            text: data["pilB"]),
+            text:data["pilB"]),
         WiidgetOption(
             isCorrect: data["jawaban"] == "pilC",
-            text: data["pilC"]),
+            text:data["pilC"]),
         WiidgetOption(
             isCorrect: data["jawaban"] == ("pilD"),
-            text: data["pilD"]),
+            text:data["pilD"]),
         WiidgetOption(
             isCorrect: data["jawaban"] == ("pilE"),
-            text: data["pilE"])
+            text:data["pilE"])
       ],
     );
   }

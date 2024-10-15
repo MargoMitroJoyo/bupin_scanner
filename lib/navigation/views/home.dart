@@ -31,14 +31,12 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-
   @override
   void initState() {
     Provider.of<NavigationProvider>(context, listen: false).getRecentVideo();
     Provider.of<NavigationProvider>(context, listen: false).getRecentSoal();
-   
 
-
+    Provider.of<NavigationProvider>(context, listen: false).getRecentUjian();
     super.initState();
   }
 
@@ -58,6 +56,7 @@ class _HomeState extends State<Home> {
           // ),
 
           body: Consumer<NavigationProvider>(builder: (context, data, c) {
+        log("build home");
         return Column(
           children: [
             Container(

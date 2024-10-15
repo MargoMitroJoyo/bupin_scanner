@@ -54,19 +54,19 @@ class WidgetQuestion {
       options: [
         WiidgetOption(
             isCorrect: data["jawaban"] == "pilA",
-            text: Helper.convertSoal(data["pilA"])[0]),
+            text: data["pilA"]),
         WiidgetOption(
             isCorrect: data["jawaban"] == "pilB",
-            text: Helper.convertSoal(data["pilB"])[0]),
+            text: data["pilB"]),
         WiidgetOption(
             isCorrect: data["jawaban"] == "pilC",
-            text: Helper.convertSoal(data["pilC"])[0]),
+            text: data["pilC"]),
         WiidgetOption(
             isCorrect: data["jawaban"] == ("pilD"),
-            text: Helper.convertSoal(data["pilD"])[0]),
+            text: data["pilD"]),
         WiidgetOption(
             isCorrect: data["jawaban"] == ("pilE"),
-            text: Helper.convertSoal(data["pilE"])[0])
+            text: data["pilE"])
       ],
     );
   }

@@ -43,7 +43,7 @@ class ApiService {
   static List<Mapel>? listMapel;
 
   Map<String, dynamic> eventData = {};
-  
+
   Future<List<Het>> fetchHet(String dropdownValue) async {
     try {
       List<Het> listHet = [];
@@ -132,24 +132,32 @@ class ApiService {
     }
     return temp;
   }
-  
-  static Future<List<Mapel>> getMapel(String jenjang, int kelas,String mapel,String type) async {
+
+  static Future<List<Mapel>> getMapel(
+      String jenjang, int kelas, String mapel, String type) async {
     final dio = Dio();
     String newLink = "https://cbt.api.bupin.id/api/mapel/";
 
-    final response = await dio.get(newLink,
-        queryParameters: {"level": jenjang, "kelas": kelas.toString(),"mapel":mapel,"type":type});
-log(response.data.toString());
+    final response = await dio.get(newLink, queryParameters: {
+      "level": jenjang,
+      "kelas": kelas.toString(),
+      "mapel": mapel,
+      "type": type
+    });
+    log(response.data.toString());
     List<Mapel> temp = [];
     var data = response.data;
     for (var element in data["data"]) {
-      temp.add(Mapel.fromMap(element));
+      if (!temp.map((e) => e.nama,) .contains(element["nama"])) {
+        temp.add(Mapel.fromMap(element));
+      }
     }
     return temp;
   }
 
-
-  static Future<Quiz> getUjian(String link,) async {
+  static Future<Quiz> getUjian(
+    String link,
+  ) async {
     log(link);
     final dio = Dio();
     String newLink =
@@ -172,16 +180,18 @@ log(response.data.toString());
 
     return Quiz.fromMap(response.data, response2.data);
   }
-  
-  static Future<Quiz> detailPtsPas(String link,) async {
+
+  static Future<Quiz> detailPtsPas(
+      String link, String namaKelas, String namaBab, String namaMapel) async {
     log(link);
     final dio = Dio();
-   
-    
+
     final response = await dio.get(link);
 
-log( response.data.toString());
-    return Quiz.fromMap({"namaKelas":"","namaBab":"","namaMapel":""}, response.data);
+    log(response.data.toString());
+    return Quiz.fromMap(
+        {"namaKelas": namaKelas, "namaBab": namaBab, "namaMapel": namaMapel},
+        response.data);
   }
 
   pushToVideo(String link, BuildContext context) {
@@ -195,7 +205,7 @@ log( response.data.toString());
     log(scanResult);
     Navigator.of(context).push(CustomRoute(
       builder: (context) => HalamanSoal(
-        link: scanResult,ptspas: "Quiz",
+        link: scanResult,
       ),
     ));
     return;

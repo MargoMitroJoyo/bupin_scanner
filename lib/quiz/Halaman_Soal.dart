@@ -45,9 +45,9 @@ String base64String(Uint8List data) {
 }
 
 class HalamanSoal extends StatefulWidget {
-  final String ptspas;
+
   final String link;
-  const HalamanSoal({super.key, required this.link, required this.ptspas});
+  const HalamanSoal({super.key, required this.link, });
 
   @override
   State<HalamanSoal> createState() => _HalamanSoalState();

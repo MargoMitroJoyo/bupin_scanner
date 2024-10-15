@@ -17,8 +17,7 @@ class HalamanPDFSoalState extends StatefulWidget {
   final RecentSoal recentSoal;
 
   final String judul;
-  const HalamanPDFSoalState(
-      this.quiz,  this.judul, this.recentSoal);
+  const HalamanPDFSoalState(this.quiz, this.judul, this.recentSoal);
 
   @override
   State<HalamanPDFSoalState> createState() => _HalamanPDFSoalStateState();
@@ -53,16 +52,16 @@ class _HalamanPDFSoalStateState extends State<HalamanPDFSoalState> {
         null) {
       Provider.of<NavigationProvider>(context, listen: false)
           .addRecentSoal(RecentSoal(
-        namaBab: widget.recentSoal.namaBab,correctAswer:widget.quiz!.questions
-                                                  .where(
-                                                    (element) => element
-                                                        .selectedWiidgetOption!
-                                                        .isCorrect!,
-                                                  )
-                                                  .toList()
-                                                  .length ,
+        namaBab: widget.recentSoal.namaBab,
+        correctAswer: widget.quiz!.questions
+            .where(
+              (element) => element.selectedWiidgetOption!.isCorrect!,
+            )
+            .toList()
+            .length,
         namaMapel: widget.recentSoal.namaMapel,
-        link: widget.recentSoal.link,kelas:  widget.recentSoal.kelas,
+        link: widget.recentSoal.link,
+        kelas: widget.recentSoal.kelas,
       ));
     } else {
       // Provider.of<NavigationProvider>(context, listen: false)
@@ -121,7 +120,8 @@ class _HalamanPDFSoalStateState extends State<HalamanPDFSoalState> {
               IconButton(
                   onPressed: () async {
                     asu = await printAll(
-                        widget.quiz, );
+                      widget.quiz,
+                    );
                     await Printing.sharePdf(
                         bytes: asu!, filename: widget.judul + ".pdf");
                   },
@@ -140,7 +140,9 @@ class _HalamanPDFSoalStateState extends State<HalamanPDFSoalState> {
             canDebug: false, allowPrinting: false, actions: [],
             allowSharing: false,
             build: (format) async {
-              return printAll(widget.quiz, );
+              return printAll(
+                widget.quiz,
+              );
             },
             onPrinted: _showPrintedToast,
             canChangeOrientation: false,
