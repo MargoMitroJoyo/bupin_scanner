@@ -30,7 +30,7 @@ class RecenVideoItem extends StatelessWidget {
             decoration: BoxDecoration(
                 border: Border.all(
                     width: 1.5,
-                    color: Theme.of(context).primaryColor.withOpacity(0.2)),
+                    color: Helper.localColor(video.namaMapel).withOpacity(0.2)),
                 borderRadius: BorderRadius.circular(15),
                 color: Colors.white),
             child: Row(
@@ -51,8 +51,7 @@ class RecenVideoItem extends StatelessWidget {
                                       aspectRatio: 16 / 13,
                                       child: FadeInImage.assetNetwork(
                                         placeholder: "asset/loading.png",
-                                        placeholderColor:
-                                         Colors.black,
+                                        placeholderColor: Colors.black,
                                         image: video.imageUrl,
                                         fit: BoxFit.fitHeight,
                                       )),
@@ -70,9 +69,9 @@ class RecenVideoItem extends StatelessWidget {
                                       child: LinearProgressIndicator(
                                         value: video.recentDuration.inSeconds /
                                             video.totalDuration.inSeconds,
-                                        valueColor:
-                                            AlwaysStoppedAnimation<Color>(
-                                                Theme.of(context).primaryColor),
+                                        valueColor: AlwaysStoppedAnimation<
+                                                Color>(
+                                            Helper.localColor(video.namaMapel)),
                                         backgroundColor:
                                             Colors.white.withOpacity(0.8),
                                       ),
@@ -89,7 +88,7 @@ class RecenVideoItem extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(left: 8),
                   child: SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.4,
+                    width: MediaQuery.of(context).size.width * 0.5,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -98,26 +97,33 @@ class RecenVideoItem extends StatelessWidget {
                         Spacer(),
                         Spacer(),
                         Text(
-                          video.namaSubBab
-                              
-                              .toTitleCase(),
-                          overflow: TextOverflow.clip,
+                          video.namaSubBab.toTitleCase(),
+                          overflow: TextOverflow.ellipsis,
                           maxLines: 1,
                           style: TextStyle(
-                            color: Theme.of(context).primaryColor,
+                            color: Helper.localColor(video.namaMapel),
                             fontFamily: "Rubik",
                             fontSize: 15,
                           ),
                         ),
                         Spacer(),
                         Text(
-                          Helper.printDuration(video.recentDuration) +
-                              " / " +
-                              Helper.printDuration(video.totalDuration),
+                          "Kelas ${video.namaKelas.extractNumber()} ${video.namaMapel.toTitleCase()}",
                           maxLines: 1,
-                          style: TextStyle(fontSize: 13, color: Colors.grey),
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: Colors.grey,
+                          ),
                           overflow: TextOverflow.clip,
                         ),
+                        // Text(
+                        //   Helper.printDuration(video.recentDuration) +
+                        //       " / " +
+                        //       Helper.printDuration(video.totalDuration),
+                        //   maxLines: 1,
+                        //   style: TextStyle(fontSize: 13, color: Colors.grey),
+                        //   overflow: TextOverflow.clip,
+                        // ),
                         Spacer(),
                         Spacer(),
                         Spacer(),
@@ -138,91 +144,11 @@ class RecenVideoItem extends StatelessWidget {
                       },
                       child: Icon(
                         Icons.arrow_forward_ios_rounded,
-                        color: Theme.of(context).primaryColor,
+                        color: Helper.localColor(video.namaMapel),
                         size: 16,
                       )),
                 ),
               ],
             )));
-
-    Container(
-      height: MediaQuery.of(context).size.width * 0.2,
-      margin: EdgeInsets.symmetric(vertical: 5),
-      decoration: BoxDecoration(
-          border: Border.all(
-              width: 1.5,
-              color: Theme.of(context).primaryColor.withOpacity(0.2)),
-          borderRadius: BorderRadius.circular(15),
-          color: Colors.white),
-      child: ListTile(
-          dense: true,
-          isThreeLine: false,
-          contentPadding: EdgeInsets.only(
-            left: 7.5,
-            right: 15,
-          ),
-          title: Text(
-            video.namaSubBab.substring(
-              3,
-            ),
-            maxLines: 1,
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-            overflow: TextOverflow.ellipsis,
-          ),
-          subtitle: Container(
-            width: 100,
-            padding: EdgeInsets.only(right: 50),
-            height: 4.5,
-            child: ClipRRect(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-              child: LinearProgressIndicator(
-                value: video.recentDuration.inSeconds /
-                    video.totalDuration.inSeconds,
-                valueColor: AlwaysStoppedAnimation<Color>(
-                    Theme.of(context).primaryColor),
-                backgroundColor:
-                    Theme.of(context).primaryColor.withOpacity(0.2),
-              ),
-            ),
-          ),
-          trailing: InkWell(
-              onTap: () {
-                Provider.of<NavigationProvider>(context, listen: false)
-                    .selectedRecentVideo = video;
-                Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => HalamanVideo(video.link),
-                ));
-              },
-              child: Icon(
-                Icons.arrow_forward_ios_rounded,
-                color: Theme.of(context).primaryColor,
-                size: 16,
-              )),
-          leading: ClipRRect(
-              borderRadius: BorderRadius.circular(10.0),
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  AspectRatio(
-                      aspectRatio: 16 / 13,
-                      child: FadeInImage.assetNetwork(
-                        placeholder: "asset/loading.png",
-                        placeholderColor: Theme.of(context).primaryColor,
-                        image: video.imageUrl,
-                        fit: BoxFit.fitHeight,
-                      )),
-                  AspectRatio(
-                      aspectRatio: 16 / 13,
-                      child: Container(
-                        color: Colors.black.withOpacity(0.4),
-                      )),
-                  Icon(
-                    Icons.play_arrow_rounded,
-                    color: Colors.white.withOpacity(0.75),
-                    size: 18,
-                  )
-                ],
-              ))),
-    );
   }
 }

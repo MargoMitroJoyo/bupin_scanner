@@ -67,7 +67,7 @@ class Helper {
     return textList;
   }
 
-  String addSpaceAfterCapitalized(String text) {
+  static String addSpaceAfterCapitalized(String text) {
     // Check if the string is fully capitalized
     if (text == text.toUpperCase()) {
       return text; // If the string is all capitalized, return it as is
@@ -108,8 +108,11 @@ class Helper {
         mapel.toUpperCase().contains("AL-QURAN") ||
         mapel.toUpperCase().contains("ARAB") ||
         mapel.toUpperCase().contains("AKIDAH") ||
-        mapel.toUpperCase().contains("QUR'AN") ||
-        mapel.toUpperCase().contains("PAI")) {
+        mapel.toUpperCase().contains("QUR'AN") ||  mapel.toUpperCase().contains("BTQ") ||
+        mapel.toUpperCase().contains("PAI") ||
+        mapel.toUpperCase().contains("FIKIH")||
+        mapel.toUpperCase().contains("QURDIS")||
+        mapel.toUpperCase().contains("SKI") ) {
       return Color.fromARGB(255, 63, 63, 63);
     }
 
@@ -130,7 +133,7 @@ class Helper {
     if (mapel.toUpperCase().contains("MATEMATIKA")) {
       return Color.fromARGB(255, 153, 178, 219);
     }
-    if (mapel.toUpperCase().contains("INGGRIS")) {
+    if (mapel.toUpperCase().contains("INGGRIS")||mapel.toUpperCase().contains("ENGLISH")) {
       return Color.fromARGB(255, 159, 101, 221);
     }
     if (mapel.toUpperCase().contains("IPA") ||
@@ -365,19 +368,6 @@ class Helper {
     return list;
   }
 
-  static String convertSoal2(String soal) {
-    final String str = 'Jeremiah  52:1\\u2013340';
-    final Pattern unicodePattern = new RegExp(r'\\u([0-9A-Fa-f]{4})');
-    final String newStr =
-        soal.replaceAllMapped(unicodePattern, (Match unicodeMatch) {
-      final int hexCode = int.parse(unicodeMatch.group(1)!, radix: 16);
-      final unicode = String.fromCharCode(hexCode);
-      return unicode;
-    });
-    print('Old string: $soal');
-    print('New string: $newStr');
-    return newStr;
-  }
 
   static String printDuration(Duration duration) {
     String negativeSign = duration.isNegative ? '-' : '';

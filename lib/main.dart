@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:Bupin/Navigation/navigation.dart';
+import 'package:Bupin/bank_soal/mapel_provider.dart';
 import 'package:Bupin/camera/camera_provider.dart';
 import 'package:Bupin/navigation/navigation_provider.dart';
 import 'package:provider/provider.dart';
@@ -29,6 +30,8 @@ void main() async {
         ),
         ChangeNotifierProvider(
           create: (context) => CameraProvider(),
+        ), ChangeNotifierProvider(
+          create: (context) => MapelProvider(),
         )
       ],
       child: const MyApp(),

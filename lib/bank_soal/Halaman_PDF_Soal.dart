@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:Bupin/ApiServices.dart';
 import 'package:Bupin/camera/camera_provider.dart';
 import 'package:Bupin/models/recent_soal.dart';
+import 'package:Bupin/models/recent_ujian.dart';
 import 'package:Bupin/models/soal.dart';
 import 'package:Bupin/navigation/navigation_provider.dart';
 import 'package:Bupin/quiz/pdf_soal.dart';
@@ -12,19 +13,20 @@ import 'package:printing/printing.dart';
 import 'package:pdf/pdf.dart';
 import 'package:provider/provider.dart';
 
-class HalamanPDFSoalState extends StatefulWidget {
+class UjianPdf extends StatefulWidget {
   final Quiz quiz;
-  final RecentSoal recentSoal;
+  final RecentUjian recentUjian;
+  final String ptspas;
 
   final String judul;
-  const HalamanPDFSoalState(
-      this.quiz,  this.judul, this.recentSoal);
+  const UjianPdf(
+      this.quiz, this.judul, this.recentUjian, this.ptspas);
 
   @override
-  State<HalamanPDFSoalState> createState() => _HalamanPDFSoalStateState();
+  State<UjianPdf> createState() => _UjianPdfState();
 }
 
-class _HalamanPDFSoalStateState extends State<HalamanPDFSoalState> {
+class _UjianPdfState extends State<UjianPdf> {
   void _showPrintedToast(BuildContext context) {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
@@ -47,34 +49,34 @@ class _HalamanPDFSoalStateState extends State<HalamanPDFSoalState> {
     super.initState();
   }
 
-  recentSoalG() {
+  recentUjianG() {
     if (Provider.of<NavigationProvider>(context, listen: false)
-            .selectedRecentSoal ==
+            .selectedRecentUjian ==
         null) {
       Provider.of<NavigationProvider>(context, listen: false)
-          .addRecentSoal(RecentSoal(
-        namaBab: widget.recentSoal.namaBab,correctAswer:widget.quiz!.questions
-                                                  .where(
-                                                    (element) => element
-                                                        .selectedWiidgetOption!
-                                                        .isCorrect!,
-                                                  )
-                                                  .toList()
-                                                  .length ,
-        namaMapel: widget.recentSoal.namaMapel,
-        link: widget.recentSoal.link,kelas:  widget.recentSoal.kelas,
+          .addRecentUjian(RecentUjian(
+        namaBab: widget.recentUjian.namaBab,ptsPas: widget.ptspas,
+        correctAswer: widget.quiz.questions
+            .where(
+              (element) => element.selectedWiidgetOption!.isCorrect!,
+            )
+            .toList()
+            .length,
+        namaMapel: widget.recentUjian.namaMapel,
+        link: widget.recentUjian.link,
+        kelas: widget.recentUjian.kelas,
       ));
     } else {
       // Provider.of<NavigationProvider>(context, listen: false)
-      //     .updateRecentSoal(RecentSoal(
-      //   widget.recentSoal.namaBab,
-      //   widget.recentSoal.namaMapel,
+      //     .updaterecentUjian(recentUjian(
+      //   widget.recentUjian.namaBab,
+      //   widget.recentUjian.namaMapel,
       //   widget.link,
-      //   Helper.localAsset(widget.recentSoal.namaMapel),
+      //   Helper.localAsset(widget.recentUjian.namaMapel),
       // ));
     }
     Provider.of<NavigationProvider>(context, listen: false)
-        .selectingRecentSoal = null;
+        .selectedRecentUjian = null;
   }
 
   Uint8List? asu;
@@ -84,7 +86,7 @@ class _HalamanPDFSoalStateState extends State<HalamanPDFSoalState> {
     return WillPopScope(
         onWillPop: () {
           Provider.of<CameraProvider>(context, listen: false).scaning = false;
-          recentSoalG();
+          recentUjianG();
           Navigator.of(context).pop();
           return Future.value(true);
         },
@@ -101,7 +103,7 @@ class _HalamanPDFSoalStateState extends State<HalamanPDFSoalState> {
                   onTap: () {
                     Provider.of<CameraProvider>(context, listen: false)
                         .scaning = false;
-                    recentSoalG();
+                    recentUjianG();
 
                     Navigator.pop(context, false);
                   },
@@ -121,7 +123,8 @@ class _HalamanPDFSoalStateState extends State<HalamanPDFSoalState> {
               IconButton(
                   onPressed: () async {
                     asu = await printAll(
-                        widget.quiz, );
+                      widget.quiz,
+                    );
                     await Printing.sharePdf(
                         bytes: asu!, filename: widget.judul + ".pdf");
                   },
@@ -140,7 +143,9 @@ class _HalamanPDFSoalStateState extends State<HalamanPDFSoalState> {
             canDebug: false, allowPrinting: false, actions: [],
             allowSharing: false,
             build: (format) async {
-              return printAll(widget.quiz, );
+              return printAll(
+                widget.quiz,
+              );
             },
             onPrinted: _showPrintedToast,
             canChangeOrientation: false,

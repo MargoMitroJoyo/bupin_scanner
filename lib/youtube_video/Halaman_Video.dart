@@ -60,7 +60,9 @@ class HalamanVideoState extends State<HalamanVideo>
               ),
               Duration(
                 seconds: total.inSeconds,
-              )));
+              ),
+              video!.namaKelas,video!.namaMapel!
+              ));
     } else {
       log("update recent");
       Provider.of<NavigationProvider>(context, listen: false)
@@ -73,7 +75,7 @@ class HalamanVideoState extends State<HalamanVideo>
               ),
               Duration(
                 seconds: total.inSeconds,
-              )));
+              )  ,video!.namaKelas,video!.namaMapel!));
     }
     Provider.of<NavigationProvider>(context, listen: false)
         .selectingRecentVideo = null;

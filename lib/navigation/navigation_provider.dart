@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:Bupin/models/recent_soal.dart';
+import 'package:Bupin/models/recent_ujian.dart';
 import 'package:Bupin/models/recent_video.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -8,24 +9,65 @@ import 'package:pod_player/pod_player.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class NavigationProvider extends ChangeNotifier {
-  List<RecentSoal> recentSoalList = [];
-  RecentSoal? selectedRecentSoal;
+
+  
   List<RecentVideo> recentVideoList = [];
   RecentVideo? selectedRecentVideo;
-  late PodPlayerController controller;
 
-  set setConttoler(val) {
-    controller = val;
-  }
 
-  pause() {
-    controller.pause();
+   List<RecentSoal> recentSoalList = [];
+  RecentSoal? selectedRecentSoal;
+  
+   List<RecentUjian> RecentUjianList = [];
+  RecentUjian? selectedRecentUjian;
+  set selectingRecentUjian(val) {
+    selectedRecentUjian = val;
     notifyListeners();
   }
 
-  play() {
-    controller.play();
+  addRecentUjian(RecentUjian data) {
+    if (!RecentUjianList
+        .map(
+          (e) => e.namaBab,
+        )
+        .toList()
+        .contains(data.namaBab)) {
+      RecentUjianList.add(data);
+    }
+
+    saveRecentUjian();
     notifyListeners();
+  }
+
+  updateRecentUjian(RecentUjian data) {
+    RecentUjianList[RecentUjianList.indexOf(selectedRecentUjian!)] = data;
+    saveRecentUjian();
+    notifyListeners();
+  }
+
+  getRecentUjian() async {
+    RecentUjianList.clear();
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    var data = prefs.getStringList(
+          "RecentUjian",
+        ) ??
+        [];
+
+    for (var element in data) {
+      RecentUjianList.add(RecentUjian.fromMap(jsonDecode(element)));
+    }
+    notifyListeners();
+  }
+
+  saveRecentUjian() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setStringList(
+        "RecentUjian",
+        RecentUjianList
+            .map(
+              (e) => jsonEncode(RecentUjian.toJson(e)),
+            )
+            .toList());
   }
 
   set selectingRecentSoal(val) {

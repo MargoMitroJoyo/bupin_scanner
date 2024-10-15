@@ -13,7 +13,7 @@ class TabBarDemo extends StatelessWidget {
     return DefaultTabController(
         length: 3,
         child: Consumer<NavigationProvider>(builder: (context, data, c) {
-          return Scaffold(
+          return Scaffold(backgroundColor: Colors.white,
             appBar: PreferredSize(
               preferredSize: new Size(50.0, 50.0),
               child: Container(

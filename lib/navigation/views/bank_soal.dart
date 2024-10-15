@@ -2,12 +2,13 @@ import 'dart:developer';
 
 import 'package:Bupin/bank_soal/Halaman_PTS&PAS.dart';
 import 'package:Bupin/bank_soal/custom_button.dart';
+import 'package:Bupin/bank_soal/mapel_provider.dart';
 import 'package:Bupin/helper/helper.dart';
 import 'package:Bupin/styles/PageTransitionTheme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-
+import "package:provider/provider.dart";
 import 'package:Bupin/ApiServices.dart';
 import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
 
@@ -32,44 +33,12 @@ class _BankSoalState extends State<BankSoal> {
 
   String dropdownValue = list.first;
 
-  List<String> subjects = [
-    'Bahasa Indonesia',
-    'Bahasa Inggris',
-    'Bahasa Jawa',
-    'Bahasa Jawa Timur',
-    'Bahasa Sunda',
-    'Biologi',
-    'Fisika',
-    'Kimia',
-    // 'IPA',
-    // 'IPAS',
-    'Informatika',
-    'Matematika',
-    // 'Matematika Peminatan',
-    // 'IPS',
-    'Geografi',
-    'Ekonomi',
-    'Antropologi',
-    'Sosiologi',
-    'Sejarah',
-    // 'Sejarah Indonesia',
-    // 'Seni Budaya',
-    'Seni Musik',
-    'Seni Rupa',
-    'Penjas',
-    //  'Prakarya',
-    'Pendidikan Pancasila',
-    // 'PKWU',
-
-    // 'BK',
-    'Bahasa Arab',
-    // 'BTQ',
-    // 'Akidah Akhlak',
-    // 'Fikih',
-    // 'PAIBP',
-    // 'Qurdis',
-    // 'SKI',
-  ];
+  @override
+  void initState() {
+    Provider.of<MapelProvider>(context, listen: false)
+        .getRecentMapel(dropdownValue);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -189,6 +158,9 @@ class _BankSoalState extends State<BankSoal> {
                                           // This is called when the user selects an item.
 
                                           dropdownValue = value!;
+                                          Provider.of<MapelProvider>(context,
+                                                  listen: false)
+                                              .getRecentMapel(dropdownValue);
                                           setState(() {});
                                           // fetchApi();
                                         },
@@ -205,22 +177,24 @@ class _BankSoalState extends State<BankSoal> {
                                   ],
                                 ),
                               ),
-                              Container(
-                                  child: Container(
-                                      child: GridView.builder(
-                                          padding: const EdgeInsets.only(
-                                              top: 25, right: 5, left: 5),
-                                          gridDelegate:
-                                              SliverGridDelegateWithFixedCrossAxisCount(
-                                                  crossAxisCount: 2,
-                                                  childAspectRatio: 1.8),
-                                          shrinkWrap: true,
-                                          physics:
-                                              NeverScrollableScrollPhysics(),
-                                          itemCount: subjects.length,
-                                          itemBuilder:
-                                              (context, index) =>CustomButton(subjects[index]),
-                                                 ))),
+                              Container(child: Container(child:
+                                  Consumer<MapelProvider>(
+                                      builder: (context, snapshot, c) {
+                                return GridView.builder(
+                                  padding: const EdgeInsets.only(
+                                      top: 25, right: 5, left: 5),
+                                  gridDelegate:
+                                      SliverGridDelegateWithFixedCrossAxisCount(
+                                          crossAxisCount: 2,
+                                          mainAxisSpacing: 10,
+                                          childAspectRatio: 1.8),
+                                  shrinkWrap: true,
+                                  physics: NeverScrollableScrollPhysics(),
+                                  itemCount: snapshot.listMapel.length,
+                                  itemBuilder: (context, index) =>
+                                      CustomButton(Helper.addSpaceAfterCapitalized(snapshot.listMapel[index]) ),
+                                );
+                              }))),
                             ],
                           ),
                         ),

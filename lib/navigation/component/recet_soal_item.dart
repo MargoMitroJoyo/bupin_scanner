@@ -64,7 +64,7 @@ class RecenSoalItem extends StatelessWidget {
                                 //         .asset(
                                 //             "asset/Icon/Bg t.png")),
                                 Padding(
-                                  padding: const EdgeInsets.all(8.0),
+                                  padding: const EdgeInsets.all(9.0),
                                   child: Image.asset(
                                     Helper.localAsset(soal.namaMapel!),
                                   ),
@@ -120,7 +120,7 @@ class RecenSoalItem extends StatelessWidget {
                       Provider.of<NavigationProvider>(context, listen: false)
                           .selectedRecentSoal = soal;
                       Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => HalamanSoal(link: soal.link),
+                        builder: (context) => HalamanSoal(link: soal.link,ptspas: "pts",),
                       ));
                     },
                     child: Icon(

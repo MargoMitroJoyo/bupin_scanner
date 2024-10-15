@@ -3,24 +3,27 @@ import 'dart:developer';
 import 'package:Bupin/helper/capital.dart';
 import 'package:Bupin/helper/helper.dart';
 
-class Quiz {
+class Ujian {
   final List<WidgetQuestion> questions;
   final String namaBab;
   final String namaMapel;
   final String kelas;
+  final String ptspas;
 
-  Quiz({
+  Ujian({
     required this.questions,
     required this.namaBab,
     required this.namaMapel,
+    required this.ptspas,
     this.kelas = "0",
   });
 
-  factory Quiz.fromMap(Map<String, dynamic> data, Map<String, dynamic> data2) {
-    return Quiz(
+  factory Ujian.fromMap(Map<String, dynamic> data, Map<String, dynamic> data2) {
+    return Ujian(
         kelas: data["namaKelas"] == null
             ? "0"
             : data["namaKelas"].toString().extractNumber(),
+        ptspas: data["ptspas"],
         questions: (data2["data"]["soal"] as List<dynamic>)
             .map(
               (e) => WidgetQuestion.fromMap(e),
@@ -51,19 +54,19 @@ class WidgetQuestion {
       options: [
         WiidgetOption(
             isCorrect: data["jawaban"] == "pilA",
-            text: data["pilA"]),
+            text: Helper.convertSoal(data["pilA"])[0]),
         WiidgetOption(
             isCorrect: data["jawaban"] == "pilB",
-            text: data["pilB"]),
+            text: Helper.convertSoal(data["pilB"])[0]),
         WiidgetOption(
             isCorrect: data["jawaban"] == "pilC",
-            text: data["pilC"]),
+            text: Helper.convertSoal(data["pilC"])[0]),
         WiidgetOption(
             isCorrect: data["jawaban"] == ("pilD"),
-            text: data["pilD"]),
+            text: Helper.convertSoal(data["pilD"])[0]),
         WiidgetOption(
             isCorrect: data["jawaban"] == ("pilE"),
-            text: data["pilE"])
+            text: Helper.convertSoal(data["pilE"])[0])
       ],
     );
   }

@@ -3,11 +3,12 @@ import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:Bupin/ApiServices.dart';
+import 'package:Bupin/bank_soal/Halaman_PDF_Soal.dart';
 import 'package:Bupin/camera/camera_provider.dart';
 import 'package:Bupin/helper/capital.dart';
 import 'package:Bupin/helper/helper.dart';
 import 'package:Bupin/models/recent_soal.dart';
-import 'package:Bupin/quiz/Halaman_PDF_Soal.dart';
+import 'package:Bupin/models/recent_ujian.dart';
 import 'package:Bupin/models/soal.dart';
 import 'package:Bupin/widgets/image_memory.dart';
 import 'package:flutter/cupertino.dart';
@@ -44,16 +45,16 @@ String base64String(Uint8List data) {
   return base64Encode(data);
 }
 
-class HalamanSoal extends StatefulWidget {
+class Ujian extends StatefulWidget {
   final String ptspas;
   final String link;
-  const HalamanSoal({super.key, required this.link, required this.ptspas});
+  const Ujian({super.key, required this.link, required this.ptspas});
 
   @override
-  State<HalamanSoal> createState() => _HalamanSoalState();
+  State<Ujian> createState() => _UjianState();
 }
 
-class _HalamanSoalState extends State<HalamanSoal> {
+class _UjianState extends State<Ujian> {
   Quiz? data;
   int _questionNumber = 1;
   PageController _controller = PageController();
@@ -69,7 +70,7 @@ class _HalamanSoalState extends State<HalamanSoal> {
   }
 
   getUjian() async {
-    data = await ApiService.getUjian(
+    data = await ApiService.detailPtsPas(
       widget.link,
     );
 
@@ -77,13 +78,13 @@ class _HalamanSoalState extends State<HalamanSoal> {
     setState(() {});
   }
 
-  recentSoal() {
+  recentUjian() {
     if (Provider.of<NavigationProvider>(context, listen: false)
-            .selectedRecentSoal ==
+            .selectedRecentUjian ==
         null) {
       Provider.of<NavigationProvider>(context, listen: false)
-          .addRecentSoal(RecentSoal(
-        namaBab: data!.namaBab,
+          .addRecentUjian(RecentUjian(
+        namaBab: data!.namaBab,ptsPas:widget.ptspas ,
         namaMapel: data!.namaMapel,
         correctAswer: 0,
         kelas: data!.kelas,
@@ -91,7 +92,7 @@ class _HalamanSoalState extends State<HalamanSoal> {
       ));
     }
     Provider.of<NavigationProvider>(context, listen: false)
-        .selectingRecentSoal = null;
+        .selectingRecentUjian = null;
   }
 
   @override
@@ -100,7 +101,7 @@ class _HalamanSoalState extends State<HalamanSoal> {
     return WillPopScope(
       onWillPop: () {
         Provider.of<CameraProvider>(context, listen: false).scaning = false;
-        recentSoal();
+        recentUjian();
         Navigator.of(context).pop();
         return Future.value(true);
       },
@@ -127,7 +128,7 @@ class _HalamanSoalState extends State<HalamanSoal> {
                             Navigator.of(context).pop();
                             Provider.of<CameraProvider>(context, listen: false)
                                 .scaning = false;
-                            recentSoal();
+                            recentUjian();
                           }
                         },
                         child: Text(
@@ -179,17 +180,24 @@ class _HalamanSoalState extends State<HalamanSoal> {
                                 Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => HalamanPDFSoalState(
+                                      builder: (context) => UjianPdf(
                                             data!,
                                             data!.namaBab,
-                                            RecentSoal(
-                                              correctAswer: 0,
+                                            RecentUjian(ptsPas: widget.ptspas,
+                                              correctAswer: data!.questions
+                                                  .where(
+                                                    (element) => element
+                                                        .selectedWiidgetOption!
+                                                        .isCorrect!,
+                                                  )
+                                                  .toList()
+                                                  .length,
                                               namaBab: data!.namaBab,
                                               kelas: data!.kelas,
                                               namaMapel: data!.namaMapel,
                                               link: widget.link,
                                             ),
-                                            
+                                            widget.ptspas,
                                           )),
                                 );
                               }
@@ -230,7 +238,7 @@ class _HalamanSoalState extends State<HalamanSoal> {
                                   Provider.of<CameraProvider>(context,
                                           listen: false)
                                       .scaning = false;
-                                  recentSoal();
+                                  recentUjian();
 
                                   Navigator.of(context).pop();
                                 },
@@ -407,13 +415,14 @@ class _HalamanSoalState extends State<HalamanSoal> {
                                                 style: const TextStyle(
                                                     fontSize: 16),
                                               ),
-                                            ),  Expanded(
-                                              child: Padding(
+                                            ),
+                                             Expanded(
+                                               child: Padding(
                                                   padding: const EdgeInsets.only(
                                                       left: 10, right: 4),
                                                   child:
-                                              HtmlWidget( questionOption.text!)),
-                                            )
+                                                                                           HtmlWidget( questionOption.text!)),
+                                             )
                                             // Expanded(
                                             //   child: Padding(
                                             //     padding: const EdgeInsets.only(
@@ -430,7 +439,6 @@ class _HalamanSoalState extends State<HalamanSoal> {
                                             //           ),
                                             //   ),
                                             // ),
-                                           
                                           ],
                                         ),
                                       ),

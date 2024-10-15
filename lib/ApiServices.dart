@@ -43,31 +43,7 @@ class ApiService {
   static List<Mapel>? listMapel;
 
   Map<String, dynamic> eventData = {};
-  Future<void> getMapel() async {
-    final dio = Dio();
-    final response = await dio.get(
-        "https://bupin.id/api/apigurupintar/api-materipusat.php?kode_sekolah=PUSAT-12345&id_kelas=72");
-
-    if (response.data == null) {
-      return;
-    } else {
-      List<Mapel> tempListMapel = [];
-
-      for (Map<String, dynamic> element in response.data) {
-        if (!tempListMapel
-            .map((e) => e.mapel)
-            .toList()
-            .contains(element["mapel"])) {
-          log(element["mapel"] + " Mapel");
-          tempListMapel.add(Mapel.fromMap(element));
-        }
-      }
-      listMapel = tempListMapel;
-      ;
-      return;
-    }
-  }
-
+  
   Future<List<Het>> fetchHet(String dropdownValue) async {
     try {
       List<Het> listHet = [];
@@ -142,7 +118,38 @@ class ApiService {
     };
   }
 
-  static Future<Quiz> getUjian(String link) async {
+  static Future<List<String>> getMapelList(String jenjang, int kelas) async {
+    final dio = Dio();
+    String newLink = "https://cbt.api.bupin.id/api/mapel/lists";
+
+    final response = await dio.get(newLink,
+        queryParameters: {"level": jenjang, "kelas": kelas.toString()});
+
+    List<String> temp = [];
+    var data = response.data;
+    for (var element in data) {
+      temp.add(element.toString());
+    }
+    return temp;
+  }
+  
+  static Future<List<Mapel>> getMapel(String jenjang, int kelas,String mapel,String type) async {
+    final dio = Dio();
+    String newLink = "https://cbt.api.bupin.id/api/mapel/";
+
+    final response = await dio.get(newLink,
+        queryParameters: {"level": jenjang, "kelas": kelas.toString(),"mapel":mapel,"type":type});
+log(response.data.toString());
+    List<Mapel> temp = [];
+    var data = response.data;
+    for (var element in data["data"]) {
+      temp.add(Mapel.fromMap(element));
+    }
+    return temp;
+  }
+
+
+  static Future<Quiz> getUjian(String link,) async {
     log(link);
     final dio = Dio();
     String newLink =
@@ -165,6 +172,17 @@ class ApiService {
 
     return Quiz.fromMap(response.data, response2.data);
   }
+  
+  static Future<Quiz> detailPtsPas(String link,) async {
+    log(link);
+    final dio = Dio();
+   
+    
+    final response = await dio.get(link);
+
+log( response.data.toString());
+    return Quiz.fromMap({"namaKelas":"","namaBab":"","namaMapel":""}, response.data);
+  }
 
   pushToVideo(String link, BuildContext context) {
     Navigator.of(context).push(CustomRoute(
@@ -175,12 +193,11 @@ class ApiService {
 
   pushToCbt(String scanResult, BuildContext context) {
     log(scanResult);
-     Navigator.of(context).push(CustomRoute(
+    Navigator.of(context).push(CustomRoute(
       builder: (context) => HalamanSoal(
-        link: scanResult,
+        link: scanResult,ptspas: "Quiz",
       ),
     ));
     return;
   }
-
 }

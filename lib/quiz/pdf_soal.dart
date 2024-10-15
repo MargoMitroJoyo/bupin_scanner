@@ -185,7 +185,7 @@ Future<Uint8List> printAll(
                                                     padding: EdgeInsets.only(
                                                         left: 10, right: 4),
                                                     child: Text(
-                                                      "${questionOption.text}",
+                                                    Helper.convertSoal( "${questionOption.text}").first,
                                                       style: TextStyle(
                                                           fontSize: 11),
                                                     ),

@@ -1,19 +1,26 @@
 import 'package:Bupin/ApiServices.dart';
 import 'package:Bupin/bank_soal/Halaman_PTS&PAS.dart';
+import 'package:Bupin/bank_soal/halaman_soal2.dart';
+import 'package:Bupin/bank_soal/halaman_ujian.dart';
 import 'package:Bupin/bank_soal/mapel_provider.dart';
 import 'package:Bupin/helper/helper.dart';
+import 'package:Bupin/quiz/Halaman_Soal.dart';
 import 'package:Bupin/styles/PageTransitionTheme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-class CustomButton extends StatefulWidget {
+
+class PtsPasItem extends StatefulWidget {
   final String subject;
-  const CustomButton(this.subject);
+  final String idMapel;
+  final Color color;
+  final String ptspas;
+  const PtsPasItem(this.subject, this.idMapel, this.color,this.ptspas);
 
   @override
-  State<CustomButton> createState() => _CustomButtonState();
+  State<PtsPasItem> createState() => _PtsPasItemState();
 }
 
-class _CustomButtonState extends State<CustomButton> {
+class _PtsPasItemState extends State<PtsPasItem> {
   @override
   static const double _shadowHeight = 4;
   double _position = 4;
@@ -31,8 +38,6 @@ class _CustomButtonState extends State<CustomButton> {
     return Center(
       child: GestureDetector(
         onTap: () async {
-            Provider.of<MapelProvider>(context, listen: false)
-                          .selectingMapel=widget.subject;
           setState(() {
             _position = 0;
           });
@@ -41,12 +46,14 @@ class _CustomButtonState extends State<CustomButton> {
             _position = 4;
           });
           await Future.delayed(Duration(milliseconds: 70));
-          Navigator.of(context).push(CustomRoute(
-            builder: (context) => HalamanMapel(
-                color: Helper.localColor(widget.subject),
-                judul: widget.subject,
-                image: Helper.localAsset(widget.subject)),
-          ));
+          var jenjang = Provider.of<MapelProvider>(context, listen: false)
+              .selectedJenjang
+              .toLowerCase();
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => Ujian(ptspas: widget.ptspas,
+                
+                  link:
+                      "https://cbt.api.bupin.id/api/mapel/${widget.idMapel}?level=$jenjang&noscan=true")));
         },
         onTapUp: (_) {
           setState(() {
@@ -64,8 +71,9 @@ class _CustomButtonState extends State<CustomButton> {
           });
         },
         child: Container(
+          margin: EdgeInsets.symmetric(vertical: 10),
           height: _height + _shadowHeight,
-          width: MediaQuery.of(context).size.width * 0.45,
+          width: MediaQuery.of(context).size.width * 0.8,
           child: Stack(
             alignment: Alignment.center,
             clipBehavior: Clip.none,
@@ -74,9 +82,9 @@ class _CustomButtonState extends State<CustomButton> {
                 bottom: 0,
                 child: Container(
                   height: _height,
-                  width: MediaQuery.of(context).size.width * 0.45,
+                  width: MediaQuery.of(context).size.width * 0.8,
                   decoration: BoxDecoration(
-                    color: Helper.localColor(widget.subject),
+                    color: widget.color,
                     borderRadius: BorderRadius.all(
                       Radius.circular(16),
                     ),
@@ -90,9 +98,9 @@ class _CustomButtonState extends State<CustomButton> {
                 duration: Duration(milliseconds: 70),
                 child: Container(
                   height: _height,
-                  width: MediaQuery.of(context).size.width * 0.45,
+                  width: MediaQuery.of(context).size.width * 0.8,
                   decoration: BoxDecoration(
-                    color: lightenColor(Helper.localColor(widget.subject)),
+                    color: lightenColor(widget.color),
                     borderRadius: BorderRadius.all(
                       Radius.circular(16),
                     ),
@@ -110,32 +118,12 @@ class _CustomButtonState extends State<CustomButton> {
                 ),
               ),
               AnimatedPositioned(
-                  curve: Curves.easeIn,
-                  top: -70,
-                  bottom: _position,
-                  duration: Duration(milliseconds: 70),
-                  child: Center(
-                    child: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Hero(
-                        tag: widget.subject,
-                        child: Container(
-                          child: Image.asset(
-                            Helper.localAsset(widget.subject),
-                            height: MediaQuery.of(context).size.width * 0.14,
-                            width: MediaQuery.of(context).size.width * 0.14,
-                          ),
-                        ),
-                      ),
-                    ),
-                  )),
-              AnimatedPositioned(
                 curve: Curves.easeIn,
                 bottom: _position,
                 duration: Duration(milliseconds: 70),
                 child: Container(
                   height: _height,
-                  width: MediaQuery.of(context).size.width * 0.45,
+                  width: MediaQuery.of(context).size.width * 0.8,
                   decoration: BoxDecoration(
                     color: Colors.transparent,
                     borderRadius: BorderRadius.all(
@@ -149,8 +137,7 @@ class _CustomButtonState extends State<CustomButton> {
                         foreground: Paint()
                           ..style = PaintingStyle.stroke
                           ..strokeWidth = 2
-                          ..color =
-                              lightenColor(Helper.localColor(widget.subject)),
+                          ..color = lightenColor(widget.color),
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
                       ),
@@ -164,7 +151,7 @@ class _CustomButtonState extends State<CustomButton> {
                 duration: Duration(milliseconds: 70),
                 child: Container(
                   height: _height,
-                  width: MediaQuery.of(context).size.width * 0.45,
+                  width: MediaQuery.of(context).size.width * 0.8,
                   decoration: BoxDecoration(
                     color: Colors.transparent,
                     borderRadius: BorderRadius.all(
