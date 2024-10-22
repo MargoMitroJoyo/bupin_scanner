@@ -30,7 +30,8 @@ void main() async {
         ),
         ChangeNotifierProvider(
           create: (context) => CameraProvider(),
-        ), ChangeNotifierProvider(
+        ),
+        ChangeNotifierProvider(
           create: (context) => MapelProvider(),
         )
       ],
@@ -93,10 +94,10 @@ class _MyAppState extends State<MyApp> {
             textTheme: TextTheme(
                 titleMedium: TextStyle(
                     fontFamily: "Rubik", color: Colors.grey.shade700)),
-            scaffoldBackgroundColor: Color.fromRGBO(74, 74, 165, 1),
+            scaffoldBackgroundColor: const Color.fromRGBO(4, 123, 145, 1),
             colorScheme: ColorScheme.fromSwatch().copyWith(
                 secondary: const Color.fromRGBO(124, 120, 209, 1),
-                primary: const Color.fromRGBO(74, 74, 165, 1))),
+                primary: const Color.fromRGBO(4, 123, 145, 1))),
         home: const Navigation());
   }
 }

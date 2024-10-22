@@ -25,13 +25,13 @@ class HalamanMapel extends StatefulWidget {
 
 class _HalamanMapelState extends State<HalamanMapel>
     with AutomaticKeepAliveClientMixin {
+      
   initState() {
     Provider.of<MapelProvider>(context, listen: false).getListMapelPTS();
     Provider.of<MapelProvider>(context, listen: false).getListMapelPAS();
     super.initState();
   }
 
-  bool _stretch = true;
   @override
   Widget build(BuildContext context) {
     super.build(context);

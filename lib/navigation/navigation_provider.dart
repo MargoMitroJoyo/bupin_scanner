@@ -10,17 +10,16 @@ import 'package:pod_player/pod_player.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class NavigationProvider extends ChangeNotifier {
-
-  
+  List<dynamic> allRecentList=[];
   List<RecentVideo> recentVideoList = [];
   RecentVideo? selectedRecentVideo;
 
-
-   List<RecentSoal> recentSoalList = [];
+  List<RecentSoal> recentSoalList = [];
   RecentSoal? selectedRecentSoal;
-  
-   List<RecentUjian> recentUjianList = [];
+
+  List<RecentUjian> recentUjianList = [];
   RecentUjian? selectedRecentUjian;
+  
   set selectingRecentUjian(val) {
     selectedRecentUjian = val;
     notifyListeners();
@@ -34,6 +33,7 @@ class NavigationProvider extends ChangeNotifier {
         .toList()
         .contains(data.namaBab)) {
       recentUjianList.add(data);
+       allRecentList.add(data);
     }
 
     saveRecentUjian();
@@ -56,7 +56,9 @@ class NavigationProvider extends ChangeNotifier {
         [];
 
     for (var element in data) {
+      
       recentUjianList.add(RecentUjian.fromMap(jsonDecode(element)));
+       allRecentList.add(RecentUjian.fromMap(jsonDecode(element)));
     }
     log(recentUjianList.length.toString());
     notifyListeners();
@@ -87,6 +89,7 @@ class NavigationProvider extends ChangeNotifier {
         .toList()
         .contains(data.namaBab)) {
       recentSoalList.add(data);
+         allRecentList.add(data);
     }
 
     saveRecentSoal();
@@ -109,6 +112,7 @@ class NavigationProvider extends ChangeNotifier {
 
     for (var element in data) {
       recentSoalList.add(RecentSoal.fromMap(jsonDecode(element)));
+       allRecentList.add(RecentSoal.fromMap(jsonDecode(element)));
     }
     notifyListeners();
   }
@@ -137,6 +141,7 @@ class NavigationProvider extends ChangeNotifier {
         .toList()
         .contains(data.imageUrl)) {
       recentVideoList.add(data);
+         allRecentList.add(data);
     }
 
     saveRecentVideo();
@@ -159,6 +164,7 @@ class NavigationProvider extends ChangeNotifier {
 
     for (var element in data!) {
       recentVideoList.add(RecentVideo.fromMap(jsonDecode(element)));
+           allRecentList.add(RecentVideo.fromMap(jsonDecode(element)));
     }
     notifyListeners();
   }

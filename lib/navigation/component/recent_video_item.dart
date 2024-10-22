@@ -22,9 +22,19 @@ class RecenVideoItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        margin: EdgeInsets.symmetric(vertical: 6),
-        height: MediaQuery.of(context).size.width * 0.19,
+    return InkWell(
+                      onTap: () {
+                        Provider.of<NavigationProvider>(context, listen: false)
+                            .selectedRecentVideo = video;
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => HalamanVideo(video.link),
+                        ));
+                      },
+                      child: Container(
+            margin: EdgeInsets.symmetric(horizontal: 6,vertical: 6),
+
+                  height: MediaQuery.of(context).size.width * 0.19,
+            width: MediaQuery.of(context).size.width * 0.75,
         child: Container(
             padding: EdgeInsets.all(2),
             decoration: BoxDecoration(
@@ -130,25 +140,9 @@ class RecenVideoItem extends StatelessWidget {
                       ],
                     ),
                   ),
-                ),
-                Spacer(),
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: InkWell(
-                      onTap: () {
-                        Provider.of<NavigationProvider>(context, listen: false)
-                            .selectedRecentVideo = video;
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => HalamanVideo(video.link),
-                        ));
-                      },
-                      child: Icon(
-                        Icons.arrow_forward_ios_rounded,
-                        color: Helper.localColor(video.namaMapel),
-                        size: 16,
-                      )),
-                ),
+                ),            
+               
               ],
-            )));
+            ))));
   }
 }

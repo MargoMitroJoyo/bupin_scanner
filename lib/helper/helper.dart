@@ -1,10 +1,19 @@
 import 'dart:developer';
 import 'dart:ui';
 
+import 'package:flutter/material.dart';
 import 'package:html/parser.dart' as html;
 import 'package:html/dom.dart' as dom;
 
 class Helper {
+static   Color lightenColor(Color color, [double amount = 0.15]) {
+    // Use Color.lerp to mix the color with white
+    return Color.lerp(color, Colors.white, amount)!;
+  }
+static   Color darkenColor(Color color, [double amount = 0.15]) {
+    // Use Color.lerp to mix the color with white
+    return Color.lerp(color, Colors.black, amount)!;
+  }
 static  String decodeHtml(String htmlString) {
  // Replace Unicode escape sequences
   String decoded = htmlString

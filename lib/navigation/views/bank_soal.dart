@@ -191,8 +191,9 @@ class _BankSoalState extends State<BankSoal> {
                                   shrinkWrap: true,
                                   physics: NeverScrollableScrollPhysics(),
                                   itemCount: snapshot.listMapel.length,
-                                  itemBuilder: (context, index) =>
-                                      CustomButton(Helper.addSpaceAfterCapitalized(snapshot.listMapel[index]) ),
+                                  itemBuilder: (context, index) => CustomButton(
+                                      Helper.addSpaceAfterCapitalized(
+                                          snapshot.listMapel[index])),
                                 );
                               }))),
                             ],

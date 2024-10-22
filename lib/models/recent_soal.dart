@@ -9,7 +9,6 @@ class RecentSoal {
   final int correctAswer;
   RecentSoal(
       {required this.namaBab,
- 
       required this.correctAswer,
       required this.namaMapel,
       required this.link,
@@ -19,15 +18,15 @@ class RecentSoal {
   ) {
     return RecentSoal(
         namaBab: data["namaBab"],
-        correctAswer: data["correctAnswer"]??0,
-    
+        correctAswer: data["correctAnswer"] ?? 0,
         namaMapel: data["namaMapel"],
         kelas: data["namaKelas"],
         link: data["link"]);
   }
   static Map<String, dynamic> toJson(RecentSoal instance) => {
         "namaBab": instance.namaBab,
-        "namaMapel": instance.namaMapel,"correctAnswer":instance.correctAswer,
+        "namaMapel": instance.namaMapel,
+        "correctAnswer": instance.correctAswer,
         "link": instance.link,
         "namaKelas": instance.kelas
       };
