@@ -145,7 +145,7 @@ class _NavigationState extends State<Navigation>
             ],
           ),
         ),
-        const HalamanBanner()
+        // const HalamanBanner()
       ],
     );
   }

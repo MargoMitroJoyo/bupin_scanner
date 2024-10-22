@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:Bupin/Navigation/navigation.dart';
 import 'package:Bupin/bank_soal/mapel_provider.dart';
@@ -51,7 +52,9 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    initPlatformState();
+   
+   initPlatformState();
+ 
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
